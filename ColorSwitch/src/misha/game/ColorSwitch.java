@@ -8,28 +8,29 @@
 package misha.game;
 
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import com.apple.eawt.*;
-import java.awt.SystemTray;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.awt.AWTException;
 import java.awt.Image;
-import java.awt.*;
+import java.awt.Taskbar;
 
-@SuppressWarnings("unused")
-public class Game extends JFrame {
+public class ColorSwitch extends JFrame {
 	
 	public static int WIDTH = 750;
 	public static int HEIGHT = 600;
 	
 	private GamePanel gamePanel;
 
-	public Game() {
+	public ColorSwitch() {
 		super("Color Switch");
 		
-		Image img = Toolkit.getDefaultToolkit().getImage("img/ico.png");
+		Image img = Toolkit.getDefaultToolkit().getImage("img/icon.png");
 		setIconImage(img);
+		if (Taskbar.isTaskbarSupported()) {
+			try {
+				Taskbar.getTaskbar().setIconImage(img);
+			} catch (Exception e) {
+				System.out.println("Unable to set taskbar image...");
+			}
+		}
 		
 		setSize(WIDTH, HEIGHT + 28);
 		setLocationRelativeTo(null);
@@ -44,6 +45,6 @@ public class Game extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		Game game = new Game();
+		ColorSwitch game = new ColorSwitch();
 	}
 }

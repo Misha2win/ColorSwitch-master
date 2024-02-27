@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Polygon;
-import misha.game.Game;
+import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
@@ -62,13 +62,13 @@ public class Prism extends Obstacle {
 			
 			if (active) {
 				if (direction == UP)
-					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10 - Game.HEIGHT, BEAM_WIDTH, Game.HEIGHT);
+					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10 - ColorSwitch.HEIGHT, BEAM_WIDTH, ColorSwitch.HEIGHT);
 				else if (direction == RIGHT)
-					beam = new Rectangle((int) x + 10, (int) y + height / 2 - BEAM_WIDTH / 2, Game.WIDTH, BEAM_WIDTH);
+					beam = new Rectangle((int) x + 10, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.WIDTH, BEAM_WIDTH);
 				else if (direction == DOWN)
-					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10, BEAM_WIDTH, Game.HEIGHT);
+					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10, BEAM_WIDTH, ColorSwitch.HEIGHT);
 				else if (direction == LEFT)
-					beam = new Rectangle((int) x + 10 - Game.WIDTH, (int) y + height / 2 - BEAM_WIDTH / 2, Game.WIDTH, BEAM_WIDTH);
+					beam = new Rectangle((int) x + 10 - ColorSwitch.WIDTH, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.WIDTH, BEAM_WIDTH);
 				
 				for (Entity platform : level.getPlatforms()) {
 					if ((platform.getColor().collidesWith(color) || platform.getColor().equals(CSColor.BLACK) || platform.getColor().equals(CSColor.WHITE)) && beam.intersects(platform.getRect())) {

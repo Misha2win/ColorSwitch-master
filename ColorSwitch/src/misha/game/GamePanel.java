@@ -37,8 +37,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		setFocusable(true);
 		
 		buttons = new RectangularShape[] {
-			new RoundRectangle2D.Float(Game.WIDTH / 2 - 125, 225, 250, 75, 20, 20),
-			new RoundRectangle2D.Float(Game.WIDTH / 2 - 125, 325, 250, 75, 20, 20)
+			new RoundRectangle2D.Float(ColorSwitch.WIDTH / 2 - 125, 225, 250, 75, 20, 20),
+			new RoundRectangle2D.Float(ColorSwitch.WIDTH / 2 - 125, 325, 250, 75, 20, 20)
 		};
 		
 		isRepainting = true;
@@ -59,15 +59,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		} else {
 			levelManager.getLevel(3).draw(g);
 			g.setColor(new Color(200, 200, 200, 120));
-			g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+			g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("MONOSPACED", Font.PLAIN, 60));
 			
 			String str = "Color Switch";
-			g.drawString(str, Game.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2 - 1, 150);
+			g.drawString(str, ColorSwitch.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2 - 1, 150);
 			g.setColor(Color.BLACK);
-			g.drawString(str, Game.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2 + 2, 150 + 2);
+			g.drawString(str, ColorSwitch.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2 + 2, 150 + 2);
 			
 			for (int i = 0; i < buttons.length; i++) {
 				RectangularShape button = buttons[i];
@@ -82,7 +82,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 				}
 				
 				g.setColor(Color.BLACK);
-				g.drawString(str, Game.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2, (int)button.getY() + 55);
+				g.drawString(str, ColorSwitch.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2, (int)button.getY() + 55);
 			}
 		}
 	}

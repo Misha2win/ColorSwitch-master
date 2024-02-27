@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
-import misha.game.Game;
+import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
 import misha.game.level.LevelManager;
@@ -23,11 +23,11 @@ import misha.game.level.LevelManager;
 public class LevelImageMaker {
 
 	public static BufferedImage createLevelImage(Level level) {
-		BufferedImage img = new BufferedImage(Game.WIDTH, Game.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		BufferedImage img = new BufferedImage(ColorSwitch.WIDTH, ColorSwitch.HEIGHT, BufferedImage.TYPE_INT_RGB);
 
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+		g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
 		level.draw(g);
 
 		return img;

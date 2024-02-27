@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.Font;
-import misha.game.Game;
+import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Updatable;
 import misha.game.level.entity.item.Item;
@@ -194,14 +194,14 @@ public class Level implements Updatable {
 				c = CSColor.GRAY;
 			}
 			
-			int ghostX = (int) (Game.WIDTH - platform.getX() - platform.getWidth());
+			int ghostX = (int) (ColorSwitch.WIDTH - platform.getX() - platform.getWidth());
 			if (platform instanceof HealthGate) {
 				HealthGate gate = (HealthGate) platform;
 				ghostPlatform = new HealthGate(gate.getRule(), gate.getHealthRule(), ghostX, (int)gate.getY(), gate.getWidth(), gate.getHeight());
 			} else if (platform instanceof MovingPlatform) {
 				MovingPlatform mp = (MovingPlatform) platform;
-				int ghostX1 = (int) (Game.WIDTH - mp.getX1() - platform.getWidth());
-				int ghostX2 = (int) (Game.WIDTH - mp.getX2() - platform.getWidth());
+				int ghostX1 = (int) (ColorSwitch.WIDTH - mp.getX1() - platform.getWidth());
+				int ghostX2 = (int) (ColorSwitch.WIDTH - mp.getX2() - platform.getWidth());
 				ghostPlatform = new MovingPlatform(c, ghostX1, (int)mp.getY1(), ghostX2, (int)mp.getY(), mp.getWidth(), mp.getHeight());
 				ghostPlatform.setPos(ghostX, platform.getY());
 			} else {
@@ -248,7 +248,7 @@ public class Level implements Updatable {
 			g.setColor(Color.BLACK);
 			for (int i = 0; i < text.length; i++) {
 				String str = text[i];
-				g.drawString(str, Game.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2, 200 + (i * 25));
+				g.drawString(str, ColorSwitch.WIDTH / 2 - g.getFontMetrics().stringWidth(str) / 2, 200 + (i * 25));
 			}
 		}
 	}

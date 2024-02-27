@@ -14,7 +14,7 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.BasicStroke;
 import java.awt.event.KeyEvent;
-import misha.game.Game;
+import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
@@ -103,7 +103,7 @@ public class Player extends Entity implements Updatable {
 			
 			// Draw the mirror player
 			g.setColor(mirrorPlayer.getColor().getGraphicsColor());
-			g.fillRect((int)(-x + Game.WIDTH - width + .5), (int)(y + .5), width, height);
+			g.fillRect((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5), width, height);
 		}
 		
 		int yOffset = 0;
@@ -162,7 +162,7 @@ public class Player extends Entity implements Updatable {
 	@Override
 	public void update() {
 		if (mirrored) {
-			mirrorPlayer.setPos((int)(-x + Game.WIDTH - width + .5), (int)(y + .5));
+			mirrorPlayer.setPos((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5));
 		}
 	}
 	
@@ -217,7 +217,7 @@ public class Player extends Entity implements Updatable {
 		mirrored = newbool;
 		
 		if (newbool) {
-			mirrorPlayer = new Player((int)(-x + Game.WIDTH - width + .5), (int)(y + .5));
+			mirrorPlayer = new Player((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5));
 		}
 	}
 	
