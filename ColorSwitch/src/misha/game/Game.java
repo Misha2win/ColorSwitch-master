@@ -8,7 +8,16 @@
 package misha.game;
 
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
+import com.apple.eawt.*;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.*;
 
+@SuppressWarnings("unused")
 public class Game extends JFrame {
 	
 	public static int WIDTH = 750;
@@ -18,6 +27,9 @@ public class Game extends JFrame {
 
 	public Game() {
 		super("Color Switch");
+		
+		Image img = Toolkit.getDefaultToolkit().getImage("img/ico.png");
+		setIconImage(img);
 		
 		setSize(WIDTH, HEIGHT + 28);
 		setLocationRelativeTo(null);

@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		isRepainting = true;
 		drawGame = false;
 	
-		levelManager = new LevelManager(16);
+		levelManager = new LevelManager(0);
 		
 		start();
 	}
