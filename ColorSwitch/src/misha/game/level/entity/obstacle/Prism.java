@@ -25,7 +25,7 @@ public class Prism extends Obstacle {
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
 	
-	private boolean cooldown;
+//	private boolean cooldown;
 	private boolean active;
 	private int direction;
 	private Rectangle beam;
@@ -51,14 +51,14 @@ public class Prism extends Obstacle {
 	@Override
 	public void update() {
 		if (level != null) {
-			if (getRect().intersects(level.getLevelManager().getPlayer().getRect())) { // TODO refactor this
-				if (!cooldown) {
-					active = !active;
-					cooldown = true;
-				}
-			} else {
-				cooldown = false;
-			}
+//			if (getRect().intersects(level.getLevelManager().getPlayer().getRect())) { // TODO refactor this
+//				if (!cooldown) {
+//					active = !active;
+//					cooldown = true;
+//				}
+//			} else {
+//				cooldown = false;
+//			}
 			
 			if (active) {
 				if (direction == UP)
@@ -125,8 +125,11 @@ public class Prism extends Obstacle {
 	@Override
 	public void onCollision(Entity entity) {
 		if (entity instanceof Player) {
-			if (beam.intersects(entity.getRect()))
+			if (beam.intersects(entity.getRect())) {
+				if (level.getLevelManager().getPlayer().getMirrored())
+					level.createGhostPlatforms(level.getLevelManager().getPlayer().getMirrorPlayer().getColor());
 				entity.setColor(color);
+			}
 		}
 	}
 	

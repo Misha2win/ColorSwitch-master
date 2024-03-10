@@ -72,8 +72,9 @@ public class Platform extends Entity {
 			} else if (smallest == top) { // Push entity out of the top side
 				e.setPos(e.getX(), e.getY() - top);
 				e.setYVelocity(0);
-			} else { // Push entity out of the bottom side
+			} else if (smallest == bot) { // Push entity out of the bottom side
 				e.setPos(e.getX(), e.getY() + bot);
+				e.setYVelocity(PhysicsEngine.GRAVITY);
 			}
 		} else if (PhysicsEngine.willVCollide(e, this)) {
 			// Will collide must be true

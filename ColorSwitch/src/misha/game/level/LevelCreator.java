@@ -16,6 +16,7 @@ import misha.game.level.entity.item.DamagePack;
 import misha.game.level.entity.item.HealthPack;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.item.Mirror;
+import misha.game.level.entity.item.Painter;
 import misha.game.level.entity.item.SuperJump;
 import misha.game.level.entity.item.Teleporter;
 import misha.game.level.entity.obstacle.Acid;
@@ -36,6 +37,38 @@ public class LevelCreator {
 	public static Level[] createLevels(LevelManager levelManager) {
 		ArrayList<Level> levels = new ArrayList<>(50);
 		
+//		levels.add(new Level(
+//				levelManager,
+//				CSColor.GREEN,
+//				new Platform[] {
+//						new Platform(CSColor.BLACK, 10, 10, 10, 580),
+//						new Platform(CSColor.BLACK, 20, 580, 720, 10),
+//						new Platform(CSColor.BLACK, 20, 10, 720, 10),
+//						new Platform(CSColor.BLACK, 730, 20, 10, 560),
+//						new Platform(CSColor.RED, 110, 450, 160, 10),
+//						new Platform(CSColor.BLUE, 240, 510, 130, 10),
+//						new Platform(CSColor.GREEN, 100, 510, 90, 10),
+//						new Platform(CSColor.BLUE, 400, 440, 130, 10),
+//						new Platform(CSColor.RED, 450, 480, 130, 10),
+//						new Platform(CSColor.GREEN, 510, 540, 80, 10),
+//						new Platform(CSColor.BLACK, 690, 520, 20, 20),
+//						new Platform(CSColor.BLACK, 670, 460, 20, 20)
+//				},
+//				new Point[] {
+//						new SpawnPoint(20, 560, true, false)
+//				},
+//				new Obstacle[] {
+//						new Prism(CSColor.BLUE, 710, 20, Prism.DOWN),
+//						new Prism(CSColor.GREEN, 690, 20, Prism.DOWN),
+//						new Prism(CSColor.RED, 670, 20, Prism.DOWN)
+//				},
+//				new Item[] {
+//						new Mirror(30, 490, CSColor.GREEN, false)
+//				},
+//				new String[] {
+//				}
+//		));
+		
 		levels.add(createLevel0(levelManager));
 		levels.add(createColorChanger1(levelManager));
 		levels.add(createColorChanger2(levelManager));
@@ -44,9 +77,8 @@ public class LevelCreator {
 		levels.add(createPrism1(levelManager));
 		levels.add(createPrism2(levelManager));
 		levels.add(createPrism4(levelManager));
-		levels.add(createPrism3(levelManager));
+//		levels.add(createPrism3(levelManager)); // Impossible level if you cannot deactivate Prisms
 		levels.add(createTeleporter1(levelManager));
-		levels.add(createSuperJump1(levelManager));
 		levels.add(createMirror1(levelManager));
 		levels.add(createMirror6(levelManager));
 		levels.add(createMirror2(levelManager));
@@ -55,7 +87,9 @@ public class LevelCreator {
 		levels.add(createMirror4(levelManager));
 		levels.add(createMirror5(levelManager));
 		levels.add(createPrism5(levelManager));
+		// Levels beyond this line do not really fit and need more levels to back up the mechanics
 		levels.add(createPortalPoint1(levelManager));
+		levels.add(createSuperJump1(levelManager));
 		levels.add(createHealthGate1(levelManager));
 		levels.add(createHealthGate2(levelManager));
 		levels.add(createColorMixer1(levelManager));
@@ -163,7 +197,8 @@ public class LevelCreator {
 						new Mirror(520, 520, CSColor.GRAY, true),
 						new Teleporter(560, 520, -1, -1),
 						new SuperJump(440, 520),
-						new Teleporter(600, 520, 710, 70)
+						//new Teleporter(600, 520, 710, 70)
+						new Painter(600, 520, true)
 				},
 				new String[] {
 						"",
