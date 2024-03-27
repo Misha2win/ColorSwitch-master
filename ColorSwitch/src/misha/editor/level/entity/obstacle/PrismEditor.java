@@ -19,18 +19,18 @@ import misha.game.level.entity.obstacle.Prism;
 
 public class PrismEditor extends AbstractObstacleEditor<Prism> {
 	
-	private static final Rectangle RED_BUTTON = new Rectangle(10, 610, 40, 40);
-	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 610, 40, 40);
-	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 610, 40, 40);
-	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 610, 40, 40);
-	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 610, 40, 40);
-	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 610, 40, 40);
-	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 610, 40, 40);
-	private static final Rectangle BLACK_BUTTON = new Rectangle(360, 610, 40, 40);
-	private static final Rectangle UP_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle RIGHT_BUTTON = new Rectangle(60, 660, 40, 40);
-	private static final Rectangle DOWN_BUTTON = new Rectangle(110, 660, 40, 40);
-	private static final Rectangle LEFT_BUTTON = new Rectangle(160, 660, 40, 40);
+	private static final Rectangle RED_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 710, 40, 40);
+	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 710, 40, 40);
+	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 710, 40, 40);
+	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 710, 40, 40);
+	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 710, 40, 40);
+	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 710, 40, 40);
+	private static final Rectangle BLACK_BUTTON = new Rectangle(360, 710, 40, 40);
+	private static final Rectangle UP_BUTTON = new Rectangle(10, 760, 40, 40);
+	private static final Rectangle RIGHT_BUTTON = new Rectangle(60, 760, 40, 40);
+	private static final Rectangle DOWN_BUTTON = new Rectangle(110, 760, 40, 40);
+	private static final Rectangle LEFT_BUTTON = new Rectangle(160, 760, 40, 40);
 	
 	private Point point;
 	private int direction;
@@ -60,16 +60,16 @@ public class PrismEditor extends AbstractObstacleEditor<Prism> {
 			entity.draw(g);
 		}
 		
-		drawColorButton(g, RED_BUTTON, Color.RED);
-		drawColorButton(g, GREEN_BUTTON, Color.GREEN);
-		drawColorButton(g, BLUE_BUTTON, Color.BLUE);
-		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW);
-		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA);
-		drawColorButton(g, CYAN_BUTTON, Color.CYAN);
-		drawColorButton(g, WHITE_BUTTON, Color.WHITE);
-		drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50));
+		drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
+		drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
 		
-		super.drawColorButton(g, UP_BUTTON, Color.WHITE);
+		super.drawColorButton(g, UP_BUTTON, Color.WHITE, direction == Prism.UP);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon upArrow = new Polygon();
 		upArrow.addPoint(UP_BUTTON.x + 20, UP_BUTTON.y + 12);
@@ -77,7 +77,7 @@ public class PrismEditor extends AbstractObstacleEditor<Prism> {
 		upArrow.addPoint(UP_BUTTON.x + 12, UP_BUTTON.y + 27);
 		g.fill(upArrow);
 		
-		super.drawColorButton(g, RIGHT_BUTTON, Color.WHITE);
+		super.drawColorButton(g, RIGHT_BUTTON, Color.WHITE, direction == Prism.RIGHT);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon rightArrow = new Polygon();
 		rightArrow.addPoint(RIGHT_BUTTON.x + 12, RIGHT_BUTTON.y + 12);
@@ -85,7 +85,7 @@ public class PrismEditor extends AbstractObstacleEditor<Prism> {
 		rightArrow.addPoint(RIGHT_BUTTON.x + 12, RIGHT_BUTTON.y + 27);
 		g.fill(rightArrow);
 		
-		super.drawColorButton(g, DOWN_BUTTON, Color.WHITE);
+		super.drawColorButton(g, DOWN_BUTTON, Color.WHITE, direction == Prism.DOWN);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon downArrow = new Polygon();
 		downArrow.addPoint(DOWN_BUTTON.x + 27, DOWN_BUTTON.y + 12);
@@ -93,7 +93,7 @@ public class PrismEditor extends AbstractObstacleEditor<Prism> {
 		downArrow.addPoint(DOWN_BUTTON.x + 20, DOWN_BUTTON.y + 27);
 		g.fill(downArrow);
 		
-		super.drawColorButton(g, LEFT_BUTTON, Color.WHITE);
+		super.drawColorButton(g, LEFT_BUTTON, Color.WHITE, direction == Prism.LEFT);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon leftArrow = new Polygon();
 		leftArrow.addPoint(LEFT_BUTTON.x + 27, LEFT_BUTTON.y + 12);

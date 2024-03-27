@@ -19,15 +19,16 @@ import misha.game.level.entity.item.ColorMixer;
 
 public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 	
-	private static final Rectangle RED_BUTTON = new Rectangle(10, 610, 40, 40);
-	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 610, 40, 40);
-	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 610, 40, 40);
-	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 610, 40, 40);
-	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 610, 40, 40);
-	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 610, 40, 40);
-	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 610, 40, 40);
-	private static final Rectangle ADD_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle SUBTRACT_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle RED_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 710, 40, 40);
+	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 710, 40, 40);
+	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 710, 40, 40);
+	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 710, 40, 40);
+	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 710, 40, 40);
+	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 710, 40, 40);
+	
+	private static final Rectangle ADD_BUTTON = new Rectangle(10, 760, 40, 40);
+	private static final Rectangle SUBTRACT_BUTTON = new Rectangle(60, 760, 40, 40);
 	
 	private boolean add;
 	
@@ -48,17 +49,17 @@ public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		drawColorButton(g, RED_BUTTON, Color.RED);
-		drawColorButton(g, GREEN_BUTTON, Color.GREEN);
-		drawColorButton(g, BLUE_BUTTON, Color.BLUE);
-		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW);
-		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA);
-		drawColorButton(g, CYAN_BUTTON, Color.CYAN);
-		drawColorButton(g, WHITE_BUTTON, Color.WHITE);
+		drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
 		
 		g.setStroke(new BasicStroke(1));
 		
-		drawColorButton(g, ADD_BUTTON, Color.WHITE);
+		drawColorButton(g, ADD_BUTTON, Color.WHITE, add);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(ADD_BUTTON.x + 11, ADD_BUTTON.y + 17, 18, 6, 3, 3);
 		g.fillRoundRect(ADD_BUTTON.x + 17, ADD_BUTTON.y + 11, 6, 18, 3, 3);
@@ -67,7 +68,7 @@ public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 		g.fillRoundRect(ADD_BUTTON.x + 18, ADD_BUTTON.y + 12, 4, 16, 3, 3);
 		
 		
-		drawColorButton(g, SUBTRACT_BUTTON, Color.GRAY);
+		drawColorButton(g, SUBTRACT_BUTTON, Color.GRAY, !add);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(SUBTRACT_BUTTON.x + 11, SUBTRACT_BUTTON.y + 17, 18, 6, 3, 3);
 		g.setColor(Color.WHITE);

@@ -18,13 +18,8 @@ import misha.game.level.entity.item.Teleporter;
 
 public class TeleporterEditor extends AbstractItemEditor<Teleporter> {
 	
-	private static final Rectangle DO_TELEPORT_BUTTON;
-	private static final Rectangle DO_NOT_TELEPORT_BUTTON;
-	
-	static {
-		DO_TELEPORT_BUTTON = new Rectangle(10, 610, 40, 40);
-		DO_NOT_TELEPORT_BUTTON = new Rectangle(60, 610, 40, 40);
-	}
+	private static final Rectangle DO_TELEPORT_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle DO_NOT_TELEPORT_BUTTON = new Rectangle(60, 710, 40, 40);
 	
 	private boolean draggingPoint;
 	private Point teleportPoint;
@@ -54,8 +49,8 @@ public class TeleporterEditor extends AbstractItemEditor<Teleporter> {
 			g.fillOval(teleportPoint.x, teleportPoint.y, 20, 20);
 		}
 		
-		super.drawColorButton(g, DO_TELEPORT_BUTTON, Color.MAGENTA.darker());
-		super.drawColorButton(g, DO_NOT_TELEPORT_BUTTON, Color.MAGENTA.darker().darker().darker());
+		super.drawColorButton(g, DO_TELEPORT_BUTTON, Color.MAGENTA.darker(), !teleportPoint.equals(new Point(-1, -1)));
+		super.drawColorButton(g, DO_NOT_TELEPORT_BUTTON, Color.MAGENTA.darker().darker().darker(), teleportPoint.equals(new Point(-1, -1)));
 	}
 	
 	@Override

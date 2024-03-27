@@ -18,18 +18,18 @@ import misha.game.level.entity.item.Mirror;
 
 public class MirrorEditor extends AbstractItemEditor<Mirror> {
 	
-	private static final Rectangle RED_BUTTON = new Rectangle(10, 610, 40, 40);
-	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 610, 40, 40);
-	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 610, 40, 40);
-	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 610, 40, 40);
-	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 610, 40, 40);
-	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 610, 40, 40);
-	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 610, 40, 40);
-	private static final Rectangle BLACK_BUTTON = new Rectangle(360, 610, 40, 40);
-	private static final Rectangle GRAY_BUTTON = new Rectangle(410, 610, 40, 40);
+	private static final Rectangle RED_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle GREEN_BUTTON = new Rectangle(60, 710, 40, 40);
+	private static final Rectangle BLUE_BUTTON = new Rectangle(110, 710, 40, 40);
+	private static final Rectangle YELLOW_BUTTON = new Rectangle(160, 710, 40, 40);
+	private static final Rectangle MAGENTA_BUTTON = new Rectangle(210, 710, 40, 40);
+	private static final Rectangle CYAN_BUTTON = new Rectangle(260, 710, 40, 40);
+	private static final Rectangle WHITE_BUTTON = new Rectangle(310, 710, 40, 40);
+	private static final Rectangle BLACK_BUTTON = new Rectangle(360, 710, 40, 40);
+	private static final Rectangle GRAY_BUTTON = new Rectangle(410, 710, 40, 40);
 	
-	private static final Rectangle PERSIST_ON_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle PERSIST_OFF_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle PERSIST_ON_BUTTON = new Rectangle(10, 760, 40, 40);
+	private static final Rectangle PERSIST_OFF_BUTTON = new Rectangle(60, 760, 40, 40);
 	
 	private boolean persist;
 	
@@ -45,19 +45,18 @@ public class MirrorEditor extends AbstractItemEditor<Mirror> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		super.drawColorButton(g, PERSIST_ON_BUTTON, Color.YELLOW);
-		super.drawColorButton(g, PERSIST_OFF_BUTTON, Color.GRAY.darker());
+		super.drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		super.drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		super.drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		super.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		super.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		super.drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		super.drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
+		super.drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
+		super.drawColorButton(g, GRAY_BUTTON, Color.GRAY, color.equals(CSColor.GRAY));
 		
-		super.drawColorButton(g, RED_BUTTON, Color.RED);
-		super.drawColorButton(g, GREEN_BUTTON, Color.GREEN);
-		super.drawColorButton(g, BLUE_BUTTON, Color.BLUE);
-		super.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW);
-		super.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA);
-		super.drawColorButton(g, CYAN_BUTTON, Color.CYAN);
-		super.drawColorButton(g, WHITE_BUTTON, Color.WHITE);
-		super.drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50));
-		super.drawColorButton(g, GRAY_BUTTON, Color.GRAY);
-		
+		super.drawColorButton(g, PERSIST_ON_BUTTON, Color.YELLOW, persist);
+		super.drawColorButton(g, PERSIST_OFF_BUTTON, Color.GRAY.darker(), !persist);
 	}
 	
 	@Override

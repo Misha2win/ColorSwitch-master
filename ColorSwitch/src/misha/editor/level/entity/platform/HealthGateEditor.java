@@ -17,10 +17,10 @@ import misha.game.level.entity.platform.HealthGate;
 
 public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 	
-	private static final Rectangle GREATER_BUTTON = new Rectangle(10, 610, 40, 40);
-	private static final Rectangle LESS_BUTTON = new Rectangle(60, 610, 40, 40);
-	private static final Rectangle ADD_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle SUBTRACT_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle GREATER_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle LESS_BUTTON = new Rectangle(60, 710, 40, 40);
+	private static final Rectangle ADD_BUTTON = new Rectangle(10, 760, 40, 40);
+	private static final Rectangle SUBTRACT_BUTTON = new Rectangle(60, 760, 40, 40);
 	
 	private boolean more;
 	private int health;
@@ -42,7 +42,7 @@ public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		super.drawColorButton(g, GREATER_BUTTON, Color.WHITE);
+		super.drawColorButton(g, GREATER_BUTTON, Color.WHITE, more);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon upArrow = new Polygon();
 		upArrow.addPoint(GREATER_BUTTON.x + 20, GREATER_BUTTON.y + 13);
@@ -50,7 +50,7 @@ public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 		upArrow.addPoint(GREATER_BUTTON.x + 12, GREATER_BUTTON.y + 27);
 		g.fill(upArrow);
 		
-		super.drawColorButton(g, LESS_BUTTON, Color.WHITE);
+		super.drawColorButton(g, LESS_BUTTON, Color.WHITE, !more);
 		g.setColor(Color.GRAY.darker().darker());
 		Polygon downArrow = new Polygon();
 		downArrow.addPoint(LESS_BUTTON.x + 27, LESS_BUTTON.y + 13);
@@ -59,7 +59,7 @@ public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 		g.fill(downArrow);
 		
 		
-		super.drawColorButton(g, ADD_BUTTON, Color.WHITE);
+		super.drawColorButton(g, ADD_BUTTON, Color.WHITE, false);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(ADD_BUTTON.x + 11, (ADD_BUTTON.y + 5 + 30 / 2) - 3, 18, 6, 3, 3);
 		g.fillRoundRect((ADD_BUTTON.x + 5 + 30 / 2) - 3, ADD_BUTTON.y + 11, 6, 18, 3, 3);
@@ -67,7 +67,7 @@ public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 		g.fillRoundRect(ADD_BUTTON.x + 12, (ADD_BUTTON.y + 5 + 30 / 2) - 2, 16, 4, 3, 3);
 		g.fillRoundRect((ADD_BUTTON.x + 5 + 30 / 2) - 2, ADD_BUTTON.y + 12, 4, 16, 3, 3);
 		
-		super.drawColorButton(g, SUBTRACT_BUTTON, Color.WHITE);
+		super.drawColorButton(g, SUBTRACT_BUTTON, Color.WHITE, false);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(SUBTRACT_BUTTON.x + 11, (SUBTRACT_BUTTON.y + 5 + 30 / 2) - 3, 18, 6, 3, 3);
 		g.setColor(Color.WHITE);

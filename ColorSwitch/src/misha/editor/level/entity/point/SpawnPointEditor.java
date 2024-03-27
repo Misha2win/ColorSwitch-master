@@ -17,10 +17,10 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class SpawnPointEditor extends AbstractPointEditor<SpawnPoint> {
 	
-	private static final Rectangle ACTIVE_ON_BUTTON = new Rectangle(10, 610, 40, 40);
-	private static final Rectangle ACTIVE_OFF_BUTTON = new Rectangle(60, 610, 40, 40);
-	private static final Rectangle OBTAINABLE_ON_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle OBTAINABLE_OFF_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle ACTIVE_ON_BUTTON = new Rectangle(10, 710, 40, 40);
+	private static final Rectangle ACTIVE_OFF_BUTTON = new Rectangle(60, 710, 40, 40);
+	private static final Rectangle OBTAINABLE_ON_BUTTON = new Rectangle(10, 760, 40, 40);
+	private static final Rectangle OBTAINABLE_OFF_BUTTON = new Rectangle(60, 760, 40, 40);
 	
 	private boolean isActive;
 	private boolean isObtainable;
@@ -37,10 +37,10 @@ public class SpawnPointEditor extends AbstractPointEditor<SpawnPoint> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		super.drawColorButton(g, ACTIVE_ON_BUTTON, Color.RED);
-		super.drawColorButton(g, ACTIVE_OFF_BUTTON, Color.RED.darker().darker());
-		super.drawColorButton(g, OBTAINABLE_ON_BUTTON, Color.GREEN);
-		super.drawColorButton(g, OBTAINABLE_OFF_BUTTON, Color.RED);
+		super.drawColorButton(g, ACTIVE_ON_BUTTON, Color.RED, isActive);
+		super.drawColorButton(g, ACTIVE_OFF_BUTTON, Color.RED.darker().darker(), !isActive);
+		super.drawColorButton(g, OBTAINABLE_ON_BUTTON, Color.GREEN, isObtainable);
+		super.drawColorButton(g, OBTAINABLE_OFF_BUTTON, Color.RED, !isObtainable);
 	}
 	
 	@Override

@@ -65,46 +65,46 @@ import misha.game.level.LevelCreator;
 public class LevelEditor implements KeyListener, MouseListener, MouseMotionListener {
 	
 	// Buttons for selecting the button selectors
-	private static final Rectangle PLATFORM_SELECT_BUTTON = new Rectangle(10, 710, 40, 40);
-	private static final Rectangle ITEM_SELECT_BUTTON = new Rectangle(60, 710, 40, 40);
-	private static final Rectangle OBSTACLE_SELECT_BUTTON = new Rectangle(110, 710, 40, 40);
-	private static final Rectangle POINT_SELECT_BUTTON = new Rectangle(160, 710, 40, 40);
-	private static final Rectangle COLOR_SELECT_BUTTON = new Rectangle(210, 710, 40, 40);
+	private static final Rectangle PLATFORM_SELECT_BUTTON = new Rectangle(10, 610, 40, 40);
+	private static final Rectangle ITEM_SELECT_BUTTON = new Rectangle(60, 610, 40, 40);
+	private static final Rectangle OBSTACLE_SELECT_BUTTON = new Rectangle(110, 610, 40, 40);
+	private static final Rectangle POINT_SELECT_BUTTON = new Rectangle(160, 610, 40, 40);
+	private static final Rectangle COLOR_SELECT_BUTTON = new Rectangle(210, 610, 40, 40);
 	
 	// Buttons for selecting platforms editors
-	private static final Rectangle PLATFORM_BUTTON = new Rectangle(10, 760, 40, 40);
-	private static final Rectangle MOVING_PLATFORM_BUTTON = new Rectangle(60, 760, 40, 40);
-	private static final Rectangle HEALTH_GATE_BUTTON = new Rectangle(110, 760, 40, 40);
+	private static final Rectangle PLATFORM_BUTTON = new Rectangle(10, 660, 40, 40);
+	private static final Rectangle MOVING_PLATFORM_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle HEALTH_GATE_BUTTON = new Rectangle(110, 660, 40, 40);
 	
 	// Buttons for selecting item editors
-	private static final Rectangle COLOR_CHANGER_BUTTON = new Rectangle(10, 760, 40, 40);
-	private static final Rectangle COLOR_MIXER_BUTTON = new Rectangle(60, 760, 40, 40);
-	private static final Rectangle DAMAGE_PACK_BUTTON = new Rectangle(110, 760, 40, 40);
-	private static final Rectangle HEALTH_PACK_BUTTON = new Rectangle(160, 760, 40, 40);
-	private static final Rectangle MIRROR_BUTTON = new Rectangle(210, 760, 40, 40);
-	private static final Rectangle SUPER_JUMP_BUTTON = new Rectangle(260, 760, 40, 40);
-	private static final Rectangle TELEPORTER_BUTTON = new Rectangle(310, 760, 40, 40);
+	private static final Rectangle COLOR_CHANGER_BUTTON = new Rectangle(10, 660, 40, 40);
+	private static final Rectangle COLOR_MIXER_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle DAMAGE_PACK_BUTTON = new Rectangle(110, 660, 40, 40);
+	private static final Rectangle HEALTH_PACK_BUTTON = new Rectangle(160, 660, 40, 40);
+	private static final Rectangle MIRROR_BUTTON = new Rectangle(210, 660, 40, 40);
+	private static final Rectangle SUPER_JUMP_BUTTON = new Rectangle(260, 660, 40, 40);
+	private static final Rectangle TELEPORTER_BUTTON = new Rectangle(310, 660, 40, 40);
 	
 	// Buttons for selecting obstacle editors
-	private static final Rectangle HEALTH_POOL_BUTTON = new Rectangle(10, 760, 40, 40);
-	private static final Rectangle LAVA_BUTTON = new Rectangle(60, 760, 40, 40);
-	private static final Rectangle WATER_BUTTON = new Rectangle(110, 760, 40, 40);
-	private static final Rectangle PRISM_BUTTON = new Rectangle(160, 760, 40, 40);
+	private static final Rectangle HEALTH_POOL_BUTTON = new Rectangle(10, 660, 40, 40);
+	private static final Rectangle LAVA_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle WATER_BUTTON = new Rectangle(110, 660, 40, 40);
+	private static final Rectangle PRISM_BUTTON = new Rectangle(160, 660, 40, 40);
 	
 	// Buttons for selecting point editors
-	private static final Rectangle GOAL_POINT_BUTTON = new Rectangle(10, 760, 40, 40);
-	private static final Rectangle PORTAL_POINT_BUTTON = new Rectangle(60, 760, 40, 40);
-	private static final Rectangle SPAWN_POINT_BUTTON = new Rectangle(110, 760, 40, 40);
+	private static final Rectangle GOAL_POINT_BUTTON = new Rectangle(10, 660, 40, 40);
+	private static final Rectangle PORTAL_POINT_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle SPAWN_POINT_BUTTON = new Rectangle(110, 660, 40, 40);
 	
 	// Buttons for selecting level color
-	private static final Rectangle LEVEL_BLACK_BUTTON = new Rectangle(10, 760, 40, 40);
-	private static final Rectangle LEVEL_RED_BUTTON = new Rectangle(60, 760, 40, 40);
-	private static final Rectangle LEVEL_GREEN_BUTTON = new Rectangle(110, 760, 40, 40);
-	private static final Rectangle LEVEL_BLUE_BUTTON = new Rectangle(160, 760, 40, 40);
-	private static final Rectangle LEVEL_YELLOW_BUTTON = new Rectangle(210, 760, 40, 40);
-	private static final Rectangle LEVEL_MAGENTA_BUTTON = new Rectangle(260, 760, 40, 40);
-	private static final Rectangle LEVEL_CYAN_BUTTON = new Rectangle(310, 760, 40, 40);
-	private static final Rectangle LEVEL_WHITE_BUTTON = new Rectangle(360, 760, 40, 40);
+	private static final Rectangle LEVEL_BLACK_BUTTON = new Rectangle(10, 660, 40, 40);
+	private static final Rectangle LEVEL_RED_BUTTON = new Rectangle(60, 660, 40, 40);
+	private static final Rectangle LEVEL_GREEN_BUTTON = new Rectangle(110, 660, 40, 40);
+	private static final Rectangle LEVEL_BLUE_BUTTON = new Rectangle(160, 660, 40, 40);
+	private static final Rectangle LEVEL_YELLOW_BUTTON = new Rectangle(210, 660, 40, 40);
+	private static final Rectangle LEVEL_MAGENTA_BUTTON = new Rectangle(260, 660, 40, 40);
+	private static final Rectangle LEVEL_CYAN_BUTTON = new Rectangle(310, 660, 40, 40);
+	private static final Rectangle LEVEL_WHITE_BUTTON = new Rectangle(360, 660, 40, 40);
 	
 	// Misc. buttons
 	private static final Rectangle CLEAR_BUTTON = new Rectangle(700, 610, 40, 40);
@@ -223,24 +223,39 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		g.fillOval(SUPER_PRINT_BUTTON.x + 18, SUPER_PRINT_BUTTON.y + 18, 4, 4);
 		
 		drawButton(g, PLATFORM_SELECT_BUTTON);
+		if (selection == PLATFORMS) {
+			drawHighlight(g, PLATFORM_SELECT_BUTTON);
+		}
 		g.setColor(Color.BLACK);
 		g.fillRect(PLATFORM_SELECT_BUTTON.x + 5, PLATFORM_SELECT_BUTTON.y + 5, 30, 30);
 		
 		drawButton(g, ITEM_SELECT_BUTTON);
+		if (selection == ITEMS) {
+			drawHighlight(g, ITEM_SELECT_BUTTON);
+		}
 		g.setColor(Color.RED.darker());
 		g.fillRect(ITEM_SELECT_BUTTON.x + 5, ITEM_SELECT_BUTTON.y + 5, 30, 30);
 		g.setColor(Color.RED);
 		g.fillRect(ITEM_SELECT_BUTTON.x + 10, ITEM_SELECT_BUTTON.y + 10, 20, 20);
 		
 		drawButton(g, OBSTACLE_SELECT_BUTTON);
+		if (selection == OBSTACLES) {
+			drawHighlight(g, OBSTACLE_SELECT_BUTTON);
+		}
 		g.setColor(Color.BLUE.darker());
 		g.fillRect(OBSTACLE_SELECT_BUTTON.x + 5, OBSTACLE_SELECT_BUTTON.y + 5, 30, 30);
 		
 		drawButton(g, POINT_SELECT_BUTTON);
+		if (selection == POINTS) {
+			drawHighlight(g, POINT_SELECT_BUTTON);
+		}
 		g.setColor(Color.GREEN);
 		g.fillOval(POINT_SELECT_BUTTON.x + 10, POINT_SELECT_BUTTON.y + 10, 20, 20);
 		
 		drawButton(g, COLOR_SELECT_BUTTON);
+		if (selection == COLORS) {
+			drawHighlight(g, COLOR_SELECT_BUTTON);
+		}
 		g.setColor(level.getLevelColor().getGraphicsColor());
 		g.fillRect(COLOR_SELECT_BUTTON.x + 10, COLOR_SELECT_BUTTON.y + 10, 20, 20);
 		if (level.getLevelColor().equals(CSColor.WHITE)) {
@@ -267,10 +282,16 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		
 		if (selection == PLATFORMS) {
 			drawButton(g, PLATFORM_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(PlatformEditor.class)) {
+				drawHighlight(g, PLATFORM_BUTTON);
+			}
 			g.setColor(Color.BLACK);
 			g.fillRect(PLATFORM_BUTTON.x + 5, PLATFORM_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, MOVING_PLATFORM_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(MovingPlatformEditor.class)) {
+				drawHighlight(g, MOVING_PLATFORM_BUTTON);
+			}
 			g.setColor(Color.BLACK);
 			g.fillRect(MOVING_PLATFORM_BUTTON.x + 5, MOVING_PLATFORM_BUTTON.y + 5, 30, 30);
 			g.setColor(Color.WHITE);
@@ -278,23 +299,38 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			g.drawLine(MOVING_PLATFORM_BUTTON.x + 5, MOVING_PLATFORM_BUTTON.y + 5, MOVING_PLATFORM_BUTTON.x + 18, MOVING_PLATFORM_BUTTON.y + 18);
 			
 			drawButton(g, HEALTH_GATE_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(HealthGateEditor.class)) {
+				drawHighlight(g, HEALTH_GATE_BUTTON);
+			}
 			g.setColor(Color.GRAY);
 			g.fillRect(HEALTH_GATE_BUTTON.x + 5, HEALTH_GATE_BUTTON.y + 5, 30, 30);
 			
 		} else if (selection == OBSTACLES) {
 			drawButton(g, HEALTH_POOL_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(HealthPoolEditor.class)) {
+				drawHighlight(g, HEALTH_POOL_BUTTON);
+			}
 			g.setColor(Color.GREEN.darker());
 			g.fillRect(HEALTH_POOL_BUTTON.x + 5, HEALTH_POOL_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LAVA_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(LavaEditor.class)) {
+				drawHighlight(g, LAVA_BUTTON);
+			}
 			g.setColor(Color.RED.darker());
 			g.fillRect(LAVA_BUTTON.x + 5, LAVA_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, WATER_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(WaterEditor.class)) {
+				drawHighlight(g, WATER_BUTTON);
+			}
 			g.setColor(Color.BLUE.darker());
-			g.fillRect(WATER_BUTTON.x + 5, WATER_BUTTON.y + 5, 30, 30); // PRISM_BUTTON
+			g.fillRect(WATER_BUTTON.x + 5, WATER_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, PRISM_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(PrismEditor.class)) {
+				drawHighlight(g, PRISM_BUTTON);
+			}
 			g.setColor(Color.GRAY);
 			Polygon prism = new Polygon();
 			prism.addPoint((int) (PRISM_BUTTON.x + 20), (int) (PRISM_BUTTON.y + 10));
@@ -303,72 +339,131 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			g.fill(prism);
 		} else if (selection == POINTS) {
 			drawButton(g, GOAL_POINT_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(GoalPointEditor.class)) {
+				drawHighlight(g, GOAL_POINT_BUTTON);
+			}
 			g.setColor(Color.GREEN);
 			g.fillOval(GOAL_POINT_BUTTON.x + 10, GOAL_POINT_BUTTON.y + 10, 20, 20);
 			
 			drawButton(g, PORTAL_POINT_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(PortalPointEditor.class)) {
+				drawHighlight(g, PORTAL_POINT_BUTTON);
+			}
 			g.setColor(Color.BLUE);
 			g.fillOval(PORTAL_POINT_BUTTON.x + 10, PORTAL_POINT_BUTTON.y + 10, 20, 20);
 			
 			drawButton(g, SPAWN_POINT_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(SpawnPointEditor.class)) {
+				drawHighlight(g, SPAWN_POINT_BUTTON);
+			}
 			g.setColor(Color.RED);
 			g.fillOval(SPAWN_POINT_BUTTON.x + 10, SPAWN_POINT_BUTTON.y + 10, 20, 20);
 		} else if (selection == ITEMS) {
 			drawButton(g, COLOR_CHANGER_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(ColorChangerEditor.class)) {
+				drawHighlight(g, COLOR_CHANGER_BUTTON);
+			}
 			new ColorChanger(CSColor.RED, COLOR_CHANGER_BUTTON.x + 5, COLOR_CHANGER_BUTTON.y + 5).draw(g);
 			
 			drawButton(g, COLOR_MIXER_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(ColorMixerEditor.class)) {
+				drawHighlight(g, COLOR_MIXER_BUTTON);
+			}
 			new ColorMixer(CSColor.RED, COLOR_MIXER_BUTTON.x + 5, COLOR_MIXER_BUTTON.y + 5, true).draw(g);
 			
 			drawButton(g, DAMAGE_PACK_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(DamagePackEditor.class)) {
+				drawHighlight(g, DAMAGE_PACK_BUTTON);
+			}
 			new DamagePack(DAMAGE_PACK_BUTTON.x + 5, DAMAGE_PACK_BUTTON.y + 5).draw(g);
 			
 			drawButton(g, HEALTH_PACK_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(HealthPackEditor.class)) {
+				drawHighlight(g, HEALTH_PACK_BUTTON);
+			}
 			new HealthPack(HEALTH_PACK_BUTTON.x + 5, HEALTH_PACK_BUTTON.y + 5).draw(g);
 			
 			drawButton(g, MIRROR_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(MirrorEditor.class)) {
+				drawHighlight(g, MIRROR_BUTTON);
+			}
 			new Mirror(MIRROR_BUTTON.x + 5, MIRROR_BUTTON.y + 5, CSColor.GRAY, false).draw(g);
 			
 			drawButton(g, SUPER_JUMP_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(SuperJumpEditor.class)) {
+				drawHighlight(g, SUPER_JUMP_BUTTON);
+			}
 			new SuperJump(SUPER_JUMP_BUTTON.x + 5, SUPER_JUMP_BUTTON.y + 5).draw(g);
 			
 			drawButton(g, TELEPORTER_BUTTON);
+			if (entityEditor != null && entityEditor.getClass().equals(TeleporterEditor.class)) {
+				drawHighlight(g, TELEPORTER_BUTTON);
+			}
 			new Teleporter(TELEPORTER_BUTTON.x + 5, TELEPORTER_BUTTON.y + 5).draw(g);
 		} else if (selection == COLORS) {
 			drawButton(g, LEVEL_BLACK_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.BLACK)) {
+				drawHighlight(g, LEVEL_BLACK_BUTTON);
+			}
 			g.setColor(Color.BLACK);
 			g.fillRect(LEVEL_BLACK_BUTTON.x + 5, LEVEL_BLACK_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_RED_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.RED)) {
+				drawHighlight(g, LEVEL_RED_BUTTON);
+			}
 			g.setColor(Color.RED);
 			g.fillRect(LEVEL_RED_BUTTON.x + 5, LEVEL_RED_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_GREEN_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.GREEN)) {
+				drawHighlight(g, LEVEL_GREEN_BUTTON);
+			}
 			g.setColor(Color.GREEN);
 			g.fillRect(LEVEL_GREEN_BUTTON.x + 5, LEVEL_GREEN_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_BLUE_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.BLUE)) {
+				drawHighlight(g, LEVEL_BLUE_BUTTON);
+			}
 			g.setColor(Color.BLUE);
 			g.fillRect(LEVEL_BLUE_BUTTON.x + 5, LEVEL_BLUE_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_YELLOW_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.YELLOW)) {
+				drawHighlight(g, LEVEL_YELLOW_BUTTON);
+			}
 			g.setColor(Color.YELLOW);
 			g.fillRect(LEVEL_YELLOW_BUTTON.x + 5, LEVEL_YELLOW_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_MAGENTA_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.MAGENTA)) {
+				drawHighlight(g, LEVEL_MAGENTA_BUTTON);
+			}
 			g.setColor(Color.MAGENTA);
 			g.fillRect(LEVEL_MAGENTA_BUTTON.x + 5, LEVEL_MAGENTA_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_CYAN_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.CYAN)) {
+				drawHighlight(g, LEVEL_CYAN_BUTTON);
+			}
 			g.setColor(Color.CYAN);
 			g.fillRect(LEVEL_CYAN_BUTTON.x + 5, LEVEL_CYAN_BUTTON.y + 5, 30, 30);
 			
 			drawButton(g, LEVEL_WHITE_BUTTON);
+			if (this.level.getLevelColor().equals(CSColor.WHITE)) {
+				drawHighlight(g, LEVEL_WHITE_BUTTON);
+			}
 			g.setColor(Color.WHITE);
 			g.fillRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
 			g.setColor(Color.BLACK);
 			g.drawRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
 		}
+	}
+	
+	private void drawHighlight(Graphics2D g, Rectangle rect) {
+		g.setColor(new Color(150, 150, 150));
+		g.fillRect(rect.x + 1, rect.y + 1, rect.width - 1, rect.height - 1);
 	}
 	
 	private void drawButton(Graphics2D g, Rectangle rect) {
@@ -604,14 +699,19 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		
 		if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = PLATFORMS;
+			entityEditor = null;
 		} else if (ITEM_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = ITEMS;
+			entityEditor = null;
 		} else if (OBSTACLE_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = OBSTACLES;
+			entityEditor = null;
 		} else if (POINT_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = POINTS;
+			entityEditor = null;
 		} else if (COLOR_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = COLORS;
+			entityEditor = null;
 		}
 		
 		if (selection == PLATFORMS) {

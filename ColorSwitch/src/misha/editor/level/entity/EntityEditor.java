@@ -67,9 +67,15 @@ public abstract class EntityEditor<T extends Entity> implements KeyListener, Mou
 		g.fillRect(0, 0, Editor.WIDTH, 600);
 	}
 	
-	protected void drawColorButton(Graphics2D g, Rectangle button, Color outer, Color inner) {
+	protected void drawColorButton(Graphics2D g, Rectangle button, Color outer, Color inner, boolean highlight) {
 		g.setColor(Color.WHITE);
 		g.fill(button);
+		
+		if (highlight) {
+			g.setColor(new Color(150, 150, 150));
+			g.fillRect(button.x + 1, button.y + 1, button.width - 1, button.height - 1);
+		}
+		
 		g.setColor(outer);
 		g.fillRect(button.x + 5, button.y + 5, 30, 30);
 		g.setColor(inner);
@@ -78,8 +84,8 @@ public abstract class EntityEditor<T extends Entity> implements KeyListener, Mou
 		g.draw(button);
 	}
 	
-	protected void drawColorButton(Graphics2D g, Rectangle button, Color color) {
-		drawColorButton(g, button, color.darker(), color);
+	protected void drawColorButton(Graphics2D g, Rectangle button, Color color, boolean highlight) {
+		drawColorButton(g, button, color.darker(), color, highlight);
 	}
 	
 	protected void beginDraggingEntity(Point initial) {

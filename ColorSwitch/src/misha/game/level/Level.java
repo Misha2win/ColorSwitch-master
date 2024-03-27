@@ -237,9 +237,14 @@ public class Level implements Updatable {
 			platform.draw(g);
 		}
 		
-		if (debug && levelManager.getPlayer().getMirrored()) {
-			for (Platform platform : ghostPlatforms) {
-				platform.draw(g);
+		if (levelManager != null && levelManager.getPlayer() != null && levelManager.getPlayer().getMirrored()) {
+			g.setColor(new Color(0, 0, 0, 50));
+			g.fillRect(ColorSwitch.WIDTH / 2, 0, 1, ColorSwitch.HEIGHT);
+			
+			if (debug) {
+				for (Platform platform : ghostPlatforms) {
+					platform.draw(g);
+				}
 			}
 		}
 		
@@ -255,14 +260,6 @@ public class Level implements Updatable {
 
 	@Override
 	public void update() {
-//		CSColor c = CSColor.RED;
-//		createGhostPlatforms(c);
-//		levelManager.getPlayer().getMirrorPlayer().setColor(c);
-//		
-//		if (!levelManager.getDebugMode())
-//			levelManager.toggleDebugMode();
-//		levelManager.getPlayer().setMirrored(true);
-		
 		for (Updatable e : updatables) {
 			e.update();
 		}
@@ -272,6 +269,90 @@ public class Level implements Updatable {
 				((Updatable) platform).update();
 			}
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) { // TODO This needs to be implemented in all relevent Entity classes as well!
+		if (obj instanceof Level) {
+			Level other = (Level) obj;
+			
+			// Check platforms
+			for (Platform p1 : platforms) {
+				boolean foundEqual = false;
+				
+				for (Platform p2 : other.platforms) {
+					if (p1.equals(p2)) {
+						foundEqual = true;
+						break;
+					}
+				}
+				
+				if (!foundEqual)
+					return false;
+			}
+			
+			// Check Obstacles
+			for (Obstacle o1 : obstacles) {
+				boolean foundEqual = false;
+				
+				for (Obstacle o2 : other.obstacles) {
+					if (o1.equals(o2)) {
+						foundEqual = true;
+						break;
+					}
+				}
+				
+				if (!foundEqual)
+					return false;
+			}
+			
+			// Check Items
+			for (Item i1 : items) {
+				boolean foundEqual = false;
+				
+				for (Item i2 : other.items) {
+					if (i1.equals(i2)) {
+						foundEqual = true;
+						break;
+					}
+				}
+				
+				if (!foundEqual)
+					return false;
+			}
+			
+			// Check Points
+			for (Point p1 : points) {
+				boolean foundEqual = false;
+				
+				for (Point p2 : other.points) {
+					if (p1.equals(p2)) {
+						foundEqual = true;
+						break;
+					}
+				}
+				
+				if (!foundEqual)
+					return false;
+			}
+			
+			// Check Texts
+			for (String s1 : text) {
+				boolean foundEqual = false;
+				
+				for (String s2 : other.text) {
+					if (s1.equals(s2)) {
+						foundEqual = true;
+						break;
+					}
+				}
+				
+				if (!foundEqual)
+					return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }

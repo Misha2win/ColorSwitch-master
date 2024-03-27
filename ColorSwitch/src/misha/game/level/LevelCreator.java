@@ -8,7 +8,6 @@
 package misha.game.level;
 
 import java.util.ArrayList;
-
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.ColorChanger;
 import misha.game.level.entity.item.ColorMixer;
@@ -35,39 +34,8 @@ import misha.game.level.entity.point.SpawnPoint;
 public class LevelCreator {
 
 	public static Level[] createLevels(LevelManager levelManager) {
-		ArrayList<Level> levels = new ArrayList<>(50);
 		
-//		levels.add(new Level(
-//				levelManager,
-//				CSColor.GREEN,
-//				new Platform[] {
-//						new Platform(CSColor.BLACK, 10, 10, 10, 580),
-//						new Platform(CSColor.BLACK, 20, 580, 720, 10),
-//						new Platform(CSColor.BLACK, 20, 10, 720, 10),
-//						new Platform(CSColor.BLACK, 730, 20, 10, 560),
-//						new Platform(CSColor.RED, 110, 450, 160, 10),
-//						new Platform(CSColor.BLUE, 240, 510, 130, 10),
-//						new Platform(CSColor.GREEN, 100, 510, 90, 10),
-//						new Platform(CSColor.BLUE, 400, 440, 130, 10),
-//						new Platform(CSColor.RED, 450, 480, 130, 10),
-//						new Platform(CSColor.GREEN, 510, 540, 80, 10),
-//						new Platform(CSColor.BLACK, 690, 520, 20, 20),
-//						new Platform(CSColor.BLACK, 670, 460, 20, 20)
-//				},
-//				new Point[] {
-//						new SpawnPoint(20, 560, true, false)
-//				},
-//				new Obstacle[] {
-//						new Prism(CSColor.BLUE, 710, 20, Prism.DOWN),
-//						new Prism(CSColor.GREEN, 690, 20, Prism.DOWN),
-//						new Prism(CSColor.RED, 670, 20, Prism.DOWN)
-//				},
-//				new Item[] {
-//						new Mirror(30, 490, CSColor.GREEN, false)
-//				},
-//				new String[] {
-//				}
-//		));
+		ArrayList<Level> levels = new ArrayList<>(50);
 		
 		levels.add(createLevel0(levelManager));
 		levels.add(createColorChanger1(levelManager));
@@ -87,6 +55,16 @@ public class LevelCreator {
 		levels.add(createMirror4(levelManager));
 		levels.add(createMirror5(levelManager));
 		levels.add(createPrism5(levelManager));
+		levels.add(createMirror7(levelManager));
+		
+		levels.add(createEmptyLevel(
+				levelManager, 
+				"The levels beyond this level are ideas", 
+				"that I am testing out. I made basic",
+				"levels but I cannot come up with actual",
+				"level ideas."
+		));
+		
 		// Levels beyond this line do not really fit and need more levels to back up the mechanics
 		levels.add(createPortalPoint1(levelManager));
 		levels.add(createSuperJump1(levelManager));
@@ -102,6 +80,63 @@ public class LevelCreator {
 		levels.set(levels.size() - 1, createTestLevel(levelManager));
 
 		return levels.toArray(new Level[levels.size()]);
+	}
+	
+	// Unused
+	public static Level createMirrorPrismTestLevel(LevelManager levelManager) {
+		return new Level(
+				levelManager,
+				CSColor.GREEN,
+				new Platform[] {
+						new Platform(CSColor.BLACK, 10, 10, 10, 580),
+						new Platform(CSColor.BLACK, 20, 580, 720, 10),
+						new Platform(CSColor.BLACK, 20, 10, 720, 10),
+						new Platform(CSColor.BLACK, 730, 20, 10, 560),
+						new Platform(CSColor.RED, 110, 450, 160, 10),
+						new Platform(CSColor.BLUE, 240, 510, 130, 10),
+						new Platform(CSColor.GREEN, 100, 510, 90, 10),
+						new Platform(CSColor.BLUE, 400, 440, 130, 10),
+						new Platform(CSColor.RED, 450, 480, 130, 10),
+						new Platform(CSColor.GREEN, 510, 540, 80, 10),
+						new Platform(CSColor.BLACK, 690, 520, 20, 20),
+						new Platform(CSColor.BLACK, 670, 460, 20, 20)
+				},
+				new Point[] {
+						new SpawnPoint(20, 560, true, false)
+				},
+				new Obstacle[] {
+						new Prism(CSColor.BLUE, 710, 20, Prism.DOWN),
+						new Prism(CSColor.GREEN, 690, 20, Prism.DOWN),
+						new Prism(CSColor.RED, 670, 20, Prism.DOWN)
+				},
+				new Item[] {
+						new Mirror(30, 490, CSColor.GREEN, false)
+				},
+				new String[] {
+				}
+		);
+	}
+	
+	public static Level createEmptyLevel(LevelManager levelManager, String... text) {
+		return new Level(
+				levelManager,
+				CSColor.GREEN,
+				new Platform[] {
+						new Platform(CSColor.BLACK, 10, 10, 730, 10),
+						new Platform(CSColor.BLACK, 10, 10, 10, 580),
+						new Platform(CSColor.BLACK, 730, 10, 10, 580),
+						new Platform(CSColor.BLACK, 10, 580, 730, 10)
+				},
+				new Point[] {
+						new SpawnPoint(20, 560, true, false),
+						new GoalPoint(710, 560)
+				},
+				new Obstacle[] {
+				},
+				new Item[] {
+				},
+				text
+		);
 	}
 	
 	public static Level createTestLevel(LevelManager levelManager) {
@@ -530,8 +565,8 @@ public class LevelCreator {
 						new Platform(CSColor.BLACK, 20, 10, 720, 10),
 						new Platform(CSColor.BLACK, 730, 20, 10, 560),
 						new Platform(CSColor.BLACK, 20, 300, 160, 280),
-						new Platform(CSColor.BLACK, 380, 300, 350, 280),
-						new Platform(CSColor.BLACK, 250, 20, 60, 240)
+						new Platform(CSColor.BLACK, 250, 20, 60, 240),
+						new Platform(CSColor.BLACK, 430, 300, 300, 280)
 				},
 				new Point[] {
 						new SpawnPoint(20, 280, true, false),
@@ -579,27 +614,28 @@ public class LevelCreator {
 	public static Level createMirror5(LevelManager levelManager) {
 		return new Level(
 				levelManager,
-				CSColor.RED,
+				CSColor.BLUE,
 				new Platform[] {
 						new Platform(CSColor.BLACK, 10, 10, 10, 580),
 						new Platform(CSColor.BLACK, 20, 580, 720, 10),
 						new Platform(CSColor.BLACK, 20, 10, 720, 10),
 						new Platform(CSColor.BLACK, 730, 20, 10, 560),
-						new Platform(CSColor.BLACK, 670, 120, 60, 10),
-						new Platform(CSColor.RED, 530, 210, 110, 10),
-						new Platform(CSColor.RED, 250, 390, 110, 10),
-						new Platform(CSColor.BLUE, 110, 480, 110, 10),
-						new Platform(CSColor.BLUE, 390, 300, 110, 10)
+						new Platform(CSColor.BLACK, 380, 300, 350, 280),
+						new Platform(CSColor.BLUE, 20, 20, 230, 210),
+						new Platform(CSColor.BLACK, 20, 320, 170, 260),
+						new Platform(CSColor.BLACK, 140, 300, 50, 20),
+						new Platform(CSColor.BLACK, 480, 260, 130, 40),
+						new Platform(CSColor.RED, 250, 20, 50, 250)
 				},
 				new Point[] {
-						new SpawnPoint(20, 560, true, false),
-						new GoalPoint(710, 100)
+						new SpawnPoint(20, 280, true, false),
+						new GoalPoint(710, 280)
 				},
 				new Obstacle[] {
 				},
 				new Item[] {
-						new ColorChanger(CSColor.GREEN, 570, 150),
-						new Mirror(670, 520, CSColor.BLUE, true)
+						new Mirror(120, 240, CSColor.RED, true),
+						new ColorChanger(CSColor.GREEN, 540, 170)
 				},
 				new String[] {
 				}
@@ -627,6 +663,36 @@ public class LevelCreator {
 				},
 				new Item[] {
 						new Mirror(210, 290, CSColor.GRAY, false)
+				},
+				new String[] {
+				}
+		);
+	}
+	
+	public static Level createMirror7(LevelManager levelManager) {
+		return new Level(
+				levelManager,
+				CSColor.RED,
+				new Platform[] {
+						new Platform(CSColor.BLACK, 10, 10, 10, 580),
+						new Platform(CSColor.BLACK, 20, 580, 720, 10),
+						new Platform(CSColor.BLACK, 20, 10, 720, 10),
+						new Platform(CSColor.BLACK, 730, 20, 10, 560),
+						new Platform(CSColor.BLACK, 670, 120, 60, 10),
+						new Platform(CSColor.RED, 530, 210, 110, 10),
+						new Platform(CSColor.RED, 250, 390, 110, 10),
+						new Platform(CSColor.BLUE, 110, 480, 110, 10),
+						new Platform(CSColor.BLUE, 390, 300, 110, 10)
+				},
+				new Point[] {
+						new SpawnPoint(20, 560, true, false),
+						new GoalPoint(710, 100)
+				},
+				new Obstacle[] {
+				},
+				new Item[] {
+						new ColorChanger(CSColor.GREEN, 570, 150),
+						new Mirror(670, 520, CSColor.BLUE, true)
 				},
 				new String[] {
 				}
