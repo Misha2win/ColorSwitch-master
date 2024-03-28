@@ -8,9 +8,6 @@
 package misha.game;
 
 import javax.swing.JFrame;
-//import java.awt.Toolkit;
-//import java.awt.Image;
-//import java.awt.Taskbar;
 
 public class ColorSwitch extends JFrame {
 	
@@ -21,16 +18,6 @@ public class ColorSwitch extends JFrame {
 
 	public ColorSwitch() {
 		super("Color Switch");
-		
-//		Image img = Toolkit.getDefaultToolkit().getImage("img/icon.png");
-//		setIconImage(img);
-//		if (Taskbar.isTaskbarSupported()) {
-//			try {
-//				Taskbar.getTaskbar().setIconImage(img);
-//			} catch (Exception e) {
-//				System.out.println("Unable to set taskbar image...");
-//			}
-//		}
 		
 		setSize(WIDTH, HEIGHT + 28);
 		setLocationRelativeTo(null);
