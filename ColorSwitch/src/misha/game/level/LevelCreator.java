@@ -53,7 +53,7 @@ public class LevelCreator {
 		levels.add(createTeleporter2(levelManager));
 		levels.add(createMirror3(levelManager));
 		levels.add(createMirror4(levelManager));
-		levels.add(createMirror5(levelManager));
+		//levels.add(createMirror5(levelManager));
 		levels.add(createPrism5(levelManager));
 		levels.add(createMirror7(levelManager));
 		

@@ -7,31 +7,36 @@
 
 package misha.game;
 
+import java.awt.Insets;
+
 import javax.swing.JFrame;
 
 public class ColorSwitch extends JFrame {
-	
-	public static int WIDTH = 750;
-	public static int HEIGHT = 600;
-	
-	private GamePanel gamePanel;
+    public static int WIDTH = 750;
+    public static int HEIGHT = 600;
 
-	public ColorSwitch() {
-		super("Color Switch");
-		
-		setSize(WIDTH, HEIGHT + 28);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setAlwaysOnTop(true);
-		
-		gamePanel = new GamePanel();
-		getContentPane().add(gamePanel);
-		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-	}
+    private GamePanel gamePanel;
 
-	public static void main(String[] args) {
-		ColorSwitch game = new ColorSwitch();
-	}
+    public ColorSwitch() {
+        super("Color Switch");
+
+        pack();
+        
+        Insets insets = getInsets();
+        setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + insets.bottom);
+        
+        setLocationRelativeTo(null);
+        setResizable(true);
+        setAlwaysOnTop(true);
+
+        gamePanel = new GamePanel();
+        getContentPane().add(gamePanel);
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        ColorSwitch game = new ColorSwitch();
+    }
 }
