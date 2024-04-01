@@ -14,7 +14,7 @@ import java.awt.Polygon;
 public class SuperJump extends Item {
 	
 	public SuperJump(int x, int y) {
-		super("SuperJump", x, y, 30, 30);
+		super(x, y, 30, 30);
 	}
 	
 	@Override
@@ -48,6 +48,11 @@ public class SuperJump extends Item {
 			p.addPoint((int)(x + 5), (int)(y + height / 2 + 11));
 			g.fill(p);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
 	}
 	
 }

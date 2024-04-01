@@ -133,4 +133,10 @@ public class Prism extends Obstacle {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, direction);
+		
+	}
+	
 }

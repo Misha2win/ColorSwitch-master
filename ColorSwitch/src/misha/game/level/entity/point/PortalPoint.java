@@ -59,4 +59,9 @@ public class PortalPoint extends Point {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, portalLinkID);
+	}
+	
 }

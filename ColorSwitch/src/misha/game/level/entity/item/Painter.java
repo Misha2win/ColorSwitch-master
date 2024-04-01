@@ -22,7 +22,7 @@ public class Painter extends Item {
 	private boolean persistOnce;
 	
 	public Painter(int x, int y, boolean persistOnce) {
-		super("Painter", x, y, 30, 30);
+		super(x, y, 30, 30);
 		super.color = CSColor.GRAY;
 		this.persistOnce = persistOnce;
 	}
@@ -85,6 +85,11 @@ public class Painter extends Item {
 				g.fillRect((int) player.getX() - AURA_RADIUS, (int) player.getY() - AURA_RADIUS, player.getWidth() + 2 * AURA_RADIUS, player.getHeight() + 2 * AURA_RADIUS);
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, persistOnce);
 	}
 	
 }

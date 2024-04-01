@@ -33,7 +33,7 @@ public class LevelPrinter {
 		
 		str += "// *** Create level " + (levelNum + 1) + " ***\n"; 
 		
-		str += "Level " + levelName + " = new Level(\n";
+		str += "return new Level(\n";
 		
 		str += "\t\tlevelManager,\n";
 		
@@ -123,8 +123,6 @@ public class LevelPrinter {
 		str += "\t\t}\n";
 		
 		str += ");\n";
-		
-		str += "levels[" + levelNum + "] = " + levelName + ";";
 		
 		System.out.println(str + "\n");
 	}

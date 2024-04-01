@@ -1,0 +1,28 @@
+// Level color
+level green
+// Platforms
+platform Platform black 10 10 10 580
+platform Platform black 20 580 720 10
+platform Platform black 20 10 720 10
+platform Platform black 730 20 10 560
+platform Platform blue 340 20 10 430
+platform Platform blue 110 450 240 10
+platform Platform blue 100 250 240 10
+platform Platform blue 20 150 240 10
+platform Platform blue 20 350 240 10
+platform Platform blue 390 450 240 10
+platform Platform blue 490 350 240 10
+platform Platform red 400 250 240 10
+platform Platform red 490 150 240 10
+platform Platform blue 390 260 10 190
+platform Platform red 390 20 10 240
+// Points
+point GoalPoint 710 560
+point SpawnPoint 20 560 true false
+// Obstacles
+obstacle Prism red 360 20 2
+// Items
+item ColorChanger blue 670 520
+item ColorChanger red 50 90
+item ColorChanger green 670 90
+// Texts

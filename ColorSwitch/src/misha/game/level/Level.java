@@ -24,6 +24,8 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class Level implements Updatable {
 	
+	private final String levelName;
+	
 	private LevelManager levelManager;
 
 	private CSColor levelColor;
@@ -39,16 +41,17 @@ public class Level implements Updatable {
 	private Platform[] ghostPlatforms;
 	
 	@Deprecated
-	public Level(LevelManager levelManager, CSColor c) {
-		this(levelManager, c, new Platform[] {}, new Point[] {}, new Obstacle[] {}, new Item[] {}, new String[] {});
+	public Level(String levelName, LevelManager levelManager, CSColor c) {
+		this(levelName, levelManager, c, new Platform[] {}, new Point[] {}, new Obstacle[] {}, new Item[] {}, new String[] {});
 	}
 	
 	@Deprecated
-	public Level(CSColor c) {
-		this(null, c);
+	public Level(String levelName, CSColor c) {
+		this(levelName, null, c);
 	}
 	
-	public Level(LevelManager levelManager, CSColor levelColor, Platform[] platforms, Point[] points, Obstacle[] obstacles, Item[] items, String[] text) {
+	public Level(String levelName, LevelManager levelManager, CSColor levelColor, Platform[] platforms, Point[] points, Obstacle[] obstacles, Item[] items, String[] text) {
+		this.levelName = levelName;
 		this.levelManager = levelManager;
 		this.levelColor = levelColor;
 		this.updatables = new ArrayList<Updatable>();
@@ -60,8 +63,17 @@ public class Level implements Updatable {
 		setText(text);
 	}
 	
+	public String getLevelName() {
+		return levelName;
+	}
+	
 	public LevelManager getLevelManager() {
 		return levelManager;
+	}
+	
+	@Deprecated
+	public void setLevelManager(LevelManager levelManager) {
+		this.levelManager = levelManager;
 	}
 	
 	public ArrayList<Updatable> getUpdatables() {

@@ -14,15 +14,13 @@ import misha.game.level.entity.player.Player;
 
 public abstract class Item extends Entity implements Updatable {
 	
-	protected String itemName;
 	protected boolean isCollected;
 	protected boolean used;
 	protected boolean dropped;
 	protected boolean persist;
 	
-	public Item(String itemName, int x, int y, int w, int h) {
+	public Item(int x, int y, int w, int h) {
 		super(x, y, w, h);
-		this.itemName = itemName;
 		isCollected = false;
 		dropped = false;
 		persist = false;
@@ -86,14 +84,6 @@ public abstract class Item extends Entity implements Updatable {
 		
 		level.getLevelManager().getPlayer().removeInventory(this);
 		PhysicsEngine.calcPhysics(level.getLevelManager()); // Attempt to pick up an item?
-	}
-	
-	public String getName() {
-		return itemName;
-	}
-	
-	public String toString() {
-		return this.getClass().getSimpleName();
 	}
 	
 	@Override

@@ -1,0 +1,43 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform Platform black 370 10 10 490
+platform Platform black 182 100 10 480
+platform Platform black 20 100 100 10
+platform Platform black 90 200 100 10
+platform Platform black 20 300 100 10
+platform Platform black 90 400 100 10
+platform Platform black 20 500 100 10
+platform Platform blue 370 500 10 80
+platform HealthGate true 70 190 500 180 40
+platform MovingPlatform blue 380 100 380 580 180 10
+platform Platform black 557 100 10 480
+platform HealthGate true 99 565 100 165 50
+platform HealthGate true 99 565 450 165 50
+// Points
+point GoalPoint 710 560
+point SpawnPoint 20 560 true false
+point SpawnPoint 455 560 false true
+// Obstacles
+obstacle Lava 20 110 170 390
+obstacle Lava 190 110 180 390
+obstacle Water 190 500 10 90
+obstacle Lava 380 100 100 60
+obstacle Lava 470 200 100 60
+obstacle Lava 380 300 100 60
+obstacle Lava 470 400 100 60
+obstacle Lava 560 150 50 350
+obstacle Lava 685 150 50 350
+obstacle Lava 565 400 165 50
+// Items
+item HealthPack 40 240
+item HealthPack 40 340
+item HealthPack 135 290
+item ColorChanger red 170 60
+item ColorChanger green 635 285
+item ColorChanger red 635 230
+// Texts

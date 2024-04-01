@@ -27,6 +27,13 @@ public class LevelManager {
 		resetPlayer();
 	}
 	
+	public LevelManager(Level... levels) {
+		this(0);
+		
+		this.levels = levels;
+		resetPlayer();
+	}
+	
 	public LevelManager() {
 		this(0);
 	}
@@ -52,7 +59,7 @@ public class LevelManager {
 	}
 
 	public void resetLevel() {
-		levels[currentLevel] = LevelCreator.createLevels(this)[currentLevel];
+		levels[currentLevel] = LevelLoader.getLevel(this, getCurrentLevel().getLevelName());
 		resetPlayer();
 	}
 
@@ -74,7 +81,7 @@ public class LevelManager {
 
 			resetPlayer();
 		}
-		System.out.println("Advancing to level " + currentLevel);
+		System.out.println("Advancing to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
 	}
 
 	public void previousLevel() {
@@ -84,7 +91,7 @@ public class LevelManager {
 			resetLevel();
 			resetPlayer();
 		}
-		System.out.println("Going back to level " + currentLevel);
+		System.out.println("Going back to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
 	}
 	
 	public void resetPlayer() {

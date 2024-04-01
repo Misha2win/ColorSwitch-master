@@ -73,7 +73,7 @@ public class TeleporterEditor extends AbstractItemEditor<Teleporter> {
 			} else {
 				super.levelEditor.removeObjectFromLevel(entity);
 				point = new Point((int) entity.getX(), (int) entity.getY());
-				entity = new Teleporter(point.x, point.y);
+				entity = new Teleporter(point.x, point.y, -1, -1);
 			}
 		} else {
 			if (DO_TELEPORT_BUTTON.contains(e.getPoint())) {

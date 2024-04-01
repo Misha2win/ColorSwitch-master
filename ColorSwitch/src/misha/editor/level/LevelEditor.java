@@ -18,6 +18,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Array;
+
+import javax.swing.JOptionPane;
+
 import misha.editor.Editor;
 import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.item.ColorChangerEditor;
@@ -59,8 +62,12 @@ import misha.game.level.entity.item.ColorChanger;
 import misha.game.level.entity.item.ColorMixer;
 import misha.game.level.entity.item.DamagePack;
 import misha.game.level.entity.item.HealthPack;
+import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
+import misha.game.level.LevelLoader;
+import misha.game.level.LevelManager;
+import misha.game.level.LevelSaver;
 
 public class LevelEditor implements KeyListener, MouseListener, MouseMotionListener {
 	
@@ -109,7 +116,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	// Misc. buttons
 	private static final Rectangle CLEAR_BUTTON = new Rectangle(700, 610, 40, 40);
 	private static final Rectangle PRINT_BUTTON = new Rectangle(700, 660, 40, 40);
-	private static final Rectangle SUPER_PRINT_BUTTON = new Rectangle(700, 710, 40, 40);
+	private static final Rectangle PLAY_LEVEL_BUTTON = new Rectangle(700, 710, 40, 40);
 	private static final Rectangle NEXT_LEVEL_BUTTON = new Rectangle(700, 760, 40, 40);
 	private static final Rectangle PREVIOUS_LEVEL_BUTTON = new Rectangle(650, 760, 40, 40);
 	
@@ -121,12 +128,11 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	private static final int COLORS = 5;
 	private int selection;
 	
-	private Level[] levels;
+	private EntityEditor<?> entityEditor;
 	
 	private int levelCounter;
+	private Level[] levels;
 	private Level level;
-	
-	private EntityEditor<?> entityEditor;
 	
 	public LevelEditor(Level level) {
 		this(level, -1);
@@ -135,7 +141,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	@SuppressWarnings("deprecation")
 	public LevelEditor(Level level, int num) {
 		if (level == null) {
-			level = new Level(CSColor.RED);
+			level = new Level("EditingLevel", CSColor.RED);
 		} else {
 			this.level = level;
 		}
@@ -144,7 +150,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		this.levelCounter = num;
 		this.selection = NOTHING;
 		
-		System.out.println("Currently editing level: " + levelCounter);
+		System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 	}
 	
 	public Level getLevel() {
@@ -205,23 +211,6 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		g.setColor(Color.GREEN.darker());
 		g.fillOval(PRINT_BUTTON.x + 15, PRINT_BUTTON.y + 15, 10, 10);
 		
-		g.setStroke(new BasicStroke(0));
-		drawButton(g, SUPER_PRINT_BUTTON);
-		g.setColor(Color.GREEN.darker());
-		g.fillRect(SUPER_PRINT_BUTTON.x + 5, SUPER_PRINT_BUTTON.y + 5, 30, 30);
-		g.setColor(Color.GREEN);
-		g.fillRect(SUPER_PRINT_BUTTON.x + 10, SUPER_PRINT_BUTTON.y + 10, 20, 20);
-		g.setColor(Color.GREEN.darker());
-		g.fillOval(SUPER_PRINT_BUTTON.x + 10, SUPER_PRINT_BUTTON.y + 10, 20, 20);
-		g.setColor(Color.GREEN);
-		g.fillOval(SUPER_PRINT_BUTTON.x + 12, SUPER_PRINT_BUTTON.y + 12, 16, 16);
-		g.setColor(Color.GREEN.darker());
-		g.fillOval(SUPER_PRINT_BUTTON.x + 14, SUPER_PRINT_BUTTON.y + 14, 12, 12);
-		g.setColor(Color.GREEN);
-		g.fillOval(SUPER_PRINT_BUTTON.x + 16, SUPER_PRINT_BUTTON.y + 16, 8, 8);
-		g.setColor(Color.GREEN.darker());
-		g.fillOval(SUPER_PRINT_BUTTON.x + 18, SUPER_PRINT_BUTTON.y + 18, 4, 4);
-		
 		drawButton(g, PLATFORM_SELECT_BUTTON);
 		if (selection == PLATFORMS) {
 			drawHighlight(g, PLATFORM_SELECT_BUTTON);
@@ -279,6 +268,14 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		leftArrow.addPoint(PREVIOUS_LEVEL_BUTTON.x + 35, PREVIOUS_LEVEL_BUTTON.y + 35);
 		leftArrow.addPoint(PREVIOUS_LEVEL_BUTTON.x + 5, PREVIOUS_LEVEL_BUTTON.y + 20);
 		g.fill(leftArrow);
+		
+		drawButton(g, PLAY_LEVEL_BUTTON);
+		g.setColor(Color.BLACK);
+		Polygon playArrow = new Polygon();
+		playArrow.addPoint(PLAY_LEVEL_BUTTON.x + 5, PLAY_LEVEL_BUTTON.y + 5);
+		playArrow.addPoint(PLAY_LEVEL_BUTTON.x + 5, PLAY_LEVEL_BUTTON.y + 35);
+		playArrow.addPoint(PLAY_LEVEL_BUTTON.x + 35, PLAY_LEVEL_BUTTON.y + 20);
+		g.draw(playArrow);
 		
 		if (selection == PLATFORMS) {
 			drawButton(g, PLATFORM_BUTTON);
@@ -399,7 +396,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			if (entityEditor != null && entityEditor.getClass().equals(TeleporterEditor.class)) {
 				drawHighlight(g, TELEPORTER_BUTTON);
 			}
-			new Teleporter(TELEPORTER_BUTTON.x + 5, TELEPORTER_BUTTON.y + 5).draw(g);
+			new Teleporter(TELEPORTER_BUTTON.x + 5, TELEPORTER_BUTTON.y + 5, -1, -1).draw(g);
 		} else if (selection == COLORS) {
 			drawButton(g, LEVEL_BLACK_BUTTON);
 			if (this.level.getLevelColor().equals(CSColor.BLACK)) {
@@ -654,21 +651,21 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		}
 		
 		if (PRINT_BUTTON.contains(e.getPoint())) {
-			LevelPrinter.printLevelCode(level, levelCounter);
-		} else if (SUPER_PRINT_BUTTON.contains(e.getPoint())) {
-			LevelPrinter.printLevelCode(levels[levels.length - 1], levels.length - 1);
-			for (int i = 0; i < levels.length - 1; i++) {
-				if (levels[i] != null)
-					LevelPrinter.printLevelCode(levels[i], i);
+			String name = level.getLevelName();
+			if (name.startsWith("EditingLevel")) {
+				name = JOptionPane.showInputDialog("What should the name of this level be?");
 			}
+				
+			System.out.println("Saving level as: " + name + ".level");
+			LevelSaver.saveLevel(level, name);
 		} else if (CLEAR_BUTTON.contains(e.getPoint())) {
-			level = new Level(level.getLevelColor());
+			level = new Level(level.getLevelName(), level.getLevelColor());
 		} else if (NEXT_LEVEL_BUTTON.contains(e.getPoint())) {
 			if (levelCounter + 1 < levels.length) {
 				levelCounter++;
 				level = levels[levelCounter];
 				if (level == null) {
-					level = new Level(CSColor.GREEN);
+					level = new Level("EditingLevel" + levelCounter, CSColor.GREEN);
 					level.setPlatforms(new Platform[] {
 							new Platform(CSColor.BLACK, 10, 10, 10, 580),
 							new Platform(CSColor.BLACK, 20, 580, 720, 10),
@@ -677,14 +674,14 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 					});
 					levels[levelCounter] = level;
 				}
-				System.out.println("// Currently editing level: " + levelCounter);
+				System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 			}
 		} else if (PREVIOUS_LEVEL_BUTTON.contains(e.getPoint())) {
 			if (levelCounter - 1 >= 0) {
 				levelCounter--;
 				level = levels[levelCounter];
 				if (level == null) {
-					level = new Level(CSColor.GREEN);
+					level = new Level("EditingLevel" + levelCounter, CSColor.GREEN);
 					level.setPlatforms(new Platform[] {
 							new Platform(CSColor.BLACK, 10, 10, 10, 580),
 							new Platform(CSColor.BLACK, 20, 580, 720, 10),
@@ -693,8 +690,17 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 					});
 					levels[levelCounter] = level;
 				}
-				System.out.println("// Currently editing level: " + levelCounter);
+				System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 			}
+		} else if (PLAY_LEVEL_BUTTON.contains(e.getPoint())) {
+			LevelSaver.saveLevel(level, "EditingLevel");
+			
+			LevelManager levelManager = new LevelManager(LevelLoader.loadLevel(null, "EditingLevel"));
+			levelManager.getCurrentLevel().setLevelManager(levelManager);
+			
+			new Thread(() -> {
+				new ColorSwitch(levelManager);
+			}).start();
 		}
 		
 		if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {

@@ -25,22 +25,25 @@ public class Player extends Entity implements Updatable {
 	public static final int MAX_COYOTE_TIME = 5;
 	public static final float JUMP_STRENGTH = 12f;
 	public static final float SPEED = 4.5f;
+	public static final int PLAYER_SIZE = 20;
 	
 	private boolean holdingLeft, holdingRight, holdingUp;
 	
 	private Item[] inventory;
 	private int selectedItem;
-	
+
 	private boolean mirrored;
 	private Player mirrorPlayer;
 	
 	private int coyoteTime;
 	private boolean jumping;
 	
+	private boolean drawDamageVignette;
+	private boolean drawHealVignette;
 	private float health;
 	
 	public Player(int x, int y) {
-		super(x, y, 20, 20);
+		super(x, y, PLAYER_SIZE, PLAYER_SIZE);
 		
 		inventory = new Item[1];
 		
@@ -48,10 +51,13 @@ public class Player extends Entity implements Updatable {
 	}
 	
 	public void reset() {
+		width = PLAYER_SIZE;
+		height = PLAYER_SIZE;
+		
 		holdingLeft = false;
 		holdingRight = false;
 		holdingUp = false;
-		health = 100;
+		health = 1;
 		selectedItem = 0;
 		color = (level != null ? level.getLevelColor() : CSColor.GREEN);
 		mirrored = false;
@@ -144,6 +150,24 @@ public class Player extends Entity implements Updatable {
 				item.draw(g);
 			}
 		}
+		
+		if (drawDamageVignette || drawHealVignette) {
+			if (drawDamageVignette) {
+				g.setColor(Color.RED);
+				drawDamageVignette = false;
+			} else {
+				g.setColor(Color.GREEN);
+				drawHealVignette = false;
+			}
+			
+			g.setStroke(new BasicStroke(10));
+			g.drawRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
+			
+			Color color = g.getColor();
+			g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 100));
+			g.setStroke(new BasicStroke(30));
+			g.drawRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
+		}
 	}
 	
 	public boolean hasInventorySpace() {
@@ -179,6 +203,12 @@ public class Player extends Entity implements Updatable {
 	}
 	
 	public void addHealth(float healthToAdd) {
+		if (healthToAdd > 0) {
+			drawHealVignette = true;
+		} else if (healthToAdd < 0) {
+			drawDamageVignette = true;
+		}
+		
 		health += healthToAdd;
 		if (health > 100) {
 			health = 100;
@@ -281,6 +311,11 @@ public class Player extends Entity implements Updatable {
 	@Override
 	public void onCollision(Entity entity) {
 		// Do nothing.
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
 	}
 	
 }

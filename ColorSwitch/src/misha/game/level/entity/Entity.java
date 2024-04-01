@@ -32,6 +32,9 @@ public abstract class Entity {
 	
 	public abstract void onCollision(Entity entity);
 	
+	@Override
+	public abstract String toString();
+	
 	public float getX() {
 		return x;
 	}

@@ -13,7 +13,7 @@ import java.awt.Color;
 public class DamagePack extends Item {
 	
 	public DamagePack(int x, int y) {
-		super("DamagePack", x, y, 30, 30);
+		super(x, y, 30, 30);
 	}
 	
 	@Override
@@ -38,6 +38,11 @@ public class DamagePack extends Item {
 			g.setColor(Color.WHITE);
 			g.fillRoundRect((int)x + 2, (int)(y + height / 2) - 3, width - 4, 6, 3, 3);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
 	}
 	
 }

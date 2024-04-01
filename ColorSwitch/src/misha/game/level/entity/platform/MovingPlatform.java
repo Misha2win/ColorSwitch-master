@@ -36,10 +36,6 @@ public class MovingPlatform extends Platform implements Updatable {
 		this.speed = .5f;
 	}
 	
-	public MovingPlatform(int x, int y, int x2, int y2, int w, int h) {
-		this(CSColor.BLACK, x, y, x2, y2, w, h);
-	}
-	
 	public void setMovingToPoint2(boolean newbool) {
 		movingToPoint2 = newbool;
 	}
@@ -92,10 +88,9 @@ public class MovingPlatform extends Platform implements Updatable {
 		}
 	}
 	
-//	@Override
-//	public void onCollision(Entity e) {
-//		// if (e.getY() + e.getHeight() < this.getY())
-//		super.onCollision(e);
-//	}
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, (int) x2, (int) y2, width, height); 
+	}
 	
 }

@@ -1,0 +1,16 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 10 580
+platform Platform black 20 580 720 10
+platform Platform black 20 10 720 10
+platform Platform black 730 20 10 560
+// Points
+point SpawnPoint 20 560 true false
+point GoalPoint 710 560
+// Obstacles
+obstacle Lava 330 20 90 560
+// Items
+item ColorChanger green 560 520
+item ColorChanger red 160 520
+// Texts

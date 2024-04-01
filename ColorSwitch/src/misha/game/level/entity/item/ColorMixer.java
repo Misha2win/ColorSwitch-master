@@ -20,7 +20,7 @@ public class ColorMixer extends Item {
 	private boolean add;
 	
 	public ColorMixer(CSColor color, int x, int y, boolean add) {
-		super("ColorMixer", x, y, 30, 30);
+		super(x, y, 30, 30);
 		this.color = color;
 		this.add = add;
 	}
@@ -78,6 +78,15 @@ public class ColorMixer extends Item {
 			if (add)
 				g.fillRoundRect((int)(x + width / 2) - 2, (int)y + 7, 4, height - 14, 3, 3);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, add);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new ColorMixer(CSColor.RED, 100, 100, true));
 	}
 	
 }

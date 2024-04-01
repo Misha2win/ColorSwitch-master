@@ -7,9 +7,9 @@
 
 package misha.editor;
 
-import javax.swing.*;
+import java.awt.Insets;
 
-import misha.game.level.Level;
+import javax.swing.*;
 
 public class Editor extends JFrame {
 	
@@ -17,36 +17,18 @@ public class Editor extends JFrame {
 	public static final int HEIGHT = 600 + 210;
 	
 	private EditorPanel gamePanel;
-
-	public Editor(Level level) {
-		super("Color Switch: Level Editor");
-		
-		setSize(WIDTH, HEIGHT + 28);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setAlwaysOnTop(true);
-		
-		gamePanel = new EditorPanel(level);
-		getContentPane().add(gamePanel);
-		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-		
-		new Thread(() -> {
-			while (true) {
-				gamePanel.repaint();
-				try { Thread.sleep(10); } catch (Exception e) { e.printStackTrace(); }
-			}
-		}).start();
-	}
 	
 	public Editor(int levelNum) {
 		super("Color Switch: Level Editor");
 		
-		setSize(WIDTH, HEIGHT + 28);
+		pack();
+        
+        Insets insets = getInsets();
+        setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + insets.bottom);
+        
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setAlwaysOnTop(true);
+		//setAlwaysOnTop(true);
 		
 		gamePanel = new EditorPanel(levelNum);
 		getContentPane().add(gamePanel);

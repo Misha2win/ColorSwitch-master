@@ -73,4 +73,9 @@ public class HealthGate extends Platform implements Updatable {
 		g.drawString(str, x + width / 2 - g.getFontMetrics().stringWidth(str) / 2, y + height / 2 + 12);
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s %s", moreThan, healthRule, (int) x, (int) y, width, height);
+	}
+	
 }

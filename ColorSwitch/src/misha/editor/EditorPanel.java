@@ -38,7 +38,7 @@ public class EditorPanel extends JPanel {
 	
 	@SuppressWarnings("deprecation")
 	public EditorPanel() {
-		this(new Level(CSColor.GREEN), -1);
+		this(new Level("EditingLevel", CSColor.GREEN), -1);
 	}
 	
 	@Override

@@ -19,13 +19,9 @@ public class Teleporter extends Item {
 	private int endX, endY;
 	
 	public Teleporter(int x, int y, int x2, int y2) {
-		super("Teleporter", x, y, 30, 30);
+		super(x, y, 30, 30);
 		endX = x2;
 		endY = y2;
-	}
-	
-	public Teleporter(int x, int y) {
-		this(x, y, -1, -1);
 	}
 	
 	@Override
@@ -72,6 +68,11 @@ public class Teleporter extends Item {
 				g.fillOval((int)endX, (int)endY, 20, 20);
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", (int) x, (int) y, (int) endX, (int) endY);
 	}
 	
 }

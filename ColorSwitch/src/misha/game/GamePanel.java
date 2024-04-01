@@ -20,6 +20,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 
 import misha.game.level.entity.PhysicsEngine;
+import misha.game.level.Level;
+import misha.game.level.LevelLoader;
 import misha.game.level.LevelManager;
 
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
@@ -33,8 +35,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
 	public LevelManager levelManager;
 	
+	private Level backgroundLevel;
 	private boolean isRepainting;
 	private boolean drawGame;
+	
+	public GamePanel(LevelManager levelManager) {
+		addKeyListener(this);
+		addMouseListener(this);
+		setFocusable(true);
+		
+		isRepainting = true;
+		drawGame = true;
+		
+		this.levelManager = levelManager;
+		
+		pTime = System.currentTimeMillis();
+		start();
+	}
 	
 	public GamePanel() {
 		addKeyListener(this);
@@ -45,9 +62,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		drawGame = false;
 	
 		levelManager = new LevelManager(0);
+		backgroundLevel = LevelLoader.getLevel(null, "ColorChanger3");
 		
 		pTime = System.currentTimeMillis();
 		start();
+	}
+	
+	public void stopRepainting() {
+		isRepainting = false;
 	}
 	
 	@Override
@@ -70,7 +92,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		if (drawGame) {
 			levelManager.draw(g);
 		} else {
-			levelManager.getLevel(3).draw(g);
+			backgroundLevel.draw(g);
 			g.setColor(new Color(200, 200, 200, 120));
 			g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
 			
@@ -130,7 +152,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 			levelManager.getPlayer().keyPressed(e);
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
+			// TODO menu
 		} else if (e.getKeyCode() == KeyEvent.VK_B) {
 			levelManager.toggleDebugMode();
 			System.out.println("Debug mode toggled: " + levelManager.getDebugMode());

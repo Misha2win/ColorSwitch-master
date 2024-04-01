@@ -110,4 +110,9 @@ public class Platform extends Entity {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, width, height); 
+	}
+	
 }

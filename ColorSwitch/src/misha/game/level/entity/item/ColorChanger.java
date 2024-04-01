@@ -16,7 +16,7 @@ import misha.game.level.entity.obstacle.Prism;
 public class ColorChanger extends Item {
 	
 	public ColorChanger(CSColor color, int x, int y) {
-		super("ColorChanger", x, y, 30, 30);
+		super(x, y, 30, 30);
 		this.color = color;
 	}
 	
@@ -57,5 +57,15 @@ public class ColorChanger extends Item {
 			g.fillRect((int)x + 5, (int)y + 5, width - 10, height - 10);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y);
+	}
+	
+//	@Override
+//	public String getConstructorCall() {
+//		return this.getClass().getSimpleName() + "(" + ((int) x) + ", " + ((int) y) + ")";
+//	}
 	
 }

@@ -19,7 +19,7 @@ public class Mirror extends Item {
 	public boolean persistOnce;
 	
 	public Mirror(int x, int y, CSColor mirrorColor, boolean persistOnce) {
-		super("Mirror", x, y, 30, 30);
+		super(x, y, 30, 30);
 		super.color = mirrorColor;
 		this.persistOnce = persistOnce;
 	}
@@ -83,6 +83,11 @@ public class Mirror extends Item {
 		super.setLevel(level);
 		
 		level.createGhostPlatforms(color);
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", (int) x, (int) y, CSColor.getStringFromColor(color), persistOnce);
 	}
 	
 }
