@@ -109,7 +109,7 @@ public class Player extends Entity implements Updatable {
 			
 			// Draw the mirror player
 			g.setColor(mirrorPlayer.getColor().getGraphicsColor());
-			g.fillRect((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5), width, height);
+			g.fillRect((int)(-x + ColorSwitch.NATIVE_WIDTH - width + .5), (int)(y + .5), width, height);
 		}
 		
 		int yOffset = 0;
@@ -161,12 +161,12 @@ public class Player extends Entity implements Updatable {
 			}
 			
 			g.setStroke(new BasicStroke(10));
-			g.drawRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
+			g.drawRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
 			
 			Color color = g.getColor();
 			g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 100));
 			g.setStroke(new BasicStroke(30));
-			g.drawRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
+			g.drawRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
 		}
 	}
 	
@@ -186,7 +186,7 @@ public class Player extends Entity implements Updatable {
 	@Override
 	public void update() {
 		if (mirrored) {
-			mirrorPlayer.setPos((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5));
+			mirrorPlayer.setPos((int)(-x + ColorSwitch.NATIVE_WIDTH - width + .5), (int)(y + .5));
 		}
 	}
 	
@@ -247,7 +247,7 @@ public class Player extends Entity implements Updatable {
 		mirrored = newbool;
 		
 		if (newbool) {
-			mirrorPlayer = new Player((int)(-x + ColorSwitch.WIDTH - width + .5), (int)(y + .5));
+			mirrorPlayer = new Player((int)(-x + ColorSwitch.NATIVE_WIDTH - width + .5), (int)(y + .5));
 		}
 	}
 	

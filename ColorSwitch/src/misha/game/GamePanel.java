@@ -11,61 +11,45 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Font;
 import java.awt.FontMetrics;
-
-import misha.game.level.entity.PhysicsEngine;
-import misha.game.level.Level;
-import misha.game.level.LevelLoader;
 import misha.game.level.LevelManager;
+import misha.game.screen.ScreenManager;
 
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
 	
-	private final static RoundRectangle2D PLAY_BUTTON = new RoundRectangle2D.Float(ColorSwitch.WIDTH / 2 - 125, 225, 250, 75, 20, 20);
-	private final static RoundRectangle2D QUIT_BUTTON = new RoundRectangle2D.Float(ColorSwitch.WIDTH / 2 - 125, 325, 250, 75, 20, 20);
+	private ScreenManager screenManager;
 	
-	private long pTime;
-	private int fpsCounter;
-	private int updateFpsCounter;
-
-	public LevelManager levelManager;
+	private long frameCountStartTime = 0;
+	private long fpsUpdateFrequency = 1000;
+	private long frameCount = 0;
+	private double fps = 0;
 	
-	private Level backgroundLevel;
 	private boolean isRepainting;
-	private boolean drawGame;
 	
 	public GamePanel(LevelManager levelManager) {
+		setBackground(Color.BLACK);
+		
 		addKeyListener(this);
 		addMouseListener(this);
 		setFocusable(true);
+		requestFocus();
 		
 		isRepainting = true;
-		drawGame = true;
 		
-		this.levelManager = levelManager;
+		screenManager = new ScreenManager();
 		
-		pTime = System.currentTimeMillis();
 		start();
 	}
 	
 	public GamePanel() {
-		addKeyListener(this);
-		addMouseListener(this);
-		setFocusable(true);
-		
-		isRepainting = true;
-		drawGame = false;
-	
-		levelManager = new LevelManager(0);
-		backgroundLevel = LevelLoader.getLevel(null, "ColorChanger3");
-		
-		pTime = System.currentTimeMillis();
-		start();
+		this(null);
 	}
 	
 	public void stopRepainting() {
@@ -77,58 +61,29 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		Graphics2D g = (Graphics2D)gr;
 		super.paintComponent(g);
 		
-		long currentTime = System.currentTimeMillis();
-		int fps = 10000 / (int)(currentTime - pTime != 0 ? currentTime - pTime : 1);
-		pTime = currentTime;
-		
-		if (updateFpsCounter >= 10 && fps != 1000) {
-			updateFpsCounter = 0;
-			fpsCounter = (int) fps;
-		}
-		updateFpsCounter++;
-	
-		FontMetrics metrics;
-		
-		if (drawGame) {
-			levelManager.draw(g);
+		if (System.currentTimeMillis() - frameCountStartTime >= fpsUpdateFrequency) {
+			frameCountStartTime = System.currentTimeMillis();
+			fps = frameCount / (fpsUpdateFrequency / 1000f);
+			fps = ((int)(fps * 10)) / 10f; // Round to one decimal place
+			frameCount = 0;
 		} else {
-			backgroundLevel.draw(g);
-			g.setColor(new Color(200, 200, 200, 120));
-			g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
-			
-			g.setColor(Color.WHITE);
-			g.setFont(new Font("MONOSPACED", Font.PLAIN, 60));
-			metrics = g.getFontMetrics();
-			
-			String title = "Color Switch";
-			g.drawString(title, ColorSwitch.WIDTH / 2 - metrics.stringWidth(title) / 2 - 1, 150);
-			g.setColor(Color.BLACK);
-			g.drawString(title, ColorSwitch.WIDTH / 2 - metrics.stringWidth(title) / 2 + 2, 150 + 2);
-			
-			String playString = "Play";
-			g.setColor(new Color(200, 200, 200));
-			g.fill(PLAY_BUTTON);
-			g.setColor(Color.BLACK);
-			g.drawString(playString, ColorSwitch.WIDTH / 2 - metrics.stringWidth(playString) / 2, (int)PLAY_BUTTON.getY() + 55);
-			
-			String quitString = "Quit";
-			g.setColor(new Color(200, 200, 200));
-			g.fill(QUIT_BUTTON);
-			g.setColor(Color.BLACK);
-			g.drawString(quitString, ColorSwitch.WIDTH / 2 - metrics.stringWidth(quitString) / 2, (int)QUIT_BUTTON.getY() + 55);
+			frameCount++;
 		}
 		
-		g.setFont(new Font("MONOSPACED", Font.PLAIN, 14));
-		metrics = g.getFontMetrics();
+		BufferedImage image = new BufferedImage(ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		Graphics imageGraphics = image.getGraphics();
 		
-		String fpsStr = "FPS: " + (fpsCounter / 10f);
-		g.setColor(Color.BLACK);
-		g.drawString(fpsStr, ColorSwitch.WIDTH - 25 - metrics.stringWidth(fpsStr), 30 - metrics.getHeight() / 2 + metrics.getAscent());
-	}
-	
-	private void update() {
-		levelManager.update();
-		PhysicsEngine.calcPhysics(levelManager);
+		screenManager.draw(imageGraphics);
+		
+		String fpsStr = "FPS: " + fps;
+		imageGraphics.setFont(new Font("MONOSPACED", Font.PLAIN, 14));
+		FontMetrics metrics = imageGraphics.getFontMetrics();
+		imageGraphics.setColor(Color.BLACK);
+		imageGraphics.drawString(fpsStr, ColorSwitch.NATIVE_WIDTH - 25 - metrics.stringWidth(fpsStr), 30 - metrics.getHeight() / 2 + metrics.getAscent());
+		
+		imageGraphics.dispose();
+		
+		g.drawImage(image, getWidth() / 2 - ColorSwitch.WIDTH / 2, getHeight() / 2 - ColorSwitch.HEIGHT / 2, ColorSwitch.WIDTH, ColorSwitch.HEIGHT, null);
 	}
 	
 	private void start() {
@@ -138,8 +93,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 				while (isRepainting) {
 					try { Thread.sleep(10); } catch (Exception ex) {}
 					
-					if (drawGame)
-						update();
+					screenManager.update();
 					repaint();
 				}
 			}
@@ -148,55 +102,42 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (drawGame)
-			levelManager.getPlayer().keyPressed(e);
-		
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			// TODO menu
-		} else if (e.getKeyCode() == KeyEvent.VK_B) {
-			levelManager.toggleDebugMode();
-			System.out.println("Debug mode toggled: " + levelManager.getDebugMode());
-		}
+		screenManager.keyPressed(e);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (drawGame)
-			levelManager.getPlayer().keyReleased(e);
+		screenManager.keyReleased(e);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// Ignore
+		screenManager.keyTyped(e);
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (PLAY_BUTTON.contains(e.getPoint())) {
-			drawGame = true;
-		} else if (QUIT_BUTTON.contains(e.getPoint())) {
-			System.exit(0);
-		}
+		screenManager.mousePressed(e);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// Ignore
+		screenManager.mouseReleased(e);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// Ignore
+		screenManager.mouseClicked(e);
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// Ingore
+		screenManager.mouseEntered(e);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// Ignore
+		screenManager.mouseExited(e);
 	}
 	
 }

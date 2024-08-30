@@ -8,12 +8,12 @@
 package misha.game.level;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-
-import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Item;
-import misha.game.level.entity.item.SizeChanger;
 import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.point.GoalPoint;
@@ -22,13 +22,20 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class LevelCreator {
 	
+	public static String LEVEL_ORDER_STRING;
+	
 	static {
+		try {
+			LEVEL_ORDER_STRING = new String(Files.readAllBytes(Paths.get(LevelLoader.LEVEL_DIRECTORY + "LevelsOrder.levels")));
+		} catch (IOException e) {
+			System.err.println("Could not load LevelOrder.levels!");
+			e.printStackTrace();
+		}
+		
 		checkUnusedLevels();
 	}
 	
 	private static void checkUnusedLevels() {
-		createLevels(null);
-		
 		System.out.println("Checking unused levels...");
 		
 		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
@@ -36,11 +43,20 @@ public class LevelCreator {
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
 
+            String[] referencedLevels = LEVEL_ORDER_STRING.split("\n");
             for (File file : files) {
                 if (file.isFile() && !file.isHidden() && file.getName().endsWith(".level")) {
-                	if (!LevelLoader.isLoaded(file.getName())) {
-                		System.err.println("Not using level \"" + file.getName() + "\"");
+                	boolean referenced = false;
+                	
+                	for (String levelName : referencedLevels) {
+                		if (levelName.equals(file.getName().replace(".level", ""))) {
+                			referenced = true;
+                			break;
+                		}
                 	}
+                	
+                	if (!referenced && !file.getName().equals("TestLevel.level"))
+                		System.err.println("Not using level \"" + file.getName() + "\"");
                 }
             }
         } else {
@@ -49,67 +65,32 @@ public class LevelCreator {
 	}
 
 	public static Level[] createLevels(LevelManager levelManager) {
-		ArrayList<Level> levels = new ArrayList<>(50);
+		ArrayList<Level> levels = new ArrayList<>();
 		
-		levels.add(LevelLoader.getLevel(levelManager, "Level0"));
-		levels.add(LevelLoader.getLevel(levelManager, "ColorChanger1"));
-		levels.add(LevelLoader.getLevel(levelManager, "ColorChanger2"));
-		levels.add(LevelLoader.getLevel(levelManager, "ColorChanger3"));
-		levels.add(LevelLoader.getLevel(levelManager, "Element1"));
-		levels.add(LevelLoader.getLevel(levelManager, "Element2"));
-		levels.add(LevelLoader.getLevel(levelManager, "Element3"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism6"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism1"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism2"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism4"));
-		levels.add(LevelLoader.getLevel(levelManager, "Teleporter1"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror1"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror6"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror2"));
-		levels.add(LevelLoader.getLevel(levelManager, "Teleporter2"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror3"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror4"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism5"));
-		levels.add(LevelLoader.getLevel(levelManager, "Mirror7"));
-		
-		levels.add(createEmptyLevel(
-				"ColorMixingText",
-				levelManager,
-				"Levels from this point on have a lot",
-				"to do with additive color mixing.",
-				"You can see how colors mix in the",
-				"pause menu by pressing ESC."
-		));
-		
-		levels.add(LevelLoader.getLevel(levelManager, "ColorMixer1"));
-		levels.add(LevelLoader.getLevel(levelManager, "ColorMixer2"));
-		levels.add(LevelLoader.getLevel(levelManager, "ColorChanger4"));
-		levels.add(LevelLoader.getLevel(levelManager, "Prism7"));
-		
-		levels.add(createEmptyLevel(
-				"IdeasText",
-				levelManager, 
-				"The levels beyond this level are ideas", 
-				"that I am testing out. I made basic",
-				"levels but I cannot come up with actual",
-				"level ideas."
-		));
-		
-		levels.add(LevelLoader.getLevel(levelManager, "PortalPoint1"));
-		levels.add(LevelLoader.getLevel(levelManager, "SuperJump1"));
-		
-		levels.add(createItemTestLevel(
-				"SizeChangerTest",
-				levelManager, 
-				new SizeChanger(ColorSwitch.WIDTH / 2 + 50, ColorSwitch.HEIGHT - 100, true),
-				new SizeChanger(ColorSwitch.WIDTH / 2 - 50, ColorSwitch.HEIGHT - 100, false)
-		));
+		String[] lines = LEVEL_ORDER_STRING.split("\n");
+		for (String line : lines) {
+			if (line.startsWith("//")) {
+				continue;
+			}
+			
+			try {
+				levels.add(LevelLoader.getLevel(levelManager, line));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		while (levels.size() < 50) {
 			levels.add(null);
 		}
 		
-		levels.set(levels.size() - 1, LevelLoader.getLevel(levelManager, "TestLevel"));
+		try {
+			levels.set(levels.size() - 1, LevelLoader.getLevel(levelManager, "TestLevel"));
+			
+//			levels.add(LevelLoader.getLevel(levelManager, "TestLevel"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		return levels.toArray(new Level[levels.size()]);
 	}

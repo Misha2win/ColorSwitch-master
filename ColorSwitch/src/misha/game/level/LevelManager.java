@@ -8,6 +8,9 @@
 package misha.game.level;
 
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.util.LinkedList;
+
 import misha.game.level.entity.player.Player;
 import misha.game.level.entity.point.SpawnPoint;
 
@@ -50,8 +53,25 @@ public class LevelManager {
 		return levels[levelNum];
 	}
 	
-	public void setCurrentLevel(Level level) {
-		levels[currentLevel] = level;
+	public String[] getLevelNames() {
+		LinkedList<String> levelNames = new LinkedList<>();
+		
+		for (Level level : levels) {
+			levelNames.add(level != null ? level.getLevelName() : null);
+		}
+		
+		return levelNames.toArray(new String[levelNames.size()]);
+	}
+	
+	public boolean setLevel(int levelNum) {
+		if (levelNum >= 0 && levelNum < levels.length) {
+			if (levels[levelNum] != null) {
+				currentLevel = levelNum;
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public Level getCurrentLevel() {
@@ -59,7 +79,12 @@ public class LevelManager {
 	}
 
 	public void resetLevel() {
-		levels[currentLevel] = LevelLoader.getLevel(this, getCurrentLevel().getLevelName());
+		try {
+			levels[currentLevel] = LevelLoader.getLevel(this, getCurrentLevel().getLevelName());
+		} catch (IOException e) {
+			System.err.println("There was an issue reloading level " + getCurrentLevel().getLevelName());
+			e.printStackTrace();
+		}
 		resetPlayer();
 	}
 
@@ -81,17 +106,23 @@ public class LevelManager {
 
 			resetPlayer();
 		}
-		System.out.println("Advancing to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
+		
+		if (debugMode)
+			System.out.println("Advancing to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
 	}
 
 	public void previousLevel() {
 		if (currentLevel > 0) {
+			resetLevel();
+			
 			currentLevel--;
 			
 			resetLevel();
 			resetPlayer();
 		}
-		System.out.println("Going back to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
+		
+		if (debugMode)
+			System.out.println("Going back to level " + currentLevel + " (" + getCurrentLevel().getLevelName() + ")");
 	}
 	
 	public void resetPlayer() {

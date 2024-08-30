@@ -1,0 +1,37 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform Platform black 10 500 100 10
+platform Platform black 140 400 100 10
+platform Platform red 270 300 100 10
+platform Platform blue 400 200 100 10
+platform Platform black 530 100 100 10
+platform MovingPlatform black 60 60 260 60 100 10
+platform MovingPlatform red 60 60 60 260 100 10
+platform HealthGate false 50 550 500 100 80
+// Points
+point SpawnPoint 20 560 true false
+point SpawnPoint 220 560 false true
+point SpawnPoint 320 560 false true
+point GoalPoint 710 560
+// Obstacles
+obstacle Lava 570 50 60 50
+// Items
+item HealthPack 120 460
+item HealthPack 220 460
+item HealthPack 320 460
+item SuperJump 20 460
+item ColorMixer green 420 460 true
+item ColorChanger blue 520 460
+item ColorChanger red 620 460
+item Teleporter 165 460 300 400
+item Mirror 260 460 red false
+// Texts
+text 
+text 
+text This level is the testing level.
+text There are no levels after this.

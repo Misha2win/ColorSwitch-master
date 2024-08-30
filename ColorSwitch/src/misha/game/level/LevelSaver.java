@@ -53,12 +53,14 @@ public final class LevelSaver {
 
 		return string.toString();
 	}
-
+	
 	public static boolean saveLevel(Level level, String fileName) {
+		return saveLevel(level, LevelLoader.LEVELS_DIRECTORY, fileName);
+	}
+
+	public static boolean saveLevel(Level level, String directoryPath, String fileName) {
 		if (!fileName.endsWith(LevelLoader.LEVEL_EXTENSION))
 			fileName += LevelLoader.LEVEL_EXTENSION;
-		
-		String directoryPath = LevelLoader.LEVELS_DIRECTORY;
 
 		String content = getLevelString(level);
 

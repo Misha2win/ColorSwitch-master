@@ -13,6 +13,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+
+import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.ColorMixer;
@@ -49,17 +51,17 @@ public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
-		drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
-		drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
-		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
-		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
-		drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
-		drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
+		DrawUtil.drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		DrawUtil.drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		DrawUtil.drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		DrawUtil.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		DrawUtil.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		DrawUtil.drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		DrawUtil.drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
 		
 		g.setStroke(new BasicStroke(1));
 		
-		drawColorButton(g, ADD_BUTTON, Color.WHITE, add);
+		DrawUtil.drawColorButton(g, ADD_BUTTON, Color.WHITE, add);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(ADD_BUTTON.x + 11, ADD_BUTTON.y + 17, 18, 6, 3, 3);
 		g.fillRoundRect(ADD_BUTTON.x + 17, ADD_BUTTON.y + 11, 6, 18, 3, 3);
@@ -68,7 +70,7 @@ public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 		g.fillRoundRect(ADD_BUTTON.x + 18, ADD_BUTTON.y + 12, 4, 16, 3, 3);
 		
 		
-		drawColorButton(g, SUBTRACT_BUTTON, Color.GRAY, !add);
+		DrawUtil.drawColorButton(g, SUBTRACT_BUTTON, Color.GRAY, !add);
 		g.setColor(Color.BLACK);
 		g.fillRoundRect(SUBTRACT_BUTTON.x + 11, SUBTRACT_BUTTON.y + 17, 18, 6, 3, 3);
 		g.setColor(Color.WHITE);

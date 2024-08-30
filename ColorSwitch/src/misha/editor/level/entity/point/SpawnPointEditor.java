@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+
+import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.point.SpawnPoint;
 
@@ -37,10 +39,10 @@ public class SpawnPointEditor extends AbstractPointEditor<SpawnPoint> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		super.drawColorButton(g, ACTIVE_ON_BUTTON, Color.RED, isActive);
-		super.drawColorButton(g, ACTIVE_OFF_BUTTON, Color.RED.darker().darker(), !isActive);
-		super.drawColorButton(g, OBTAINABLE_ON_BUTTON, Color.GREEN, isObtainable);
-		super.drawColorButton(g, OBTAINABLE_OFF_BUTTON, Color.RED, !isObtainable);
+		DrawUtil.drawColorButton(g, ACTIVE_ON_BUTTON, Color.RED, isActive);
+		DrawUtil.drawColorButton(g, ACTIVE_OFF_BUTTON, Color.RED.darker().darker(), !isActive);
+		DrawUtil.drawColorButton(g, OBTAINABLE_ON_BUTTON, Color.GREEN, isObtainable);
+		DrawUtil.drawColorButton(g, OBTAINABLE_OFF_BUTTON, Color.RED, !isObtainable);
 	}
 	
 	@Override

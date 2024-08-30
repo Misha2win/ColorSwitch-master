@@ -1,0 +1,61 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 420 10
+platform Platform black 540 580 200 10
+platform Platform black 20 140 550 10
+platform Platform black 560 140 10 130
+platform Platform black 560 140 100 10
+platform Platform black 640 200 100 10
+platform Platform black 560 260 100 10
+platform Platform black 450 220 10 120
+platform Platform black 350 150 10 120
+platform Platform black 240 220 10 120
+platform Platform black 130 150 10 120
+platform Platform black 130 340 600 10
+platform Platform black 130 340 10 120
+platform Platform black 260 460 10 130
+platform Platform black 400 340 10 120
+platform Platform black 540 420 10 160
+platform Platform black 10 260 90 10
+platform Platform red 20 450 110 10
+platform HealthGate false 50 140 350 260 110
+platform HealthGate false 45 410 350 130 110
+// Points
+point GoalPoint 710 560
+point SpawnPoint 20 120 true false
+// Obstacles
+obstacle Lava 190 20 470 120
+obstacle Acid 600 200 100 10
+obstacle Acid 600 260 100 10
+obstacle Acid 690 310 10 30
+obstacle Acid 630 310 10 30
+obstacle Acid 570 310 10 30
+obstacle Acid 510 310 10 30
+obstacle Acid 20 150 540 110
+obstacle Acid 330 270 50 70
+obstacle Lava 20 260 540 10
+obstacle Lava 20 260 80 190
+obstacle Acid 140 350 100 110
+obstacle Acid 140 350 260 60
+obstacle Acid 300 350 110 110
+obstacle Acid 410 350 50 110
+obstacle Acid 410 350 130 20
+obstacle Acid 510 420 30 40
+// Items
+item SuperJump 470 540
+item ColorChanger green 590 540
+item HealthPack 605 160
+item HealthPack 605 220
+item HealthPack 290 280
+item HealthPack 330 280
+item HealthPack 370 280
+item HealthPack 200 300
+item HealthPack 150 210
+item DamagePack 60 195
+item ColorChanger red 35 480
+item ColorChanger red 85 480
+// Texts

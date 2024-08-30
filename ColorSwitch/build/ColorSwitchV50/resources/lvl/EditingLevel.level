@@ -1,0 +1,20 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+// Points
+point SpawnPoint 20 560 true false
+point GoalPoint 710 560
+// Obstacles
+// Items
+item ColorChanger green 360 520
+// Texts
+text In this game, you must find out the rules and on your own!
+text Use WASD to MOVE,
+text Use E to USE the item in your inventory,
+text Use R to RESTART the current level you are in,
+text Use DELETE to go to the PREVIOUS level.
+text Good luck ;)

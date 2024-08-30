@@ -62,13 +62,13 @@ public class Prism extends Obstacle {
 			
 			if (active) {
 				if (direction == UP)
-					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10 - ColorSwitch.HEIGHT, BEAM_WIDTH, ColorSwitch.HEIGHT);
+					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10 - ColorSwitch.NATIVE_HEIGHT, BEAM_WIDTH, ColorSwitch.NATIVE_HEIGHT);
 				else if (direction == RIGHT)
-					beam = new Rectangle((int) x + 10, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.WIDTH, BEAM_WIDTH);
+					beam = new Rectangle((int) x + 10, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.NATIVE_WIDTH, BEAM_WIDTH);
 				else if (direction == DOWN)
-					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10, BEAM_WIDTH, ColorSwitch.HEIGHT);
+					beam = new Rectangle((int) x + width / 2 - BEAM_WIDTH / 2, (int) y + 10, BEAM_WIDTH, ColorSwitch.NATIVE_HEIGHT);
 				else if (direction == LEFT)
-					beam = new Rectangle((int) x + 10 - ColorSwitch.WIDTH, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.WIDTH, BEAM_WIDTH);
+					beam = new Rectangle((int) x + 10 - ColorSwitch.NATIVE_WIDTH, (int) y + height / 2 - BEAM_WIDTH / 2, ColorSwitch.NATIVE_WIDTH, BEAM_WIDTH);
 				
 				for (Entity platform : level.getPlatforms()) {
 					if ((platform.getColor().collidesWith(color) || platform.getColor().equals(CSColor.BLACK) || platform.getColor().equals(CSColor.WHITE)) && beam.intersects(platform.getRect())) {

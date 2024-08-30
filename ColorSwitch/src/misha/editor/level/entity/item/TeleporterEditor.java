@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.item.Teleporter;
 
@@ -49,8 +50,8 @@ public class TeleporterEditor extends AbstractItemEditor<Teleporter> {
 			g.fillOval(teleportPoint.x, teleportPoint.y, 20, 20);
 		}
 		
-		super.drawColorButton(g, DO_TELEPORT_BUTTON, Color.MAGENTA.darker(), !teleportPoint.equals(new Point(-1, -1)));
-		super.drawColorButton(g, DO_NOT_TELEPORT_BUTTON, Color.MAGENTA.darker().darker().darker(), teleportPoint.equals(new Point(-1, -1)));
+		DrawUtil.drawColorButton(g, DO_TELEPORT_BUTTON, Color.MAGENTA.darker(), !teleportPoint.equals(new Point(-1, -1)));
+		DrawUtil.drawColorButton(g, DO_NOT_TELEPORT_BUTTON, Color.MAGENTA.darker().darker().darker(), teleportPoint.equals(new Point(-1, -1)));
 	}
 	
 	@Override

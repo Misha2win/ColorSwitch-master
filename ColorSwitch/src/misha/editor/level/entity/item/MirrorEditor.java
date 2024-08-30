@@ -12,6 +12,8 @@ import java.awt.Point;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+
+import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Mirror;
@@ -45,18 +47,18 @@ public class MirrorEditor extends AbstractItemEditor<Mirror> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		super.drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
-		super.drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
-		super.drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
-		super.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
-		super.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
-		super.drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
-		super.drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
-		super.drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
-		super.drawColorButton(g, GRAY_BUTTON, Color.GRAY, color.equals(CSColor.GRAY));
+		DrawUtil.drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		DrawUtil.drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		DrawUtil.drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		DrawUtil.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		DrawUtil.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		DrawUtil.drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		DrawUtil.drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
+		DrawUtil.drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
+		DrawUtil.drawColorButton(g, GRAY_BUTTON, Color.GRAY, color.equals(CSColor.GRAY));
 		
-		super.drawColorButton(g, PERSIST_ON_BUTTON, Color.YELLOW, persist);
-		super.drawColorButton(g, PERSIST_OFF_BUTTON, Color.GRAY.darker(), !persist);
+		DrawUtil.drawColorButton(g, PERSIST_ON_BUTTON, Color.YELLOW, persist);
+		DrawUtil.drawColorButton(g, PERSIST_OFF_BUTTON, Color.GRAY.darker(), !persist);
 	}
 	
 	@Override

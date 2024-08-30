@@ -8,8 +8,10 @@
 package misha.game.level;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,7 +23,8 @@ import misha.game.level.entity.point.Point;
 
 public final class LevelLoader {
 	
-	public static final String LEVELS_DIRECTORY = "./lvl/";
+	public static final String LEVEL_DIRECTORY = "./resources/level/";
+	public static final String LEVELS_DIRECTORY = "./resources/level/levels/";
 	public static final String LEVEL_EXTENSION = ".level";
 	
 	private static final HashMap<String, String> LEVEL_STRINGS = new HashMap<>();
@@ -99,14 +102,12 @@ public final class LevelLoader {
 		);
 	}
 	
-	private static String loadLevelString(String levelName) {
-		try {
-			return new String(Files.readAllBytes(Paths.get(LEVELS_DIRECTORY + levelName)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+	private static String loadLevelString(String directory, String levelName) throws IOException {
+		return new String(Files.readAllBytes(Paths.get(directory + levelName)));
+	}
+	
+	private static String loadLevelString(String levelName) throws IOException {
+		return loadLevelString(LEVELS_DIRECTORY , levelName);
 	}
 	
 	public static boolean loadAllLevels() {
@@ -117,7 +118,12 @@ public final class LevelLoader {
 
             for (File file : files) {
                 if (file.isFile() && !file.isHidden()) {
-                	getLevel(null, file.getName());
+                	try {
+                		getLevel(null, file.getName());
+                	} catch (IOException e) {
+                		System.err.println(file.getName() + " is not a level!");
+                		e.printStackTrace();
+                	}
                 }
             }
         } else {
@@ -134,21 +140,27 @@ public final class LevelLoader {
 		return LEVEL_STRINGS.containsKey(levelName);
 	}
 	
-	public static Level loadLevel(LevelManager levelManager, String levelName) {
+	public static Level loadLevel(LevelManager levelManager, String levelName) throws IOException {
 		if (!levelName.endsWith(LEVEL_EXTENSION))
 			levelName += LEVEL_EXTENSION;
 		
-		LEVEL_STRINGS.put(levelName, loadLevelString(levelName));
+		String levelString = loadLevelString(levelName);
+		
+		if (levelString != null) {
+			LEVEL_STRINGS.put(levelName, levelString);
+		} else {
+			throw new NoSuchFileException("There was an issue reading level " + levelName);
+		}
 		
 		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
 	}
 	
-	public static Level getLevel(LevelManager levelManager, String levelName) {
+	public static Level getLevel(LevelManager levelManager, String levelName)  throws IOException {
 		if (!levelName.endsWith(LEVEL_EXTENSION))
 			levelName += LEVEL_EXTENSION;
 		
 		if (!LEVEL_STRINGS.containsKey(levelName)) {
-			LEVEL_STRINGS.put(levelName, loadLevelString(levelName));
+			return loadLevel(levelManager, levelName);
 		}
 		
 		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));

@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+
+import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.platform.Platform;
@@ -38,14 +40,14 @@ public class PlatformEditor extends AbstractPlatformEditor<Platform> {
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
-		drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
-		drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
-		drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
-		drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
-		drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
-		drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
-		drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
+		DrawUtil.drawColorButton(g, RED_BUTTON, Color.RED, color.equals(CSColor.RED));
+		DrawUtil.drawColorButton(g, GREEN_BUTTON, Color.GREEN, color.equals(CSColor.GREEN));
+		DrawUtil.drawColorButton(g, BLUE_BUTTON, Color.BLUE, color.equals(CSColor.BLUE));
+		DrawUtil.drawColorButton(g, YELLOW_BUTTON, Color.YELLOW, color.equals(CSColor.YELLOW));
+		DrawUtil.drawColorButton(g, MAGENTA_BUTTON, Color.MAGENTA, color.equals(CSColor.MAGENTA));
+		DrawUtil.drawColorButton(g, CYAN_BUTTON, Color.CYAN, color.equals(CSColor.CYAN));
+		DrawUtil.drawColorButton(g, WHITE_BUTTON, Color.WHITE, color.equals(CSColor.WHITE));
+		DrawUtil.drawColorButton(g, BLACK_BUTTON, new Color(0, 0, 0), new Color(50, 50, 50), color.equals(CSColor.BLACK));
 	}
 
 	@Override
