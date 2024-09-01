@@ -28,7 +28,7 @@ public class DamagePackEditor extends AbstractItemEditor<DamagePack> {
 	}
 	
 	@Override
-	protected DamagePack getEntity() {
+	protected DamagePack getNewEntityInstance() {
 		return new DamagePack(point.x, point.y);
 	}
 

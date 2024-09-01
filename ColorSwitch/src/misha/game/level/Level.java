@@ -9,7 +9,6 @@ package misha.game.level;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.Font;
@@ -22,24 +21,19 @@ import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.platform.HealthGate;
 import misha.game.level.entity.platform.MovingPlatform;
 import misha.game.level.entity.platform.Platform;
-import misha.game.level.entity.player.Player;
 import misha.game.level.entity.point.Point;
 import misha.game.level.entity.point.SpawnPoint;
 
-import java.awt.*;
-import java.awt.geom.*;
-
 public class Level implements Updatable {
+	
+//	private static final int LIGHT_RADIUS = 200;
+//	private boolean isDark = false;
+	
+	private LevelManager levelManager;
 	
 	private final String levelName;
 	
-	private LevelManager levelManager;
-
 	private CSColor levelColor;
-	
-	private boolean isDark = true;
-	private int lightRadius = 200;
-	
 	private Platform[] platforms;
 	private Point[] points;
 	private Obstacle[] obstacles;
@@ -49,8 +43,6 @@ public class Level implements Updatable {
 	private ArrayList<Updatable> updatables;
 	
 	private Platform[] ghostPlatforms;
-	
-	private LevelScript levelScript;
 	
 	@Deprecated
 	public Level(String levelName, LevelManager levelManager, CSColor c) {
@@ -243,16 +235,16 @@ public class Level implements Updatable {
 	}
 	
 	public void draw(Graphics2D g) {
-		int ol = lightRadius;
-		
-		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
-			long time = System.currentTimeMillis() / 100;
-			lightRadius +=  (Math.sin(time / 2) + Math.cos(time / 3) + Math.sin(time / 5));
-			
-			
-			Player p = levelManager.getPlayer();
-			g.setClip(new Ellipse2D.Float(p.getX() + p.getWidth() / 2 - lightRadius, p.getY() + p.getHeight() / 2 - lightRadius, 2 * lightRadius, 2 * lightRadius));
-		}
+//		int ol = lightRadius;
+//		
+//		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
+//			long time = System.currentTimeMillis() / 100;
+//			lightRadius +=  (Math.sin(time / 2) + Math.cos(time / 3) + Math.sin(time / 5));
+//			
+//			
+//			Player p = levelManager.getPlayer();
+//			g.setClip(new Ellipse2D.Float(p.getX() + p.getWidth() / 2 - lightRadius, p.getY() + p.getHeight() / 2 - lightRadius, 2 * lightRadius, 2 * lightRadius));
+//		}
 		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
@@ -289,7 +281,7 @@ public class Level implements Updatable {
 		if (text.length > 0) {
 			g.setFont(new Font("MONOSPACED", Font.PLAIN, 20));
 			
-			for (int i = (isDark ? 0 : 1); i < 2; i++) {
+			for (int i = /*(isDark ? 0 : */1/*)*/; i < 2; i++) {
 				Shape clip = g.getClip();
 				if (i == 0) {
 					g.setClip(null);
@@ -307,19 +299,19 @@ public class Level implements Updatable {
 			}
 		}
 
-		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
-			Player p = levelManager.getPlayer();
-			
-			float[] dist = new float[] { 0f, 0.7f, 1f };
-			Color[] colors = new Color[] { new Color(0, 0, 0, 0), new Color(0, 0, 0, 150), new Color(0, 0, 0, 255)};
-			RadialGradientPaint paint = new RadialGradientPaint(p.getX() + p.getWidth() / 2, p.getY() + p.getHeight() / 2, lightRadius, dist, colors);
-			g.setPaint(paint);
-			g.fill(g.getClip());
-		}
+//		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
+//			Player p = levelManager.getPlayer();
+//			
+//			float[] dist = new float[] { 0f, 0.7f, 1f };
+//			Color[] colors = new Color[] { new Color(0, 0, 0, 0), new Color(0, 0, 0, 150), new Color(0, 0, 0, 255)};
+//			RadialGradientPaint paint = new RadialGradientPaint(p.getX() + p.getWidth() / 2, p.getY() + p.getHeight() / 2, lightRadius, dist, colors);
+//			g.setPaint(paint);
+//			g.fill(g.getClip());
+//		}
 		
 		g.setClip(null);
 		
-		lightRadius = ol;
+//		lightRadius = ol;
 	}
 
 	@Override

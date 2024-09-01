@@ -30,7 +30,7 @@ public class PortalPointEditor extends AbstractPointEditor<PortalPoint> {
 	}
 	
 	@Override
-	protected PortalPoint getEntity() {
+	protected PortalPoint getNewEntityInstance() {
 		return new PortalPoint(point.x, point.y, portalLinkID);
 	}
 

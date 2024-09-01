@@ -28,7 +28,7 @@ public class SuperJumpEditor extends AbstractItemEditor<SuperJump> {
 	}
 	
 	@Override
-	protected SuperJump getEntity() {
+	protected SuperJump getNewEntityInstance() {
 		return new SuperJump(point.x, point.y);
 	}
 

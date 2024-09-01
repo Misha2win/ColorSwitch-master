@@ -8,6 +8,11 @@
 package misha.game.level.entity.item;
 
 import java.awt.Graphics2D;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.item.HealthPackEditor;
+
 import java.awt.Color;
 
 public class HealthPack extends Item {
@@ -43,6 +48,11 @@ public class HealthPack extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new HealthPackEditor(levelEditor, this);
 	}
 	
 }

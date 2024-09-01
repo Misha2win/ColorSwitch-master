@@ -78,7 +78,7 @@ public class ColorMixerEditor extends AbstractItemEditor<ColorMixer> {
 	}
 	
 	@Override
-	protected ColorMixer getEntity() {
+	protected ColorMixer getNewEntityInstance() {
 		return new ColorMixer(color, point.x, point.y, add);
 	}
 

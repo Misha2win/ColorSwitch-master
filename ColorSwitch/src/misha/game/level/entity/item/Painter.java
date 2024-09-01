@@ -9,6 +9,9 @@ package misha.game.level.entity.item;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.PhysicsEngine;
 import misha.game.level.entity.platform.Platform;
@@ -90,6 +93,11 @@ public class Painter extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, persistOnce);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return null;
 	}
 	
 }

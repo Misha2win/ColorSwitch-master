@@ -103,6 +103,7 @@ public abstract class AbstractPlatformEditor<T extends Platform> extends EntityE
 		rectangle.width = 0;
 		rectangle.height = 0;
 		dragging = false;
+		ignoreInput = false;
 	}
 	
 }

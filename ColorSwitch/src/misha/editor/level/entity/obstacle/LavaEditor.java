@@ -22,7 +22,7 @@ public class LavaEditor extends AbstractElementEditor<Lava> {
 	}
 
 	@Override
-	protected Lava getEntity() {
+	protected Lava getNewEntityInstance() {
 		return new Lava(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	

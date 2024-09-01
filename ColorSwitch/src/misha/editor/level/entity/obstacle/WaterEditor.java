@@ -22,7 +22,7 @@ public class WaterEditor extends AbstractElementEditor<Water> {
 	}
 
 	@Override
-	protected Water getEntity() {
+	protected Water getNewEntityInstance() {
 		return new Water(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	

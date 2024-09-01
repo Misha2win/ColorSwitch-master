@@ -33,6 +33,10 @@ public class GameScreen extends Screen {
 	public LevelManager getLevelManager() {
 		return levelManager;
 	}
+	
+	public void setLevelManager(LevelManager levelManager) {
+		this.levelManager = levelManager;
+	}
 
 	@Override
 	public void setup() {

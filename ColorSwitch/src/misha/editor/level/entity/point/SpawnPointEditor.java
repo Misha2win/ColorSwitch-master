@@ -46,7 +46,7 @@ public class SpawnPointEditor extends AbstractPointEditor<SpawnPoint> {
 	}
 	
 	@Override
-	protected SpawnPoint getEntity() {
+	protected SpawnPoint getNewEntityInstance() {
 		return new SpawnPoint(point.x, point.y, isActive, isObtainable);
 	}
 

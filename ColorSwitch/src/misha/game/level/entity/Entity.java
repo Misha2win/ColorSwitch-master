@@ -9,6 +9,9 @@ package misha.game.level.entity;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
 import misha.game.level.Level;
 
 public abstract class Entity {
@@ -31,6 +34,8 @@ public abstract class Entity {
 	public abstract void draw(Graphics2D g);
 	
 	public abstract void onCollision(Entity entity);
+	
+	public abstract EntityEditor<?> getEntityEditor(LevelEditor levelEditor);
 	
 	@Override
 	public abstract String toString();

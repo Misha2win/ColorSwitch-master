@@ -9,6 +9,10 @@ package misha.game.level.entity.item;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.item.ColorChangerEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.obstacle.Prism;
@@ -61,6 +65,11 @@ public class ColorChanger extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new ColorChangerEditor(levelEditor, this);
 	}
 	
 //	@Override

@@ -14,6 +14,9 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.BasicStroke;
 import java.awt.event.KeyEvent;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
 import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
@@ -316,6 +319,11 @@ public class Player extends Entity implements Updatable {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
+	}
+
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		throw new IllegalStateException("getEntityEditor() cannot be called for instances of Player");
 	}
 	
 }

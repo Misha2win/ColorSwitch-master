@@ -7,6 +7,9 @@
 
 package misha.game.level.entity.obstacle;
 
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.obstacle.HealthPoolEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
@@ -31,6 +34,11 @@ public class Acid extends Element {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", (int) x, (int) y, width, height);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new HealthPoolEditor(levelEditor, this);
 	}
 	
 }

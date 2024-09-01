@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Font;
 
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.platform.HealthGateEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Updatable;
 import misha.game.level.entity.player.Player;
@@ -76,6 +79,11 @@ public class HealthGate extends Platform implements Updatable {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s %s", moreThan, healthRule, (int) x, (int) y, width, height);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new HealthGateEditor(levelEditor, this);
 	}
 	
 }

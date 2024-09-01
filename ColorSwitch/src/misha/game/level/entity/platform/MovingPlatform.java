@@ -7,6 +7,9 @@
 
 package misha.game.level.entity.platform;
 
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.platform.MovingPlatformEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Updatable;
 
@@ -91,6 +94,11 @@ public class MovingPlatform extends Platform implements Updatable {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, (int) x2, (int) y2, width, height); 
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new MovingPlatformEditor(levelEditor, this);
 	}
 	
 }

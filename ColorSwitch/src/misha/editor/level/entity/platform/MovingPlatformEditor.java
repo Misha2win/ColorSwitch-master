@@ -66,7 +66,7 @@ public class MovingPlatformEditor extends AbstractPlatformEditor<MovingPlatform>
 	}
 	
 	@Override
-	protected MovingPlatform getEntity() {
+	protected MovingPlatform getNewEntityInstance() {
 		return new MovingPlatform(color, rectangle.x, rectangle.y, point.x, point.y, rectangle.width, rectangle.height);
 	}
 

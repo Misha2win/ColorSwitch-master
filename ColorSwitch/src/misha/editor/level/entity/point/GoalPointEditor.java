@@ -28,7 +28,7 @@ public class GoalPointEditor extends AbstractPointEditor<GoalPoint> {
 	}
 	
 	@Override
-	protected GoalPoint getEntity() {
+	protected GoalPoint getNewEntityInstance() {
 		return new GoalPoint(point.x, point.y);
 	}
 

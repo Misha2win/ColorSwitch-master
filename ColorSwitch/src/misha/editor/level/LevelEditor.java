@@ -18,50 +18,25 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import javax.swing.JOptionPane;
 import misha.editor.DrawUtil;
 import misha.editor.Editor;
 import misha.editor.Util;
 import misha.editor.level.entity.EntityEditor;
-import misha.editor.level.entity.item.ColorChangerEditor;
-import misha.editor.level.entity.item.ColorMixerEditor;
-import misha.editor.level.entity.item.DamagePackEditor;
-import misha.editor.level.entity.item.HealthPackEditor;
-import misha.editor.level.entity.item.MirrorEditor;
-import misha.editor.level.entity.item.SuperJumpEditor;
-import misha.editor.level.entity.item.TeleporterEditor;
-import misha.editor.level.entity.obstacle.HealthPoolEditor;
-import misha.editor.level.entity.obstacle.LavaEditor;
-import misha.editor.level.entity.obstacle.PrismEditor;
-import misha.editor.level.entity.obstacle.WaterEditor;
-import misha.editor.level.entity.platform.HealthGateEditor;
-import misha.editor.level.entity.platform.MovingPlatformEditor;
-import misha.editor.level.entity.platform.PlatformEditor;
-import misha.editor.level.entity.point.GoalPointEditor;
-import misha.editor.level.entity.point.PortalPointEditor;
-import misha.editor.level.entity.point.SpawnPointEditor;
+import misha.editor.selector.ItemSelector;
+import misha.editor.selector.LevelColorSelector;
+import misha.editor.selector.ObstacleSelector;
+import misha.editor.selector.PlatformSelector;
+import misha.editor.selector.PointSelector;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.item.Item;
-import misha.game.level.entity.item.Mirror;
-import misha.game.level.entity.item.SuperJump;
-import misha.game.level.entity.item.Teleporter;
-import misha.game.level.entity.obstacle.Acid;
-import misha.game.level.entity.obstacle.Lava;
 import misha.game.level.entity.obstacle.Obstacle;
-import misha.game.level.entity.obstacle.Prism;
-import misha.game.level.entity.obstacle.Water;
-import misha.game.level.entity.platform.HealthGate;
-import misha.game.level.entity.platform.MovingPlatform;
 import misha.game.level.entity.platform.Platform;
-import misha.game.level.entity.point.GoalPoint;
 import misha.game.level.entity.point.Point;
-import misha.game.level.entity.point.PortalPoint;
-import misha.game.level.entity.point.SpawnPoint;
-import misha.game.level.entity.item.ColorChanger;
-import misha.game.level.entity.item.ColorMixer;
-import misha.game.level.entity.item.DamagePack;
-import misha.game.level.entity.item.HealthPack;
 import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
@@ -78,36 +53,6 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	private static final Rectangle POINT_SELECT_BUTTON = new Rectangle(160, 610, 40, 40);
 	private static final Rectangle COLOR_SELECT_BUTTON = new Rectangle(210, 610, 40, 40);
 	
-	// Buttons for selecting item editors
-	private static final Rectangle COLOR_CHANGER_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle COLOR_MIXER_BUTTON = new Rectangle(60, 660, 40, 40);
-	private static final Rectangle DAMAGE_PACK_BUTTON = new Rectangle(110, 660, 40, 40);
-	private static final Rectangle HEALTH_PACK_BUTTON = new Rectangle(160, 660, 40, 40);
-	private static final Rectangle MIRROR_BUTTON = new Rectangle(210, 660, 40, 40);
-	private static final Rectangle SUPER_JUMP_BUTTON = new Rectangle(260, 660, 40, 40);
-	private static final Rectangle TELEPORTER_BUTTON = new Rectangle(310, 660, 40, 40);
-	
-	// Buttons for selecting obstacle editors
-	private static final Rectangle HEALTH_POOL_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle LAVA_BUTTON = new Rectangle(60, 660, 40, 40);
-	private static final Rectangle WATER_BUTTON = new Rectangle(110, 660, 40, 40);
-	private static final Rectangle PRISM_BUTTON = new Rectangle(160, 660, 40, 40);
-	
-	// Buttons for selecting point editors
-	private static final Rectangle GOAL_POINT_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle PORTAL_POINT_BUTTON = new Rectangle(60, 660, 40, 40);
-	private static final Rectangle SPAWN_POINT_BUTTON = new Rectangle(110, 660, 40, 40);
-	
-	// Buttons for selecting level color
-	private static final Rectangle LEVEL_BLACK_BUTTON = new Rectangle(10, 660, 40, 40);
-	private static final Rectangle LEVEL_RED_BUTTON = new Rectangle(60, 660, 40, 40);
-	private static final Rectangle LEVEL_GREEN_BUTTON = new Rectangle(110, 660, 40, 40);
-	private static final Rectangle LEVEL_BLUE_BUTTON = new Rectangle(160, 660, 40, 40);
-	private static final Rectangle LEVEL_YELLOW_BUTTON = new Rectangle(210, 660, 40, 40);
-	private static final Rectangle LEVEL_MAGENTA_BUTTON = new Rectangle(260, 660, 40, 40);
-	private static final Rectangle LEVEL_CYAN_BUTTON = new Rectangle(310, 660, 40, 40);
-	private static final Rectangle LEVEL_WHITE_BUTTON = new Rectangle(360, 660, 40, 40);
-	
 	// Misc. buttons
 	private static final Rectangle CLEAR_BUTTON = new Rectangle(700, 610, 40, 40);
 	private static final Rectangle PRINT_BUTTON = new Rectangle(700, 660, 40, 40);
@@ -115,7 +60,12 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	private static final Rectangle NEXT_LEVEL_BUTTON = new Rectangle(700, 760, 40, 40);
 	private static final Rectangle PREVIOUS_LEVEL_BUTTON = new Rectangle(650, 760, 40, 40);
 	
-	private PlatformSelector platformSelector = new PlatformSelector();
+	// Selectors for level entities and level color
+	private final PlatformSelector platformSelector = new PlatformSelector();
+	private final ObstacleSelector obstacleSelector = new ObstacleSelector();
+	private final ItemSelector itemSelector = new ItemSelector();
+	private final PointSelector pointSelector = new PointSelector();
+	private final LevelColorSelector levelColorSelector = new LevelColorSelector();
 	
 	private static final int NOTHING = 0;
 	private static final int PLATFORMS = 1;
@@ -135,10 +85,9 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		this(level, -1);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public LevelEditor(Level level, int num) {
 		if (level == null) {
-			level = new Level("EditingLevel", CSColor.RED);
+			level = LevelCreator.createEmptyLevel("EditingLevel", null);
 		} else {
 			this.level = level;
 		}
@@ -154,7 +103,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		return level;
 	}
 	
-	public void draw(Graphics2D g) {
+	public void drawGuideLines(Graphics2D g) {
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(0));
 		
@@ -183,8 +132,12 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		g.drawLine(3 * Editor.WIDTH / 4, 0, 3 * Editor.WIDTH / 4, 600);
 		g.drawLine(0, 150, Editor.WIDTH , 150);
 		g.drawLine(0, 450, Editor.WIDTH , 450);
-		
+	}
+	
+	public void draw(Graphics2D g) {
 		level.draw(g);
+		
+		drawGuideLines(g);
 		
 		if (entityEditor != null)
 			entityEditor.draw(g);
@@ -234,6 +187,12 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			g.drawRect(COLOR_SELECT_BUTTON.x + 10, COLOR_SELECT_BUTTON.y + 10, 20, 20);
 		}
 		
+		
+		
+		
+		
+		
+		
 		DrawUtil.drawButton(g, NEXT_LEVEL_BUTTON, false);
 		g.setColor(Color.BLACK);
 		Polygon rightArrow = new Polygon();
@@ -262,98 +221,14 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		if (selection == PLATFORMS) {
 			platformSelector.draw(g);
 		} else if (selection == OBSTACLES) {
-			DrawUtil.drawButton(g, HEALTH_POOL_BUTTON, entityEditor != null && entityEditor.getClass().equals(HealthPoolEditor.class));
-			g.setColor(Color.GREEN.darker());
-			g.fillRect(HEALTH_POOL_BUTTON.x + 5, HEALTH_POOL_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LAVA_BUTTON, entityEditor != null && entityEditor.getClass().equals(LavaEditor.class));
-			g.setColor(Color.RED.darker());
-			g.fillRect(LAVA_BUTTON.x + 5, LAVA_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, WATER_BUTTON, entityEditor != null && entityEditor.getClass().equals(WaterEditor.class));
-			g.setColor(Color.BLUE.darker());
-			g.fillRect(WATER_BUTTON.x + 5, WATER_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, PRISM_BUTTON, entityEditor != null && entityEditor.getClass().equals(PrismEditor.class));
-			g.setColor(Color.GRAY);
-			Polygon prism = new Polygon();
-			prism.addPoint((int) (PRISM_BUTTON.x + 20), (int) (PRISM_BUTTON.y + 10));
-			prism.addPoint((int) (PRISM_BUTTON.x + 30), (int) (PRISM_BUTTON.y + 30));
-			prism.addPoint((int) (PRISM_BUTTON.x + 10), (int) (PRISM_BUTTON.y + 30));
-			g.fill(prism);
+			obstacleSelector.draw(g);
 		} else if (selection == POINTS) {
-			DrawUtil.drawButton(g, GOAL_POINT_BUTTON, entityEditor != null && entityEditor.getClass().equals(GoalPointEditor.class));
-			g.setColor(Color.GREEN);
-			g.fillOval(GOAL_POINT_BUTTON.x + 10, GOAL_POINT_BUTTON.y + 10, 20, 20);
-			
-			DrawUtil.drawButton(g, PORTAL_POINT_BUTTON, entityEditor != null && entityEditor.getClass().equals(PortalPointEditor.class));
-			g.setColor(Color.BLUE);
-			g.fillOval(PORTAL_POINT_BUTTON.x + 10, PORTAL_POINT_BUTTON.y + 10, 20, 20);
-			
-			DrawUtil.drawButton(g, SPAWN_POINT_BUTTON, entityEditor != null && entityEditor.getClass().equals(SpawnPointEditor.class));
-			g.setColor(Color.RED);
-			g.fillOval(SPAWN_POINT_BUTTON.x + 10, SPAWN_POINT_BUTTON.y + 10, 20, 20);
+			pointSelector.draw(g);
 		} else if (selection == ITEMS) {
-			DrawUtil.drawButton(g, COLOR_CHANGER_BUTTON, entityEditor != null && entityEditor.getClass().equals(ColorChangerEditor.class));
-			new ColorChanger(CSColor.RED, COLOR_CHANGER_BUTTON.x + 5, COLOR_CHANGER_BUTTON.y + 5).draw(g);
-			
-			DrawUtil.drawButton(g, COLOR_MIXER_BUTTON, entityEditor != null && entityEditor.getClass().equals(ColorMixerEditor.class));
-			new ColorMixer(CSColor.RED, COLOR_MIXER_BUTTON.x + 5, COLOR_MIXER_BUTTON.y + 5, true).draw(g);
-			
-			DrawUtil.drawButton(g, DAMAGE_PACK_BUTTON, entityEditor != null && entityEditor.getClass().equals(DamagePackEditor.class));
-			new DamagePack(DAMAGE_PACK_BUTTON.x + 5, DAMAGE_PACK_BUTTON.y + 5).draw(g);
-			
-			DrawUtil.drawButton(g, HEALTH_PACK_BUTTON, entityEditor != null && entityEditor.getClass().equals(HealthPackEditor.class));
-			new HealthPack(HEALTH_PACK_BUTTON.x + 5, HEALTH_PACK_BUTTON.y + 5).draw(g);
-			
-			DrawUtil.drawButton(g, MIRROR_BUTTON, entityEditor != null && entityEditor.getClass().equals(MirrorEditor.class));
-			new Mirror(MIRROR_BUTTON.x + 5, MIRROR_BUTTON.y + 5, CSColor.GRAY, false).draw(g);
-			
-			DrawUtil.drawButton(g, SUPER_JUMP_BUTTON, entityEditor != null && entityEditor.getClass().equals(SuperJumpEditor.class));
-			new SuperJump(SUPER_JUMP_BUTTON.x + 5, SUPER_JUMP_BUTTON.y + 5).draw(g);
-			
-			DrawUtil.drawButton(g, TELEPORTER_BUTTON, entityEditor != null && entityEditor.getClass().equals(TeleporterEditor.class));
-			new Teleporter(TELEPORTER_BUTTON.x + 5, TELEPORTER_BUTTON.y + 5, -1, -1).draw(g);
+			itemSelector.draw(g);
 		} else if (selection == COLORS) {
-			DrawUtil.drawButton(g, LEVEL_BLACK_BUTTON, this.level.getLevelColor().equals(CSColor.BLACK));
-			g.setColor(Color.BLACK);
-			g.fillRect(LEVEL_BLACK_BUTTON.x + 5, LEVEL_BLACK_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_RED_BUTTON, this.level.getLevelColor().equals(CSColor.RED));
-			g.setColor(Color.RED);
-			g.fillRect(LEVEL_RED_BUTTON.x + 5, LEVEL_RED_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_GREEN_BUTTON, this.level.getLevelColor().equals(CSColor.GREEN));
-			g.setColor(Color.GREEN);
-			g.fillRect(LEVEL_GREEN_BUTTON.x + 5, LEVEL_GREEN_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_BLUE_BUTTON, this.level.getLevelColor().equals(CSColor.BLUE));
-			g.setColor(Color.BLUE);
-			g.fillRect(LEVEL_BLUE_BUTTON.x + 5, LEVEL_BLUE_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_YELLOW_BUTTON, this.level.getLevelColor().equals(CSColor.YELLOW));
-			g.setColor(Color.YELLOW);
-			g.fillRect(LEVEL_YELLOW_BUTTON.x + 5, LEVEL_YELLOW_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_MAGENTA_BUTTON, this.level.getLevelColor().equals(CSColor.MAGENTA));
-			g.setColor(Color.MAGENTA);
-			g.fillRect(LEVEL_MAGENTA_BUTTON.x + 5, LEVEL_MAGENTA_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_CYAN_BUTTON, this.level.getLevelColor().equals(CSColor.CYAN));
-			g.setColor(Color.CYAN);
-			g.fillRect(LEVEL_CYAN_BUTTON.x + 5, LEVEL_CYAN_BUTTON.y + 5, 30, 30);
-			
-			DrawUtil.drawButton(g, LEVEL_WHITE_BUTTON, this.level.getLevelColor().equals(CSColor.WHITE));
-			g.setColor(Color.WHITE);
-			g.fillRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
-			g.setColor(Color.BLACK);
-			g.drawRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
+			levelColorSelector.draw(g);
 		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void setLevelColor(CSColor color) {
-		level.setLevelColor(color);
 	}
 	
 	public void addObjectToLevel(Object obj) {
@@ -430,138 +305,134 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		if (entityEditor != null)
 			entityEditor.mouseExited(e);
 	}
-
+	
+	private Entity getClickedEntity(MouseEvent e) {
+		for (int check = 0; check < 4; check++) {
+			Entity[] entities = null;
+			if (check == 0)
+				entities = level.getPlatforms();
+			else if (check == 1)
+				entities = level.getPoints();
+			else if (check == 2)
+				entities = level.getObstacles();
+			else if (check == 3)
+				entities = level.getItems();
+			
+			if (entities == null)
+				continue;
+			
+			for (Entity entity : entities) {
+				if (entity.getRect().contains(e.getPoint())) {
+					return entity;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public void saveLevel() {
+		String name = level.getLevelName();
+		if (name.startsWith("EditingLevel")) {
+			name = JOptionPane.showInputDialog("What should the name of this level be?");
+		}
+			
+		System.out.println("Saving level as: " + name + ".level");
+		LevelSaver.saveLevel(level, name);
+	}
+	
+	public void setToNextLevel() {
+		if (levelCounter + 1 < levels.length) {
+			levelCounter++;
+			level = levels[levelCounter];
+			if (level == null) {
+				levels[levelCounter] = LevelCreator.createEmptyLevel("EditingLevel" + levelCounter, null);
+			}
+			System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
+		}
+	}
+	
+	public void setToPreviousLevel() {
+		if (levelCounter - 1 >= 0) {
+			levelCounter--;
+			level = levels[levelCounter];
+			if (level == null) {
+				levels[levelCounter] = LevelCreator.createEmptyLevel("EditingLevel" + levelCounter, null);
+			}
+			System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
+	public void playCurrentLevel() {
+		LevelSaver.saveLevel(level, LevelLoader.LEVEL_DIRECTORY, "EditingLevel");
+		
+		LevelManager levelManager;
+		try {
+			levelManager = new LevelManager(LevelLoader.loadLevel(null, "../EditingLevel"));
+			levelManager.getCurrentLevel().setLevelManager(levelManager);
+			
+			new Thread(() -> {
+				new ColorSwitch(levelManager);
+			}).start();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public void findSelectorToDraw() {
+		Type superclass = entityEditor.getClass().getGenericSuperclass();
+		if (superclass instanceof ParameterizedType) {
+			ParameterizedType parameterizedType = (ParameterizedType) superclass;
+			
+			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+
+			if (typeArguments.length == 1) {
+				Type type = typeArguments[0];
+				
+				if (type instanceof Class<?>) {
+					if (Platform.class.isAssignableFrom((Class<?>) type)) {
+						selection = PLATFORMS;
+	                } else if (Obstacle.class.isAssignableFrom((Class<?>) type)) {
+						selection = OBSTACLES;
+	                } else if (Point.class.isAssignableFrom((Class<?>) type)) {
+						selection = POINTS;
+	                } else if (Item.class.isAssignableFrom((Class<?>) type)) {
+						selection = ITEMS;
+	                }
+				}
+			} else {
+				throw new IllegalStateException("entityEditor either has no parameterized types or has multiple!");
+			}
+		}
+	}
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (entityEditor == null) {
-			for (int check = 0; check < 4; check++) {
-				Entity[] entities = null;
-				if (check == 0)
-					entities = level.getPlatforms();
-				else if (check == 1)
-					entities = level.getPoints();
-				else if (check == 2)
-					entities = level.getObstacles();
-				else if (check == 3)
-					entities = level.getItems();
+			Entity clickedEntity = getClickedEntity(e);
+			
+			if (clickedEntity != null) {
+				entityEditor = clickedEntity.getEntityEditor(this);
+				entityEditor.mousePressed(e);
 				
-				if (entities == null)
-					continue;
-				
-				for (Entity entity : entities) {
-					if (entity.getRect().contains(e.getPoint())) {
-						// Platforms
-						if (entity.getClass().equals(MovingPlatform.class))
-							entityEditor = new MovingPlatformEditor(this, (MovingPlatform) entity);
-						else if (entity.getClass().equals(HealthGate.class))
-							entityEditor = new HealthGateEditor(this, (HealthGate) entity);
-						else if (entity.getClass().equals(Platform.class))
-							entityEditor = new PlatformEditor(this, (Platform) entity);
-						// Obstacles
-						else if (entity.getClass().equals(Acid.class))
-							entityEditor = new HealthPoolEditor(this, (Acid) entity);
-						else if (entity.getClass().equals(Lava.class))
-							entityEditor = new LavaEditor(this, (Lava) entity);
-						else if (entity.getClass().equals(Water.class))
-							entityEditor = new WaterEditor(this, (Water) entity);
-						else if (entity.getClass().equals(Prism.class))
-							entityEditor = new PrismEditor(this, (Prism) entity);
-						// Points
-						else if (entity.getClass().equals(SpawnPoint.class))
-							entityEditor = new SpawnPointEditor(this, (SpawnPoint) entity);
-						else if (entity.getClass().equals(GoalPoint.class))
-							entityEditor = new GoalPointEditor(this, (GoalPoint) entity);
-						else if (entity.getClass().equals(PortalPoint.class))
-							entityEditor = new PortalPointEditor(this, (PortalPoint) entity);
-						// Items
-						else if (entity.getClass().equals(ColorChanger.class))
-							entityEditor = new ColorChangerEditor(this, (ColorChanger) entity);
-						else if (entity.getClass().equals(ColorMixer.class))
-							entityEditor = new ColorMixerEditor(this, (ColorMixer) entity);
-						else if (entity.getClass().equals(DamagePack.class))
-							entityEditor = new DamagePackEditor(this, (DamagePack) entity);
-						else if (entity.getClass().equals(HealthPack.class))
-							entityEditor = new HealthPackEditor(this, (HealthPack) entity);
-						else if (entity.getClass().equals(Mirror.class))
-							entityEditor = new MirrorEditor(this, (Mirror) entity);
-						else if (entity.getClass().equals(SuperJump.class))
-							entityEditor = new SuperJumpEditor(this, (SuperJump) entity);
-						else if (entity.getClass().equals(Teleporter.class))
-							entityEditor = new TeleporterEditor(this, (Teleporter) entity);
-				
-						
-						if (entityEditor != null) {
-							entityEditor.mousePressed(e);
-						}
-						
-						break;
-					}
-				}
+				findSelectorToDraw();
 			}
 		} else {
 			entityEditor.mousePressed(e);
 		}
 		
 		if (PRINT_BUTTON.contains(e.getPoint())) {
-			String name = level.getLevelName();
-			if (name.startsWith("EditingLevel")) {
-				name = JOptionPane.showInputDialog("What should the name of this level be?");
-			}
-				
-			System.out.println("Saving level as: " + name + ".level");
-			LevelSaver.saveLevel(level, name);
+			saveLevel();
 		} else if (CLEAR_BUTTON.contains(e.getPoint())) {
-			level = new Level(level.getLevelName(), level.getLevelColor());
+			level = LevelCreator.createTrulyEmptyLevel(level.getLevelName(), null);
 		} else if (NEXT_LEVEL_BUTTON.contains(e.getPoint())) {
-			if (levelCounter + 1 < levels.length) {
-				levelCounter++;
-				level = levels[levelCounter];
-				if (level == null) {
-					level = new Level("EditingLevel" + levelCounter, CSColor.GREEN);
-					level.setPlatforms(new Platform[] {
-							new Platform(CSColor.BLACK, 10, 10, 10, 580),
-							new Platform(CSColor.BLACK, 20, 580, 720, 10),
-							new Platform(CSColor.BLACK, 20, 10, 720, 10),
-							new Platform(CSColor.BLACK, 730, 20, 10, 560)	
-					});
-					levels[levelCounter] = level;
-				}
-				System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
-			}
+			setToNextLevel();
 		} else if (PREVIOUS_LEVEL_BUTTON.contains(e.getPoint())) {
-			if (levelCounter - 1 >= 0) {
-				levelCounter--;
-				level = levels[levelCounter];
-				if (level == null) {
-					level = new Level("EditingLevel" + levelCounter, CSColor.GREEN);
-					level.setPlatforms(new Platform[] {
-							new Platform(CSColor.BLACK, 10, 10, 10, 580),
-							new Platform(CSColor.BLACK, 20, 580, 720, 10),
-							new Platform(CSColor.BLACK, 20, 10, 720, 10),
-							new Platform(CSColor.BLACK, 730, 20, 10, 560)	
-					});
-					levels[levelCounter] = level;
-				}
-				System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
-			}
+			setToPreviousLevel();
 		} else if (PLAY_LEVEL_BUTTON.contains(e.getPoint())) {
-			LevelSaver.saveLevel(level, LevelLoader.LEVEL_DIRECTORY, "EditingLevel");
-			
-			LevelManager levelManager;
-			try {
-				levelManager = new LevelManager(LevelLoader.loadLevel(null, "../EditingLevel"));
-				levelManager.getCurrentLevel().setLevelManager(levelManager);
-				
-				new Thread(() -> {
-					new ColorSwitch(levelManager);
-				}).start();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-		if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {
+			playCurrentLevel();
+		} else if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = PLATFORMS;
 			entityEditor = null;
 		} else if (ITEM_SELECT_BUTTON.contains(e.getPoint())) {
@@ -580,60 +451,24 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		
 		if (selection == PLATFORMS) {
 			EntityEditor<?> editor = platformSelector.getEditor(this, level.getPlatforms(), e.getPoint());
-			if (editor != null)
+			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
 				entityEditor = editor;
  		} else if (selection == OBSTACLES) {
-			if (HEALTH_POOL_BUTTON.contains(e.getPoint())) {
-				entityEditor = new HealthPoolEditor(this, null);
-			} else if (LAVA_BUTTON.contains(e.getPoint())) {
-				entityEditor = new LavaEditor(this, null);
-			} else if (WATER_BUTTON.contains(e.getPoint())) {
-				entityEditor = new WaterEditor(this, null);
-			} else if (PRISM_BUTTON.contains(e.getPoint())) {
-				entityEditor = new PrismEditor(this, null);
+ 			EntityEditor<?> editor = obstacleSelector.getEditor(this, level.getObstacles(), e.getPoint());
+			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
+				entityEditor = editor;
 			}
 		} else if (selection == POINTS) {
-			if (GOAL_POINT_BUTTON.contains(e.getPoint())) {
-				entityEditor = new GoalPointEditor(this, null);
-			} else if (PORTAL_POINT_BUTTON.contains(e.getPoint())) {
-				entityEditor = new PortalPointEditor(this, null);
-			} else if (SPAWN_POINT_BUTTON.contains(e.getPoint())) {
-				entityEditor = new SpawnPointEditor(this, null);
+			EntityEditor<?> editor = pointSelector.getEditor(this, level.getPoints(), e.getPoint());
+			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
+				entityEditor = editor;
 			}
 		} else if (selection == ITEMS) {
-			if (COLOR_CHANGER_BUTTON.contains(e.getPoint())) {
-				entityEditor = new ColorChangerEditor(this, null);
-			} else if (COLOR_MIXER_BUTTON.contains(e.getPoint())) {
-				entityEditor = new ColorMixerEditor(this, null);
-			} else if (DAMAGE_PACK_BUTTON.contains(e.getPoint())) {
-				entityEditor = new DamagePackEditor(this, null);
-			} else if (HEALTH_PACK_BUTTON.contains(e.getPoint())) {
-				entityEditor = new HealthPackEditor(this, null);
-			} else if (MIRROR_BUTTON.contains(e.getPoint())) {
-				entityEditor = new MirrorEditor(this, null);
-			} else if (SUPER_JUMP_BUTTON.contains(e.getPoint())) {
-				entityEditor = new SuperJumpEditor(this, null);
-			} else if (TELEPORTER_BUTTON.contains(e.getPoint())) {
-				entityEditor = new TeleporterEditor(this, null);
-			}
+			EntityEditor<?> editor = itemSelector.getEditor(this, level.getItems(), e.getPoint());
+			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
+				entityEditor = editor;
 		} else if (selection == COLORS) {
-			if (LEVEL_BLACK_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.BLACK);
-			} else if (LEVEL_RED_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.RED);
-			} else if (LEVEL_GREEN_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.GREEN);
-			} else if (LEVEL_BLUE_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.BLUE);
-			} else if (LEVEL_YELLOW_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.YELLOW);
-			} else if (LEVEL_MAGENTA_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.MAGENTA);
-			} else if (LEVEL_CYAN_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.CYAN);
-			} else if (LEVEL_WHITE_BUTTON.contains(e.getPoint())) {
-				level.setLevelColor(CSColor.WHITE);
-			}
+			levelColorSelector.setColor(this, e.getPoint());
 		}
 	}
 
@@ -650,6 +485,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		
 		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			entityEditor = null;
+			selection = NOTHING;
 		}
 	}
 

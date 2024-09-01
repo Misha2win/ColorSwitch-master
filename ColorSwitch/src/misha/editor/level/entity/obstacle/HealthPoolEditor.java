@@ -22,7 +22,7 @@ public class HealthPoolEditor extends AbstractElementEditor<Acid> {
 	}
 
 	@Override
-	protected Acid getEntity() {
+	protected Acid getNewEntityInstance() {
 		return new Acid(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	

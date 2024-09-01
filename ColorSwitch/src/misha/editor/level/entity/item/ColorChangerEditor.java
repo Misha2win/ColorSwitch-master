@@ -51,7 +51,7 @@ public class ColorChangerEditor extends AbstractItemEditor<ColorChanger> {
 	}
 	
 	@Override
-	protected ColorChanger getEntity() {
+	protected ColorChanger getNewEntityInstance() {
 		return new ColorChanger(color, point.x, point.y);
 	}
 

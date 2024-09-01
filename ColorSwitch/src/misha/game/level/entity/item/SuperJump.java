@@ -11,6 +11,10 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Polygon;
 
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.item.SuperJumpEditor;
+
 public class SuperJump extends Item {
 	
 	public SuperJump(int x, int y) {
@@ -53,6 +57,11 @@ public class SuperJump extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new SuperJumpEditor(levelEditor, this);
 	}
 	
 }

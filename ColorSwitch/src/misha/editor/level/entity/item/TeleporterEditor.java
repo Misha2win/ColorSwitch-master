@@ -55,7 +55,7 @@ public class TeleporterEditor extends AbstractItemEditor<Teleporter> {
 	}
 	
 	@Override
-	protected Teleporter getEntity() {
+	protected Teleporter getNewEntityInstance() {
 		return new Teleporter(point.x, point.y, teleportPoint.x, teleportPoint.y);
 	}
 

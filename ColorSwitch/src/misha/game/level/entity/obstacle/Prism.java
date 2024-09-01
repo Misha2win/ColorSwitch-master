@@ -11,6 +11,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Polygon;
+
+import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.obstacle.PrismEditor;
 import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
@@ -137,6 +141,11 @@ public class Prism extends Obstacle {
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, direction);
 		
+	}
+	
+	@Override
+	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
+		return new PrismEditor(levelEditor, this);
 	}
 	
 }

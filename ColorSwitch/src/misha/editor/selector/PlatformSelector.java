@@ -5,13 +5,14 @@
  * Notes:  
  */
 
-package misha.editor.level;
+package misha.editor.selector;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Point;
 import misha.editor.DrawUtil;
+import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.platform.HealthGateEditor;
 import misha.editor.level.entity.platform.MovingPlatformEditor;
@@ -20,25 +21,18 @@ import misha.game.level.entity.platform.HealthGate;
 import misha.game.level.entity.platform.MovingPlatform;
 import misha.game.level.entity.platform.Platform;
 
-public class ObstacleSelector {
+public class PlatformSelector extends AbstractEntitySelector<Platform> {
 	
-	public static final int NOTHING = 0;
-	public static final int PLATFORM = 1;
-	public static final int MOVING_PLATFORM = 2;
-	public static final int HEALTH_GATE = 3;
+	private static final int PLATFORM = 1;
+	private static final int MOVING_PLATFORM = 2;
+	private static final int HEALTH_GATE = 3;
 	
 	private static final Rectangle PLATFORM_BUTTON = new Rectangle(10, 660, 40, 40);
 	private static final Rectangle MOVING_PLATFORM_BUTTON = new Rectangle(60, 660, 40, 40);
 	private static final Rectangle HEALTH_GATE_BUTTON = new Rectangle(110, 660, 40, 40);
 	
-	private int highlightOption;
-	
-	public void setHighlight(int option) {
-		if (option >= 0 && option <= 3)
-			highlightOption = option;
-	}
-	
-	public EntityEditor<?> getEditor(LevelEditor levelEditor, Platform[] platforms, Point point) {
+	@Override
+	public EntityEditor<? extends Platform> getEditor(LevelEditor levelEditor, Platform[] platforms, Point point) {
 		Platform clickedPlatform = null;
 		for (Platform platform : platforms) {
 			if (platform.getRect().contains(point)) {
@@ -58,15 +52,15 @@ public class ObstacleSelector {
 				return new HealthGateEditor(levelEditor);
 			}
 		} else {
-			if (clickedPlatform.getClass().equals(Platform.class)) {
-				highlightOption = PLATFORM;
-				return new PlatformEditor(levelEditor, clickedPlatform);
-			} else if (clickedPlatform.getClass().equals(MovingPlatform.class)) {
+			if (clickedPlatform.getClass().equals(MovingPlatform.class)) {
 				highlightOption = MOVING_PLATFORM;
 				return new MovingPlatformEditor(levelEditor, (MovingPlatform) clickedPlatform);
 			} else if (clickedPlatform.getClass().equals(HealthGate.class)) {
 				highlightOption = HEALTH_GATE;
 				return new HealthGateEditor(levelEditor, (HealthGate) clickedPlatform);
+			} else if (clickedPlatform.getClass().equals(Platform.class)) {
+				highlightOption = PLATFORM;
+				return new PlatformEditor(levelEditor, clickedPlatform);
 			}
 		}
 		

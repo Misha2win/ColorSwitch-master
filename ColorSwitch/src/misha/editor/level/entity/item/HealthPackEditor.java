@@ -28,7 +28,7 @@ public class HealthPackEditor extends AbstractItemEditor<HealthPack> {
 	}
 	
 	@Override
-	protected HealthPack getEntity() {
+	protected HealthPack getNewEntityInstance() {
 		return new HealthPack(point.x, point.y);
 	}
 

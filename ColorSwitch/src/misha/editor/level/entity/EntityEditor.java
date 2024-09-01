@@ -47,10 +47,14 @@ public abstract class EntityEditor<T extends Entity> implements KeyListener, Mou
 			this.color = CSColor.BLACK;
 	}
 	
-	protected abstract T getEntity();
+	public T getStoredEntity() {
+		return entity;
+	}
 	
-	protected void createEntity() {
-		entity = getEntity();
+	protected abstract T getNewEntityInstance();
+	
+	protected void createEntity() { // TODO maybe only this class should have access to LevelEditor
+		entity = getNewEntityInstance();
 		levelEditor.addObjectToLevel(entity);
 	}
 	

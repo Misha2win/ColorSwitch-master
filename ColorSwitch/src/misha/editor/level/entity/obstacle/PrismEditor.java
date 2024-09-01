@@ -211,7 +211,7 @@ public class PrismEditor extends AbstractObstacleEditor<Prism> {
 	}
 
 	@Override
-	protected Prism getEntity() {
+	protected Prism getNewEntityInstance() {
 		return new Prism(color, point.x, point.y, direction);
 	}
 	

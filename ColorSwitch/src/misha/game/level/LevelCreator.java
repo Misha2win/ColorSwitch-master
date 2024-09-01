@@ -140,4 +140,23 @@ public class LevelCreator {
 				text
 		);
 	}
+	
+	public static Level createTrulyEmptyLevel(String levelName, LevelManager levelManager) {
+		return new Level(
+				levelName,
+				levelManager,
+				CSColor.GREEN,
+				new Platform[] {
+				},
+				new Point[] {
+				},
+				new Obstacle[] {
+				},
+				new Item[] {
+				},
+				new String[] {
+				}
+		);
+	}
+	
 }

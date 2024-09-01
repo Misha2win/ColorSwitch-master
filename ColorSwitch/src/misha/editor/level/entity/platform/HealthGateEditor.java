@@ -78,7 +78,7 @@ public class HealthGateEditor extends AbstractPlatformEditor<HealthGate> {
 	}
 
 	@Override
-	protected HealthGate getEntity() {
+	protected HealthGate getNewEntityInstance() {
 		return new HealthGate(more, health, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	

@@ -51,7 +51,7 @@ public class PlatformEditor extends AbstractPlatformEditor<Platform> {
 	}
 
 	@Override
-	protected Platform getEntity() {
+	protected Platform getNewEntityInstance() {
 		return new Platform(color, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	

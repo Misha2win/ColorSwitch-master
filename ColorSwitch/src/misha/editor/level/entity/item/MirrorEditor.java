@@ -62,7 +62,7 @@ public class MirrorEditor extends AbstractItemEditor<Mirror> {
 	}
 	
 	@Override
-	protected Mirror getEntity() {
+	protected Mirror getNewEntityInstance() {
 		return new Mirror(point.x, point.y, color, persist);
 	}
 
