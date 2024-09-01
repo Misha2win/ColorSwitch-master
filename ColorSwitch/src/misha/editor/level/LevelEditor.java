@@ -347,6 +347,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			level = levels[levelCounter];
 			if (level == null) {
 				levels[levelCounter] = LevelCreator.createEmptyLevel("EditingLevel" + levelCounter, null);
+				level = levels[levelCounter];
 			}
 			System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 		}
@@ -358,6 +359,7 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			level = levels[levelCounter];
 			if (level == null) {
 				levels[levelCounter] = LevelCreator.createEmptyLevel("EditingLevel" + levelCounter, null);
+				level = levels[levelCounter];
 			}
 			System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 		}

@@ -19,6 +19,7 @@ import misha.editor.level.entity.item.ColorMixerEditor;
 import misha.editor.level.entity.item.DamagePackEditor;
 import misha.editor.level.entity.item.HealthPackEditor;
 import misha.editor.level.entity.item.MirrorEditor;
+import misha.editor.level.entity.item.SizeChangerEditor;
 import misha.editor.level.entity.item.SuperJumpEditor;
 import misha.editor.level.entity.item.TeleporterEditor;
 import misha.game.level.entity.CSColor;
@@ -28,6 +29,7 @@ import misha.game.level.entity.item.DamagePack;
 import misha.game.level.entity.item.HealthPack;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.item.Mirror;
+import misha.game.level.entity.item.SizeChanger;
 import misha.game.level.entity.item.SuperJump;
 import misha.game.level.entity.item.Teleporter;
 
@@ -40,6 +42,7 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 	private static final int MIRROR = 5;
 	private static final int SUPER_JUMP = 6;
 	private static final int TELEPORTER = 7;
+	private static final int SIZE_CHANGER = 8;
 	
 	private static final Rectangle COLOR_CHANGER_BUTTON = new Rectangle(10, 660, 40, 40);
 	private static final Rectangle COLOR_MIXER_BUTTON = new Rectangle(60, 660, 40, 40);
@@ -48,6 +51,7 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 	private static final Rectangle MIRROR_BUTTON = new Rectangle(210, 660, 40, 40);
 	private static final Rectangle SUPER_JUMP_BUTTON = new Rectangle(260, 660, 40, 40);
 	private static final Rectangle TELEPORTER_BUTTON = new Rectangle(310, 660, 40, 40);
+	private static final Rectangle SIZE_CHANGER_BUTTON = new Rectangle(360, 660, 40, 40);
 	
 	private static final Item COLOR_CHANGER_IMAGE = new ColorChanger(CSColor.RED, COLOR_CHANGER_BUTTON.x + 5, COLOR_CHANGER_BUTTON.y + 5);
 	private static final Item COLOR_MIXER_IMAGE = new ColorMixer(CSColor.RED, COLOR_MIXER_BUTTON.x + 5, COLOR_MIXER_BUTTON.y + 5, true);
@@ -56,6 +60,7 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 	private static final Item MIRROR_IMAGE = new Mirror(MIRROR_BUTTON.x + 5, MIRROR_BUTTON.y + 5, CSColor.GRAY, false);
 	private static final Item SUPER_JUMP_IMAGE = new SuperJump(SUPER_JUMP_BUTTON.x + 5, SUPER_JUMP_BUTTON.y + 5);
 	private static final Item TELEPORTER_IMAGE = new Teleporter(TELEPORTER_BUTTON.x + 5, TELEPORTER_BUTTON.y + 5, -1, -1);
+	private static final Item SIZE_CHANGER_IMAGE = new SizeChanger(SIZE_CHANGER_BUTTON.x + 5, SIZE_CHANGER_BUTTON.y + 5, true);
 	
 	@Override
 	public EntityEditor<? extends Item> getEditor(LevelEditor levelEditor, Item[] items, Point point) {
@@ -88,6 +93,9 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 			} else if (TELEPORTER_BUTTON.contains(point)) {
 				highlightOption = TELEPORTER;
 				return new TeleporterEditor(levelEditor);
+			} else if (SIZE_CHANGER_BUTTON.contains(point)) {
+				highlightOption = SIZE_CHANGER;
+				return new SizeChangerEditor(levelEditor);
 			}
 		} else {
 			if (clickedItem.getClass().equals(ColorChanger.class)) {
@@ -111,6 +119,9 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 			} else if (clickedItem.getClass().equals(Teleporter.class)) {
 				highlightOption = TELEPORTER;
 				return new TeleporterEditor(levelEditor, (Teleporter) clickedItem);
+			} else if (clickedItem.getClass().equals(SizeChanger.class)) {
+				highlightOption = SIZE_CHANGER;
+				return new SizeChangerEditor(levelEditor, (SizeChanger) clickedItem);
 			}
 		}
 		
@@ -138,6 +149,9 @@ public class ItemSelector extends AbstractEntitySelector<Item> {
 		
 		DrawUtil.drawButton(g, TELEPORTER_BUTTON, highlightOption == TELEPORTER);
 		TELEPORTER_IMAGE.draw(g);
+		
+		DrawUtil.drawButton(g, SIZE_CHANGER_BUTTON, highlightOption == SIZE_CHANGER);
+		SIZE_CHANGER_IMAGE.draw(g);
 	}
 	
 }

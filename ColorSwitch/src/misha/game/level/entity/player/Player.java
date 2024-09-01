@@ -111,8 +111,13 @@ public class Player extends Entity implements Updatable {
 			g.drawLine(cp.x, cp.y, (int) (x + width - p.x), (int) (y - p.y -  5));
 			
 			// Draw the mirror player
-			g.setColor(mirrorPlayer.getColor().getGraphicsColor());
+			g.setColor(mirrorPlayer.getColor().equals(CSColor.WHITE) ? Color.BLACK : mirrorPlayer.getColor().getGraphicsColor());
 			g.fillRect((int)(-x + ColorSwitch.NATIVE_WIDTH - width + .5), (int)(y + .5), width, height);
+			
+			if (mirrorPlayer.getColor().equals(CSColor.WHITE)) {
+				g.setColor(color.getGraphicsColor());
+				g.fillRect((int)(-x + ColorSwitch.NATIVE_WIDTH - width + 0.5f + 1), (int)(y + 0.5f + 1), width - 2, height - 2);
+			}
 		}
 		
 		int yOffset = 0;
