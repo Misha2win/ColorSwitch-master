@@ -16,6 +16,7 @@ import java.awt.BasicStroke;
 import java.awt.event.KeyEvent;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EntityEditor;
 import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
@@ -23,6 +24,7 @@ import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
 import misha.game.level.entity.item.Item;
 
+@EditableEntity({})
 public class Player extends Entity implements Updatable {
 	
 	public static final int MAX_COYOTE_TIME = 5;
@@ -324,6 +326,11 @@ public class Player extends Entity implements Updatable {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new Player((int) x, (int) y);
 	}
 
 	@Override

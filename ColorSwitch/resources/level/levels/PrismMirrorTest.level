@@ -31,8 +31,8 @@ obstacle Acid 550 20 180 130
 obstacle Prism red 410 350 2
 obstacle Prism green 440 350 2
 obstacle Prism blue 470 350 2
-obstacle Prism white 140 350 3
-obstacle Prism white 590 350 1
+obstacle Prism white 140 360 3
+obstacle Prism white 590 360 1
 obstacle Prism blue 320 430 3
 obstacle Prism green 320 390 3
 obstacle Prism red 320 350 3

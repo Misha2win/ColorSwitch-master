@@ -12,15 +12,21 @@ import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.item.ColorMixerEditor;
 import misha.game.level.entity.CSColor;
+import misha.game.level.entity.Entity;
 import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.obstacle.Prism;
 import misha.game.level.entity.player.Player;
 
+@EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class ColorMixer extends Item {
 	
+	@EditableField
 	private boolean add;
 	
 	public ColorMixer(CSColor color, int x, int y, boolean add) {
@@ -89,8 +95,9 @@ public class ColorMixer extends Item {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, add);
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(new ColorMixer(CSColor.RED, 100, 100, true));
+	@Override
+	public Entity clone() {
+		return new ColorMixer(color, (int) x, (int) y, add);
 	}
 	
 	@Override

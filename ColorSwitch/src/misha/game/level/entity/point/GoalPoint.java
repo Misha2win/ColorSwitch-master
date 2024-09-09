@@ -8,12 +8,15 @@
 package misha.game.level.entity.point;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.point.GoalPointEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
+@EditableEntity({ EditableEntityType.POINTS })
 public class GoalPoint extends Point {
 	
 	public GoalPoint(int x, int y) {
@@ -30,6 +33,11 @@ public class GoalPoint extends Point {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s", (int) x, (int) y);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new GoalPoint((int) x, (int) y);
 	}
 	
 	@Override

@@ -26,15 +26,22 @@ import misha.editor.DrawUtil;
 import misha.editor.Editor;
 import misha.editor.Util;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.MasterEntityEditor;
 import misha.editor.selector.ItemSelector;
 import misha.editor.selector.LevelColorSelector;
+import misha.editor.selector.MasterSelector;
 import misha.editor.selector.ObstacleSelector;
 import misha.editor.selector.PlatformSelector;
 import misha.editor.selector.PointSelector;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
+import misha.game.level.entity.item.ColorChanger;
+import misha.game.level.entity.item.ColorMixer;
 import misha.game.level.entity.item.Item;
+import misha.game.level.entity.item.Mirror;
+import misha.game.level.entity.item.SuperJump;
 import misha.game.level.entity.obstacle.Obstacle;
+import misha.game.level.entity.platform.MovingPlatform;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.point.Point;
 import misha.game.ColorSwitch;
@@ -75,7 +82,8 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	private static final int COLORS = 5;
 	private int selection;
 	
-	private EntityEditor<?> entityEditor;
+//	private EntityEditor<?> entityEditor;
+	private MasterEntityEditor<?> entityEditor;
 	
 	private int levelCounter;
 	private Level[] levels;
@@ -138,6 +146,10 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		level.draw(g);
 		
 		drawGuideLines(g);
+		
+//		new MasterSelector<Item>(Item.class).draw(g);
+		
+//		new MasterEntityEditor<MovingPlatform>(new MovingPlatform(CSColor.BLACK, 100, 100, 100, 100, 100, 100)).draw(g);
 		
 		if (entityEditor != null)
 			entityEditor.draw(g);
@@ -383,30 +395,30 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 	}
 	
 	public void findSelectorToDraw() {
-		Type superclass = entityEditor.getClass().getGenericSuperclass();
-		if (superclass instanceof ParameterizedType) {
-			ParameterizedType parameterizedType = (ParameterizedType) superclass;
-			
-			Type[] typeArguments = parameterizedType.getActualTypeArguments();
-
-			if (typeArguments.length == 1) {
-				Type type = typeArguments[0];
-				
-				if (type instanceof Class<?>) {
-					if (Platform.class.isAssignableFrom((Class<?>) type)) {
-						selection = PLATFORMS;
-	                } else if (Obstacle.class.isAssignableFrom((Class<?>) type)) {
-						selection = OBSTACLES;
-	                } else if (Point.class.isAssignableFrom((Class<?>) type)) {
-						selection = POINTS;
-	                } else if (Item.class.isAssignableFrom((Class<?>) type)) {
-						selection = ITEMS;
-	                }
-				}
-			} else {
-				throw new IllegalStateException("entityEditor either has no parameterized types or has multiple!");
-			}
-		}
+//		Type superclass = entityEditor.getClass().getGenericSuperclass();
+//		if (superclass instanceof ParameterizedType) {
+//			ParameterizedType parameterizedType = (ParameterizedType) superclass;
+//			
+//			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+//
+//			if (typeArguments.length == 1) {
+//				Type type = typeArguments[0];
+//				
+//				if (type instanceof Class<?>) {
+//					if (Platform.class.isAssignableFrom((Class<?>) type)) {
+//						selection = PLATFORMS;
+//	                } else if (Obstacle.class.isAssignableFrom((Class<?>) type)) {
+//						selection = OBSTACLES;
+//	                } else if (Point.class.isAssignableFrom((Class<?>) type)) {
+//						selection = POINTS;
+//	                } else if (Item.class.isAssignableFrom((Class<?>) type)) {
+//						selection = ITEMS;
+//	                }
+//				}
+//			} else {
+//				throw new IllegalStateException("entityEditor either has no parameterized types or has multiple!");
+//			}
+//		}
 	}
 
 	@Override
@@ -414,12 +426,15 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 		if (entityEditor == null) {
 			Entity clickedEntity = getClickedEntity(e);
 			
-			if (clickedEntity != null) {
-				entityEditor = clickedEntity.getEntityEditor(this);
-				entityEditor.mousePressed(e);
-				
-				findSelectorToDraw();
-			}
+			if (clickedEntity != null)
+				entityEditor = new MasterEntityEditor<>(clickedEntity, true);
+			
+//			if (clickedEntity != null) {
+//				entityEditor = clickedEntity.getEntityEditor(this);
+//				entityEditor.mousePressed(e);
+//				
+//				findSelectorToDraw();
+//			}
 		} else {
 			entityEditor.mousePressed(e);
 		}
@@ -434,7 +449,8 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			setToPreviousLevel();
 		} else if (PLAY_LEVEL_BUTTON.contains(e.getPoint())) {
 			playCurrentLevel();
-		} else if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {
+		} 
+		else if (PLATFORM_SELECT_BUTTON.contains(e.getPoint())) {
 			selection = PLATFORMS;
 			entityEditor = null;
 		} else if (ITEM_SELECT_BUTTON.contains(e.getPoint())) {
@@ -451,27 +467,27 @@ public class LevelEditor implements KeyListener, MouseListener, MouseMotionListe
 			entityEditor = null;
 		}
 		
-		if (selection == PLATFORMS) {
-			EntityEditor<?> editor = platformSelector.getEditor(this, level.getPlatforms(), e.getPoint());
-			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
-				entityEditor = editor;
- 		} else if (selection == OBSTACLES) {
- 			EntityEditor<?> editor = obstacleSelector.getEditor(this, level.getObstacles(), e.getPoint());
-			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
-				entityEditor = editor;
-			}
-		} else if (selection == POINTS) {
-			EntityEditor<?> editor = pointSelector.getEditor(this, level.getPoints(), e.getPoint());
-			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
-				entityEditor = editor;
-			}
-		} else if (selection == ITEMS) {
-			EntityEditor<?> editor = itemSelector.getEditor(this, level.getItems(), e.getPoint());
-			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
-				entityEditor = editor;
-		} else if (selection == COLORS) {
-			levelColorSelector.setColor(this, e.getPoint());
-		}
+//		if (selection == PLATFORMS) {
+//			EntityEditor<?> editor = platformSelector.getEditor(this, level.getPlatforms(), e.getPoint());
+//			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
+//				entityEditor = editor;
+// 		} else if (selection == OBSTACLES) {
+// 			EntityEditor<?> editor = obstacleSelector.getEditor(this, level.getObstacles(), e.getPoint());
+//			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
+//				entityEditor = editor;
+//			}
+//		} else if (selection == POINTS) {
+//			EntityEditor<?> editor = pointSelector.getEditor(this, level.getPoints(), e.getPoint());
+//			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null)) {
+//				entityEditor = editor;
+//			}
+//		} else if (selection == ITEMS) {
+//			EntityEditor<?> editor = itemSelector.getEditor(this, level.getItems(), e.getPoint());
+//			if (editor != null && (entityEditor == null || entityEditor.getStoredEntity() == null))
+//				entityEditor = editor;
+//		} else if (selection == COLORS) {
+//			levelColorSelector.setColor(this, e.getPoint());
+//		}
 	}
 
 	@Override

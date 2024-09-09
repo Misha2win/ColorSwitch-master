@@ -147,4 +147,9 @@ public class CSColor {
 		throw new IllegalArgumentException("Could not find a color for \"" + name + "\"");
 	}
 	
+	@Override
+	public String toString() {
+		return CSColor.getStringFromColor(this);
+	}
+	
 }

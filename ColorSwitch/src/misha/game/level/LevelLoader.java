@@ -15,6 +15,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.obstacle.Obstacle;
@@ -89,6 +90,9 @@ public final class LevelLoader {
 				}
 			}
 		}
+		
+//		MasterEntityEditor<ColorChanger> mee = new MasterEntityEditor<>(ColorChanger.class);
+//		items.add(mee.getEntity());
 		
 		return new Level(
 				levelName,

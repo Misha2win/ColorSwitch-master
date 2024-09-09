@@ -11,17 +11,24 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.game.level.entity.CSColor;
+import misha.game.level.entity.Entity;
 import misha.game.level.entity.PhysicsEngine;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.player.Player;
 
+@EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class Painter extends Item {
 	
 	private final int AURA_RADIUS = 5;
 	
 	private boolean active;
+	
+	@EditableField
 	private boolean persistOnce;
 	
 	public Painter(int x, int y, boolean persistOnce) {
@@ -93,6 +100,11 @@ public class Painter extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, persistOnce);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new Painter((int) x, (int) y, persistOnce);
 	}
 	
 	@Override

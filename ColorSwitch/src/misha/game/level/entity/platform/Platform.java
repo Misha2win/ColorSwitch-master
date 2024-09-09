@@ -11,13 +11,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.platform.PlatformEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.PhysicsEngine;
 import misha.game.level.entity.player.Player;
 
+@EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.COLORS })
 public class Platform extends Entity {
 	
 	public Platform(CSColor c, int x, int y, int w, int h) {
@@ -117,6 +120,11 @@ public class Platform extends Entity {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, width, height); 
+	}
+	
+	@Override
+	public Entity clone() {
+		return new Platform(color, (int) x, (int) y, width, height);
 	}
 	
 	@Override

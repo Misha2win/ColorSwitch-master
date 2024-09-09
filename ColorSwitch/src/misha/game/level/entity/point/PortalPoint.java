@@ -11,10 +11,13 @@ import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.point.PortalPointEditor;
 import misha.game.level.Level;
 
+@EditableEntity({ EditableEntityType.POINTS })
 public class PortalPoint extends Point {
 	
 	private final int portalLinkID;
@@ -65,6 +68,11 @@ public class PortalPoint extends Point {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, portalLinkID);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new PortalPoint((int) x, (int) y, portalLinkID);
 	}
 	
 	@Override

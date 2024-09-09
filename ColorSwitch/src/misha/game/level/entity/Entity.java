@@ -10,16 +10,20 @@ package misha.game.level.entity;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import misha.annotation.EnforceAnnotationInImplementedSubclasses;
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EntityEditor;
 import misha.game.level.Level;
 
+@EnforceAnnotationInImplementedSubclasses(EditableEntity.class)
 public abstract class Entity {
 	
 	protected Level level;
 
+	@EditableField
 	protected CSColor color;
-	
 	protected float x, y;
 	protected int width, height;
 	protected float xVelocity, yVelocity;
@@ -39,6 +43,9 @@ public abstract class Entity {
 	
 	@Override
 	public abstract String toString();
+	
+	@Override
+	public abstract Entity clone();
 	
 	public float getX() {
 		return x;

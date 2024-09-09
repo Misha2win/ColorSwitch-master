@@ -11,13 +11,19 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
+import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
 import java.awt.Color;
 
+@EditableEntity({ EditableEntityType.POINTS, EditableEntityType.FIELDS })
 public class SizeChanger extends Item {
 	
+	@EditableField
 	private boolean enlarge;
 	
 	public SizeChanger(int x, int y, boolean enlarge) {
@@ -82,6 +88,11 @@ public class SizeChanger extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s", (int) x, (int) y, enlarge);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new SizeChanger((int) x, (int) y, enlarge);
 	}
 	
 	@Override

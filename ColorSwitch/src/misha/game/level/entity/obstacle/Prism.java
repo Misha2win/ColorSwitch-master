@@ -13,13 +13,17 @@ import java.awt.Color;
 import java.awt.Polygon;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.obstacle.PrismEditor;
 import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
+@EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class Prism extends Obstacle {
 	
 	private static final int BEAM_WIDTH = 5;
@@ -31,7 +35,10 @@ public class Prism extends Obstacle {
 	
 //	private boolean cooldown;
 	private boolean active;
+	
+	@EditableField
 	private int direction;
+	
 	private Rectangle beam;
 
 	public Prism(CSColor color, int x, int y, int direction) {
@@ -141,6 +148,11 @@ public class Prism extends Obstacle {
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, direction);
 		
+	}
+	
+	@Override
+	public Entity clone() {
+		return new Prism(color, (int) x, (int) y, direction);
 	}
 	
 	@Override

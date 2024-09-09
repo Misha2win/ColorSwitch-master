@@ -11,14 +11,20 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.BasicStroke;
 import misha.game.level.entity.CSColor;
+import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.item.MirrorEditor;
 import misha.game.level.Level;
 
+@EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class Mirror extends Item {
 	
+	@EditableField
 	public boolean persistOnce;
 	
 	public Mirror(int x, int y, CSColor mirrorColor, boolean persistOnce) {
@@ -91,6 +97,11 @@ public class Mirror extends Item {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", (int) x, (int) y, CSColor.getStringFromColor(color), persistOnce);
+	}
+	
+	@Override
+	public Entity clone() {
+		return new Mirror((int) x, (int) y, color, persistOnce);
 	}
 	
 	@Override

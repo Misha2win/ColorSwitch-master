@@ -19,6 +19,7 @@ import misha.editor.Editor;
 import misha.editor.level.LevelEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
+import misha.game.level.entity.item.ColorChanger;
 
 public abstract class EntityEditor<T extends Entity> implements KeyListener, MouseListener, MouseMotionListener {
 	
@@ -41,10 +42,11 @@ public abstract class EntityEditor<T extends Entity> implements KeyListener, Mou
 		this.entity = entity;
 		this.pmp = new Point();
 		
-		if (entity != null)
+		if (entity != null) {
 			this.color = entity.getColor();
-		else
+		} else {
 			this.color = CSColor.BLACK;
+		}
 	}
 	
 	public T getStoredEntity() {

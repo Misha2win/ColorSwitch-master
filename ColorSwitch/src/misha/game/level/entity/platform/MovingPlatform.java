@@ -8,11 +8,17 @@
 package misha.game.level.entity.platform;
 
 import misha.editor.level.LevelEditor;
+import misha.editor.level.entity.EditableEntity;
+import misha.editor.level.entity.EditableField;
+import misha.editor.level.entity.EditableField.EditableFieldType;
 import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.platform.MovingPlatformEditor;
 import misha.game.level.entity.CSColor;
+import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
 
+@EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class MovingPlatform extends Platform implements Updatable {
 	
 	private boolean movingToPoint2;
@@ -22,6 +28,8 @@ public class MovingPlatform extends Platform implements Updatable {
 	private boolean isActive;
 	
 	private final float x1, y1;
+	
+	@EditableField({ EditableFieldType.POINT })
 	private final float x2, y2;
 	
 	public MovingPlatform(CSColor c, int x, int y, int x2, int y2, int w, int h) {
@@ -94,6 +102,11 @@ public class MovingPlatform extends Platform implements Updatable {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s %s %s", CSColor.getStringFromColor(color), (int) x, (int) y, (int) x2, (int) y2, width, height); 
+	}
+	
+	@Override
+	public Entity clone() {
+		return new MovingPlatform(color, (int) x, (int) y, (int) x2, (int) y2, width, height);
 	}
 	
 	@Override
