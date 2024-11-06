@@ -45,8 +45,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		
 		screenManager = new ScreenManager();
 		
-		if (levelManager != null)
+		if (levelManager != null) {
 			screenManager.getGameScreen().setLevelManager(levelManager);
+			screenManager.setScreen(ScreenManager.GAME_SCREEN);
+		}
 		
 		start();
 	}

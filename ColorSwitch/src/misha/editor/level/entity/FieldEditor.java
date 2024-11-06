@@ -14,7 +14,9 @@ public class FieldEditor {
 	private enum FieldEditorType {
 		SETTER,
 		INCREMENTER,
-		DECREMENTER
+		DECREMENTER,
+		RANGE_INCREMENTER,
+		RANGE_DECREMENTER
 	}
 	
 	private final Field field;
@@ -22,24 +24,36 @@ public class FieldEditor {
 	
 	private final FieldEditorType editorType;
 	private final int changeAmount;
+	private final int min;
+	private final int max;
 	
 	public FieldEditor(Field field, Object object) {
-		this(field, object, FieldEditorType.SETTER, 0);
+		this(field, object, FieldEditorType.SETTER, 0, 0, 0);
 	}
 	
-	private FieldEditor(Field field, Object object, FieldEditorType editorType, int changeAmount) {
+	private FieldEditor(Field field, Object object, FieldEditorType editorType, int changeAmount, int min, int max) {
 		this.field = field;
 		this.object = object;
 		this.editorType = editorType;
 		this.changeAmount = changeAmount;
+		this.min = min;
+		this.max = max;
 	}
 	
 	public static FieldEditor getIncrementer(Field field, int changeAmount) {
-		return new FieldEditor(field, null, FieldEditorType.INCREMENTER, changeAmount);
+		return new FieldEditor(field, null, FieldEditorType.INCREMENTER, changeAmount, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
 	
 	public static FieldEditor getDecrementer(Field field, int changeAmount) {
-		return new FieldEditor(field, null, FieldEditorType.DECREMENTER, changeAmount);
+		return new FieldEditor(field, null, FieldEditorType.DECREMENTER, changeAmount, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+	
+	public static FieldEditor getRangedIncrementer(Field field, int changeAmount, int max) {
+		return new FieldEditor(field, null, FieldEditorType.RANGE_INCREMENTER, changeAmount, Integer.MIN_VALUE, max);
+	}
+	
+	public static FieldEditor getRangedDecrementer(Field field, int changeAmount, int min) {
+		return new FieldEditor(field, null, FieldEditorType.RANGE_DECREMENTER, changeAmount, min, Integer.MAX_VALUE);
 	}
 	
 	public Class<?> getFieldType() {
@@ -60,6 +74,10 @@ public class FieldEditor {
 		else if (editorType == FieldEditorType.INCREMENTER)
 			field.set(entity, (int) field.get(entity) + changeAmount);
 		else if (editorType == FieldEditorType.DECREMENTER)
+			field.set(entity, (int) field.get(entity) - changeAmount);
+		else if (editorType == FieldEditorType.RANGE_INCREMENTER && (int) field.get(entity) < max)
+			field.set(entity, (int) field.get(entity) + changeAmount);
+		else if (editorType == FieldEditorType.RANGE_DECREMENTER && (int) field.get(entity) > min)
 			field.set(entity, (int) field.get(entity) - changeAmount);
 	}
 	

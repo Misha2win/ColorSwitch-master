@@ -11,9 +11,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
+
+import misha.game.level.LevelLoader;
 
 public class LevelImageLoader {
 	
@@ -32,8 +35,13 @@ public class LevelImageLoader {
 	}
 	
 	public static BufferedImage getLevelImage(String levelName) throws IOException {
-		if (!IMAGES.containsKey(levelName)) {
-			return loadLevelImage(levelName);
+		try {
+			if (!IMAGES.containsKey(levelName)) {
+				return loadLevelImage(levelName);
+			}
+		} catch (NoSuchFileException e) {
+			LevelImageSaver.saveImage(LevelImageSaver.createLevelImage(LevelLoader.getLevel(null, levelName)), levelName);
+			return getLevelImage(levelName);
 		}
 		
 		return IMAGES.get(levelName);

@@ -11,8 +11,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
@@ -21,6 +23,10 @@ import misha.game.ColorSwitch;
 import misha.screen.Screen;
 
 public class PauseScreen extends Screen {
+	
+	private static RoundRectangle2D BACK_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 - 210 - 20, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
+	private static RoundRectangle2D NEXT_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 + 210 + 60, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
+	
 	
 	private BufferedImage background;
 	
@@ -33,7 +39,9 @@ public class PauseScreen extends Screen {
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics gr) {
+		Graphics2D g = (Graphics2D) gr;
+		
 		g.drawImage(background, 0, 0, null);
 		g.setColor(new Color(0, 0, 0, 100));
 		g.fillRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
@@ -46,6 +54,20 @@ public class PauseScreen extends Screen {
 		g.drawString(title, ColorSwitch.NATIVE_WIDTH / 2 - metrics.stringWidth(title) / 2 - 1, 200 - 1);
 		g.setColor(Color.BLACK);
 		g.drawString(title, ColorSwitch.NATIVE_WIDTH / 2 - metrics.stringWidth(title) / 2 + 1, 200 + 1);
+		
+		BACK_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125, ColorSwitch.NATIVE_HEIGHT / 2 + 20, 250, 75, 20, 20);
+		NEXT_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125, ColorSwitch.NATIVE_HEIGHT / 2 + 100 + 20, 250, 75, 20, 20);
+		
+		drawButton(g, BACK_BUTTON, "Resume");
+		drawButton(g, NEXT_BUTTON, "Menu");
+	}
+	
+	public void drawButton(Graphics2D g, RoundRectangle2D button, String text) {
+		g.setColor(new Color(200, 200, 200));
+		g.setFont(new Font("MONOSPACED", Font.PLAIN, 60));
+		g.fill(button);
+		g.setColor(Color.BLACK);
+		g.drawString(text, (int) button.getX() + (int) button.getWidth() / 2 - g.getFontMetrics().stringWidth(text) / 2, (int) button.getY() + 60);
 	}
 	
 	@Override
@@ -74,6 +96,11 @@ public class PauseScreen extends Screen {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if (BACK_BUTTON.contains(e.getPoint())) {
+			screenManager.setScreen(ScreenManager.GAME_SCREEN);
+		} else if (NEXT_BUTTON.contains(e.getPoint())) {
+			screenManager.setScreen(ScreenManager.MENU_SCREEN);
+		}
 	}
 
 	@Override

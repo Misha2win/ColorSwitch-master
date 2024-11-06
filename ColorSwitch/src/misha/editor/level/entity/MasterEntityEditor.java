@@ -33,6 +33,8 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 	private EditableEntity entityAnnotation;
 	private ArrayList<Field> editableFields;
 	
+	private boolean inLevel;
+	
 	private T entity;
 	private boolean ready;
 	
@@ -40,13 +42,17 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 	private ArrayList<FieldEditor> fieldEditors;
 	private ArrayList<Entity> drawingEntities;
 	
-	// Varaibles for dragging entities
+	// Variables for dragging entities
 	private Point pmp;
 	private boolean dragging;
 	
-	// Varaibles for creating/editing Rectangular entities
+	// Variables for creating/editing Rectangular entities
 	private Rectangle rectangle;
 	private boolean resizing;
+	
+	// Variables for moving point varaibles in Entity class
+	private boolean movingPoint;
+	private Field[] movingPointFields;
 	
 	private boolean ignoreInput;
 	
@@ -54,17 +60,8 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 		this.entity = entity;
 		this.ready = ready;
 		this.rectangle = new Rectangle();
+		this.inLevel = ready;
 		
-		checkPreconditions();
-		
-        getEditableFields();
-		
-		createButtons();
-		
-		createDrawingEntities();
-	}
-	
-	private void checkPreconditions() {
 		if (entity == null) {
 			throw new IllegalArgumentException("The provided entity must not be null!");
 		}
@@ -80,6 +77,12 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
         } else {
         	throw new IllegalStateException(entity.getClass().getName() + " needs " + EditableEntity.class.getName() + " annotation!");
         }
+		
+        getEditableFields();
+		
+		createButtons();
+		
+		createDrawingEntities();
 	}
 	
 	private void getEditableFields() {
@@ -131,20 +134,51 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 				for (int i = 0; i < editableFields.size() - 1; i++) { // Don't check last index since it is Entity#color
 					Field field = editableFields.get(i);
 					
+					boolean isRangeField = false;
+					boolean isLimitedField = false;
+					
 					EditableField annotation = field.getAnnotation(EditableField.class);
 					for (EditableFieldType type : annotation.value()) {
 						if (type == EditableFieldType.POINT) {
 							continue loop;
+						} else if (type == EditableFieldType.RANGE) {
+							isRangeField = true;
+						} else if (type == EditableFieldType.LIMITED) {
+							isLimitedField = true;
 						}
 					}
 					
+					if (isRangeField && isLimitedField) {
+						throw new IllegalStateException("A field cannot be both ranged and limited!");
+					}
+					
 					int y = buttons.size() > 0 ? buttons.get(buttons.size() - 1).y + 50 : 710;
-					buttons.add(new Rectangle(10, y, 40, 40));
-					buttons.add(new Rectangle(60, y, 40, 40));
+					if (isLimitedField) {
+						for (int j = 0, k = 10; j < annotation.range().length; j++, k += 50) {
+							buttons.add(new Rectangle(k, y, 40, 40));
+						}
+					} else {
+						buttons.add(new Rectangle(10, y, 40, 40));
+						buttons.add(new Rectangle(60, y, 40, 40));
+					}
 					
 					if (field.getType().equals(int.class)) {
-						fieldEditors.add(FieldEditor.getDecrementer(field, 10));
-						fieldEditors.add(FieldEditor.getIncrementer(field, 10));
+						if (isRangeField) {
+							try {
+								fieldEditors.add(FieldEditor.getRangedDecrementer(field, annotation.range()[2], annotation.range()[0]));
+								fieldEditors.add(FieldEditor.getRangedIncrementer(field, annotation.range()[2], annotation.range()[1]));
+							} catch (ArrayIndexOutOfBoundsException e) {
+								System.err.println("The range section of the EditableField annotation is incomplete!");
+								throw e;
+							}
+						} else if (isLimitedField) {
+							for (int j = 0; j < annotation.range().length; j++) {
+								fieldEditors.add(new FieldEditor(field, annotation.range()[j]));
+							}
+						} else {
+							fieldEditors.add(FieldEditor.getDecrementer(field, 10));
+							fieldEditors.add(FieldEditor.getIncrementer(field, 10));
+						}
 					} else if (field.getType().equals(boolean.class)) {
 						fieldEditors.add(new FieldEditor(field, true));
 						fieldEditors.add(new FieldEditor(field, false));
@@ -163,10 +197,13 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 			try {
 				Entity drawingEntity = entity.clone();
 				fieldEditors.get(i).edit(drawingEntity);
+				
+				if (shouldResizeEntityClone(drawingEntity))
+					drawingEntity.setDimensions(30, 30);
+
 				Rectangle rect = buttons.get(i);
-				if (drawingEntity.getWidth() > 30 || drawingEntity.getHeight() > 30)
-					drawingEntity.setDimensions(30, 30); // XXX
 				drawingEntity.setPos(rect.x + rect.width / 2 - drawingEntity.getWidth() / 2, rect.y + rect.height / 2 - drawingEntity.getHeight() / 2);
+				
 				drawingEntities.add(drawingEntity);
 			} catch (Exception e) {
 				System.err.println("Could not create drawingEntity for type " + fieldEditors.get(i).getFieldType().getName());
@@ -175,12 +212,29 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 		}
 	}
 	
+	private boolean shouldResizeEntityClone(Entity drawingEntity) {
+		boolean isPlatformEditType = this.hasAnnotation(EditableEntityType.PLATFORMS);
+		if (isPlatformEditType)
+			return true;
+		
+		boolean isTooBig = drawingEntity.getWidth() > 30 || drawingEntity.getHeight() > 30;
+		return isTooBig;
+	}
+	
 	public T getEntity() {
 		return entity;
 	}
 	
 	public boolean getReady() {
 		return ready;
+	}
+	
+	public boolean getInLevel() {
+		return inLevel;
+	}
+	
+	public void addedToLevel() {
+		inLevel = true;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -196,6 +250,25 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 			if (hasAnnotation(EditableEntityType.PLATFORMS)) {
 				g.setColor(Color.RED);
 				g.fillOval((int) entity.getX() + entity.getWidth() - 5, (int) entity.getY() + entity.getHeight() - 5, 10, 10);
+			}
+			
+			Field[] pointFields = getPointFields();
+			for (int i = 0; i < pointFields.length; i += 2) {
+				try {
+					EditableField annotation = pointFields[i].getAnnotation(EditableField.class);
+					g.setColor(Color.WHITE);
+					int centerX = (int) pointFields[i].getFloat(entity);
+					int centerY = (int) pointFields[i + 1].getFloat(entity);
+					if (!annotation.visible()) {
+						g.drawOval(centerX - annotation.radius() / 2, centerY - annotation.radius() / 2, annotation.radius(), annotation.radius());
+						g.drawLine(centerX, centerY, (int) entity.getX(), (int) entity.getY());	
+					} else {
+						g.drawLine(centerX + annotation.radius() / 2, centerY + annotation.radius() / 2, (int) entity.getX(), (int) entity.getY());	
+					}
+			
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			if (dragging) {
@@ -240,6 +313,61 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 		
 		return false;
 	}
+	
+	public Field[] getPointFields() {
+		ArrayList<Field> points = new ArrayList<>();
+		if (hasAnnotation(EditableEntityType.FIELDS)) {
+			for (Field field : editableFields) {
+				EditableField annotation = field.getAnnotation(EditableField.class);
+				for (EditableFieldType type : annotation.value()) {
+					if (type == EditableFieldType.POINT) {
+						if (points.size() <= 0) {
+							points.add(field);
+						} else {
+							for (int i = 0; i < points.size(); i++) { // TODO When this becomes a point refactor this
+								int mismatchIndex = Util.sharesAllButOne(field.getName(), points.get(i).getName());
+								if (mismatchIndex != -1) {
+									if (field.getName().substring(mismatchIndex, mismatchIndex + 1).equalsIgnoreCase("x")) {
+										if (i + 1 < points.size())
+											points.set(i + 1, points.set(i, field));
+										else
+											points.add(points.set(i, field));
+									} else {
+										if (i + 1 < points.size())
+											points.set(i + 1, field);
+										else
+											points.add(field);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (points.size() % 2 != 0) {
+			throw new IllegalStateException("There are not enough annotated point varaibles in " + entity.getClass());
+		}
+		
+		return points.toArray(new Field[points.size()]);
+	}
+	
+	public boolean isDraggingVariablePoint(Point p) {
+		Field[] points = getPointFields();
+		for (int i = 0; i < points.length; i += 2) {
+			try {
+				EditableField annotation = points[i].getAnnotation(EditableField.class);
+				if (p.distance((int) points[i].getFloat(entity), (int) points[i + 1].getFloat(entity)) < annotation.radius()) {
+					movingPointFields = new Field[] { points[i], points[i + 1] };
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return false;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -251,6 +379,9 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 						pmp = e.getPoint();
 						resizing = true;
 					}
+				} else if (isDraggingVariablePoint(e.getPoint())){
+					pmp = e.getPoint();
+					movingPoint = true;
 				} else if (entity.getRect().contains(e.getPoint())) {
 					pmp = e.getPoint();
 					dragging = true;
@@ -258,6 +389,7 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 					ready = false;
 					entity = (T) Util.createEntityInstance(entity.getClass());
 					ignoreInput = true;
+					inLevel = false;
 				}
 			} else {
 				if (hasAnnotation(EditableEntityType.PLATFORMS)) {
@@ -294,6 +426,13 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 				entity.translate(cmp.x - pmp.x, cmp.y - pmp.y);
 			} else if (resizing) {
 				entity.setDimensions(entity.getWidth() + cmp.x - pmp.x, entity.getHeight() + cmp.y - pmp.y);
+			} else if (movingPoint) {
+				try {
+					movingPointFields[0].set(entity, (int) movingPointFields[0].getFloat(entity) + cmp.x - pmp.x);
+					movingPointFields[1].set(entity, (int) movingPointFields[1].getFloat(entity) + cmp.y - pmp.y);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 			pmp = cmp;
 		} else {
@@ -326,6 +465,15 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 				if (entity.getHeight() <= 0) {
 					entity.setDimensions(entity.getWidth(), 10);
 				}
+			} else if (movingPoint) {
+				try {
+					movingPointFields[0].set(entity, Math.round((int) movingPointFields[0].getFloat(entity) / 10) * 10);
+					movingPointFields[1].set(entity, Math.round((int) movingPointFields[1].getFloat(entity) / 10) * 10);
+					movingPointFields[0] = null;
+					movingPointFields[1] = null;
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		} else {
 			if (dragging) {
@@ -340,6 +488,7 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 			}
 		}
 		
+		movingPoint = false;
 		resizing = false;
 		dragging = false;
 	}

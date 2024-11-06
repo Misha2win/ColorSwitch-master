@@ -16,10 +16,27 @@ import java.lang.annotation.Target;
 public @interface EditableField {
 
 	EditableFieldType[] value() default { EditableFieldType.ATTRIBUTE };
+	int[] range() default { 0, 0, 0 };
+	int radius() default 10;
+	boolean visible() default false;
 	
 	enum EditableFieldType {
+		/**
+		 * Used if the field should be treated as a coordinate point
+		 */
 		POINT,
-		ATTRIBUTE
+		/**
+		 * Used if the field can have any value
+		 */
+		ATTRIBUTE,
+		/**
+		 * Used if the field can have a range of values
+		 */
+		RANGE,
+		/**
+		 * Used if the field can only have a limited set of values
+		 */
+		LIMITED
 	}
 	
 }

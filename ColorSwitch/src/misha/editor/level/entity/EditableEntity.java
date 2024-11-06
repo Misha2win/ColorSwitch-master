@@ -18,9 +18,21 @@ public @interface EditableEntity {
 	EditableEntityType[] value();
 	
 	enum EditableEntityType {
+		/**
+		 * Used if an entity can have variable dimensions
+		 */
 		PLATFORMS,
+		/**
+		 * Used if an entity does not have variable dimensions
+		 */
 		POINTS,
+		/**
+		 * Used if an entity can have variable colors
+		 */
 		COLORS,
+		/**
+		 * Used if an entity has editable fields
+		 */
 		FIELDS
 	}
 	

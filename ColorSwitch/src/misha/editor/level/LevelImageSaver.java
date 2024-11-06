@@ -19,7 +19,7 @@ import misha.game.level.LevelLoader;
 
 public class LevelImageSaver {
 
-	private static BufferedImage createLevelImage(Level level) {
+	public static BufferedImage createLevelImage(Level level) {
 		BufferedImage img = new BufferedImage(ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
 		Graphics2D g = (Graphics2D) img.getGraphics();
@@ -30,7 +30,7 @@ public class LevelImageSaver {
 		return img;
 	}
 
-	private static boolean saveImage(BufferedImage img, String name) {
+	public static boolean saveImage(BufferedImage img, String name) {
 		File outputfile = new File(LevelImageLoader.IMAGE_DIRECTORY + name + ".png");
 		try {
 			ImageIO.write(img, "png", outputfile);

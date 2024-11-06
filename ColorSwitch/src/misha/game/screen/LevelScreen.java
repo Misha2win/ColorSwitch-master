@@ -17,10 +17,9 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
 
 import misha.editor.level.LevelImageLoader;
+import misha.editor.level.LevelImageSaver;
 import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelLoader;
@@ -28,7 +27,9 @@ import misha.screen.Screen;
 
 public class LevelScreen extends Screen {
 	
-	private final static RoundRectangle2D BACK_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125, ColorSwitch.NATIVE_HEIGHT - 90, 250, 75, 20, 20);
+	private final static RoundRectangle2D MENU_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 + 20, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
+	private final static RoundRectangle2D BACK_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 - 210 - 20, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
+	private final static RoundRectangle2D NEXT_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 + 210 + 60, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
 	
 	private final Rectangle2D.Float[] LEVEL_BUTTONS;
 	
@@ -39,11 +40,14 @@ public class LevelScreen extends Screen {
 	private final int padding = 1;
 	
 	private boolean[] unlockedLevels;
+	private int page;
 	
 	private Level backgroundLevel;
 	
 	public LevelScreen(ScreenManager manager) {
 		super(manager);
+		
+		LevelImageSaver.saveAllLevels();
 		
 		try {
 			backgroundLevel = LevelLoader.getLevel(null, "ColorChanger3");
@@ -52,10 +56,11 @@ public class LevelScreen extends Screen {
 			e.printStackTrace();
 		}
 		
-		int levelCount = (int) Arrays.stream(((ScreenManager) screenManager).getGameScreen().getLevelManager().getLevelNames()).filter(Objects::nonNull).count();
+		int levelCount = ((ScreenManager) screenManager).getGameScreen().getLevelManager().getNonNullLevelNames().length;
 
 		unlockedLevels = new boolean[levelCount];
 		unlockedLevels[0] = true;
+		page = 0;
 		
 		LEVEL_BUTTONS = new Rectangle2D.Float[levelCount];
 		
@@ -65,8 +70,8 @@ public class LevelScreen extends Screen {
 		
 		for (int i = 0; i < LEVEL_BUTTONS.length; i++) {
 			LEVEL_BUTTONS[i] = new Rectangle2D.Float(
-					xOffset + (i % GRID_X_DIMENSION) * (LEVEL_IMAGE_WIDTH + padding), 
-					yOffset + (i / GRID_X_DIMENSION) * (LEVEL_IMAGE_HEIGHT + padding), 
+					xOffset + ((i % 30) % GRID_X_DIMENSION) * (LEVEL_IMAGE_WIDTH + padding), 
+					yOffset + ((i % 30) / GRID_X_DIMENSION) * (LEVEL_IMAGE_HEIGHT + padding), 
 					LEVEL_IMAGE_WIDTH, 
 					LEVEL_IMAGE_HEIGHT
 			);
@@ -104,32 +109,33 @@ public class LevelScreen extends Screen {
 		String title = "Level Selector:";
 		g.drawString(title, ColorSwitch.NATIVE_WIDTH / 2 - g.getFontMetrics().stringWidth(title) / 2, 45);
 		
-		int count = 0;
-		for (String level : ((ScreenManager) screenManager).getGameScreen().getLevelManager().getLevelNames()) {
-			if (level == null)
-				continue;
-			
+		String[] levelNames = ((ScreenManager) screenManager).getGameScreen().getLevelManager().getNonNullLevelNames();
+		for (int i = page * 30; i < LEVEL_BUTTONS.length && i - (30 * page) < 30; i++) {
 			try {
-				BufferedImage img = LevelImageLoader.getLevelImage(level);
-				g.drawImage(img, (int) LEVEL_BUTTONS[count].getX(), (int) LEVEL_BUTTONS[count].getY(), (int) LEVEL_BUTTONS[count].getWidth(), (int) LEVEL_BUTTONS[count].getHeight(), null);
+				BufferedImage img = LevelImageLoader.getLevelImage(levelNames[i]);
+				Rectangle2D button = LEVEL_BUTTONS[i];
+				g.drawImage(img, (int) button.getX(), (int) button.getY(), (int) button.getWidth(), (int) button.getHeight(), null);
 				
-				if (!unlockedLevels[count]) {
+				if (!unlockedLevels[i]) {
 					g.setColor(new Color(0, 0, 0, 150));
-					g.fill(LEVEL_BUTTONS[count]);
+					g.fill(LEVEL_BUTTONS[i]);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			count++;
 		}
 		
-		String backString = "Back";
+		drawButton(g, MENU_BUTTON, "Menu");
+		drawButton(g, BACK_BUTTON, "Back");
+		drawButton(g, NEXT_BUTTON, "Next");
+	}
+	
+	public void drawButton(Graphics2D g, RoundRectangle2D button, String text) {
 		g.setColor(new Color(200, 200, 200));
 		g.setFont(new Font("MONOSPACED", Font.PLAIN, 60));
-		g.fill(BACK_BUTTON);
+		g.fill(button);
 		g.setColor(Color.BLACK);
-		g.drawString(backString, ColorSwitch.NATIVE_WIDTH / 2 - g.getFontMetrics().stringWidth(backString) / 2, (int) BACK_BUTTON.getY() + 55);
+		g.drawString(text, (int) button.getX() + (int) button.getWidth() / 2 - g.getFontMetrics().stringWidth(text) / 2, (int) button.getY() + 60);
 	}
 
 	@Override
@@ -139,12 +145,21 @@ public class LevelScreen extends Screen {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (BACK_BUTTON.contains(e.getPoint())) {
+			if (page > 0)
+				page--;
+		} else if (MENU_BUTTON.contains(e.getPoint())) {
 			screenManager.setScreen(ScreenManager.MENU_SCREEN);
-		} else {
-			for (int i = 0; i < LEVEL_BUTTONS.length; i++) {
+		} else if (NEXT_BUTTON.contains(e.getPoint())) {
+			if (page < unlockedLevels.length / 30) {
+				page++;
+			}
+		}
+		else {
+			for (int i = page * 30; i < LEVEL_BUTTONS.length && i - (30 * page) < 30; i++) {
 				if (LEVEL_BUTTONS[i].contains(e.getPoint())) {
 					if (unlockedLevels[i]) {
 						((ScreenManager) screenManager).getGameScreen().getLevelManager().setLevel(i);
+						((ScreenManager) screenManager).getGameScreen().getLevelManager().resetLevel();
 						screenManager.setScreen(ScreenManager.GAME_SCREEN);
 					}
 					break;
@@ -171,6 +186,11 @@ public class LevelScreen extends Screen {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_B) {
+			for (int i = 0; i < unlockedLevels.length; i++) {
+				unlockedLevels[i] = true;
+			}
+		}
 	}
 
 	@Override

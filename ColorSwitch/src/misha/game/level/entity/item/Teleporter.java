@@ -11,27 +11,31 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableField.EditableFieldType;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.item.TeleporterEditor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
 @EditableEntity({ EditableEntityType.POINTS, EditableEntityType.FIELDS })
 public class Teleporter extends Item {
 	
+	static { Entity.addSubclass(Teleporter.class); }
+	
 	public static final Color PURPLE = new Color(150, 0, 200);
 	
 	@EditableField
+	private boolean hasDestination;
+	
+	@EditableField(value = { EditableFieldType.POINT }, visible = true, radius = 20)
 	private int endX, endY;
 	
-	public Teleporter(int x, int y, int x2, int y2) {
+	public Teleporter(int x, int y, boolean hasDestination, int x2, int y2) {
 		super(x, y, 30, 30);
-		endX = x2;
-		endY = y2;
+		this.hasDestination = hasDestination;
+		this.endX = x2;
+		this.endY = y2;
 	}
 	
 	@Override
@@ -40,7 +44,7 @@ public class Teleporter extends Item {
 			return;
 		
 		Player player = level.getLevelManager().getPlayer();
-		if (endX != -1 && endY != -1) {
+		if (hasDestination) {
 			if (!persist) {
 				removeItem();
 				used = true;
@@ -48,6 +52,7 @@ public class Teleporter extends Item {
 			
 			player.setPos(endX, endY);
 		} else {
+			hasDestination = true;
 			endX = (int)(player.getX() + .5f);
 			endY = (int)(player.getY() + .5f);
 		}
@@ -73,7 +78,7 @@ public class Teleporter extends Item {
 			g.drawString("TP", x + 7, y + 20);
 			
 			// Draw the TP end point
-			if (endX != -1 && endY != -1) {
+			if (hasDestination) {
 				g.setColor(Teleporter.PURPLE);
 				g.fillOval((int)endX, (int)endY, 20, 20);
 			}
@@ -82,17 +87,12 @@ public class Teleporter extends Item {
 	
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + String.format(" %s %s %s %s", (int) x, (int) y, (int) endX, (int) endY);
+		return this.getClass().getSimpleName() + String.format(" %s %s %s %s %s", (int) x, (int) y, hasDestination, (int) endX, (int) endY);
 	}
 	
 	@Override
 	public Entity clone() {
-		return new Teleporter((int) x, (int) y, endX, endY);
-	}
-
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new TeleporterEditor(levelEditor, this);
+		return new Teleporter((int) x, (int) y, hasDestination, endX, endY);
 	}
 	
 }

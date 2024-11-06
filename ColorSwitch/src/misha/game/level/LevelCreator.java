@@ -7,7 +7,6 @@
 
 package misha.game.level;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,48 +21,27 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class LevelCreator {
 	
-	public static String LEVEL_ORDER_STRING;
+	public final static String LEVEL_ORDER_STRING;
 	
 	static {
+		String levelOrderString = null;
+		
 		try {
-			LEVEL_ORDER_STRING = new String(Files.readAllBytes(Paths.get(LevelLoader.LEVEL_DIRECTORY + "LevelsOrder.levels")));
+			levelOrderString = new String(Files.readAllBytes(Paths.get(LevelLoader.LEVEL_DIRECTORY + "LevelsOrder.levels")));
 		} catch (IOException e) {
 			System.err.println("Could not load LevelOrder.levels!");
 			e.printStackTrace();
 		}
 		
-		checkUnusedLevels();
-	}
-	
-	private static void checkUnusedLevels() {
-		System.out.println("Checking unused levels...");
-		
-		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
-
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-
-            String[] referencedLevels = LEVEL_ORDER_STRING.split("\n");
-            for (File file : files) {
-                if (file.isFile() && !file.isHidden() && file.getName().endsWith(".level")) {
-                	boolean referenced = false;
-                	
-                	for (String levelName : referencedLevels) {
-                		if (levelName.equals(file.getName().replace(".level", ""))) {
-                			referenced = true;
-                			break;
-                		}
-                	}
-                	
-                	if (!referenced && !file.getName().equals("TestLevel.level"))
-                		System.err.println("Not using level \"" + file.getName() + "\"");
-                }
-            }
-        } else {
-            System.err.println("Directory does not exist or is not a directory.");
-        }
+		LEVEL_ORDER_STRING = levelOrderString;
 	}
 
+	/**
+	 * Create all of the levels in LevelCreator.LEVEL_ORDER_STRING
+	 * 
+	 * @param levelManager the LevelManager to assign all of the levels to
+	 * @return an array of all the Levels in LevelCreator.LEVEL_ORDER_STRING
+	 */
 	public static Level[] createLevels(LevelManager levelManager) {
 		ArrayList<Level> levels = new ArrayList<>();
 		
@@ -86,8 +64,6 @@ public class LevelCreator {
 		
 		try {
 			levels.set(levels.size() - 1, LevelLoader.getLevel(levelManager, "TestLevel"));
-			
-//			levels.add(LevelLoader.getLevel(levelManager, "TestLevel"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,6 +71,14 @@ public class LevelCreator {
 		return levels.toArray(new Level[levels.size()]);
 	}
 	
+	/**
+	 * Creates a level with 4 walls and the specified items
+	 * 
+	 * @param levelName the name of the Level to create
+	 * @param levelManager the LevelManager to assign the Level to
+	 * @param items the Items to put inside of the level
+	 * @return level with 4 walls and the specified items
+	 */
 	public static Level createItemTestLevel(String levelName, LevelManager levelManager, Item... items) {
 		return new Level(
 				levelName,
@@ -118,6 +102,14 @@ public class LevelCreator {
 		);
 	}
 	
+	/**
+	 * Creates a level with 4 walls, a SpawnPoint, and a GoalPoint, and optional text
+	 * 
+	 * @param levelName the name of the Level to create
+	 * @param levelManager the LevelManager to assign the Level to
+	 * @param text the text to put in the level
+	 * @return a level with 4 walls, a SpawnPoint, and a GoalPoint, and optional text
+	 */
 	public static Level createEmptyLevel(String levelName, LevelManager levelManager, String... text) {
 		return new Level(
 				levelName,
@@ -141,6 +133,13 @@ public class LevelCreator {
 		);
 	}
 	
+	/**
+	 * Creates a level with nothing in it
+	 * 
+	 * @param levelName the name of the Level to create
+	 * @param levelManager the LevelManager to assign the Level to
+	 * @return a level with nothing in it
+	 */
 	public static Level createTrulyEmptyLevel(String levelName, LevelManager levelManager) {
 		return new Level(
 				levelName,

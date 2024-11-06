@@ -265,6 +265,9 @@ public class Level implements Updatable {
 		
 		for (Platform platform : platforms) {
 			platform.draw(g);
+			if (platform == null) {
+				System.out.println("It is null!");
+			}
 		}
 		
 		if (levelManager != null && levelManager.getPlayer() != null && levelManager.getPlayer().getMirrored()) {

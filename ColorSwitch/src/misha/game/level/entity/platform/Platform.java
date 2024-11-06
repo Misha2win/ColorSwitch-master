@@ -10,11 +10,8 @@ package misha.game.level.entity.platform;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.platform.PlatformEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.PhysicsEngine;
@@ -23,13 +20,11 @@ import misha.game.level.entity.player.Player;
 @EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.COLORS })
 public class Platform extends Entity {
 	
+	static { Entity.addSubclass(Platform.class); }
+	
 	public Platform(CSColor c, int x, int y, int w, int h) {
 		super(x, y, w, h);
 		color = c;
-	}
-	
-	public Platform(int x, int y, int w, int h) {
-		this(CSColor.BLACK, x, y, w, h);
 	}
 	
 	@Override
@@ -125,11 +120,6 @@ public class Platform extends Entity {
 	@Override
 	public Entity clone() {
 		return new Platform(color, (int) x, (int) y, width, height);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new PlatformEditor(levelEditor, this);
 	}
 	
 }

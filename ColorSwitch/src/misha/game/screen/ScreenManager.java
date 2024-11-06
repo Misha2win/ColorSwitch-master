@@ -18,7 +18,7 @@ public class ScreenManager extends AbstractScreenManager {
 	 * @param surface the surface to give all of the Screens
 	 */
 	public ScreenManager() {
-		currentScreen = ScreenManager.GAME_SCREEN;
+		currentScreen = ScreenManager.MENU_SCREEN;
 		
 		this.screens = new ArrayList<Screen>();
 		screens.add(new MenuScreen(this));

@@ -28,7 +28,7 @@ public class Editor extends JFrame {
         
 		setLocationRelativeTo(null);
 		setResizable(false);
-		//setAlwaysOnTop(true);
+//		setAlwaysOnTop(true);
 		
 		gamePanel = new EditorPanel(levelNum);
 		getContentPane().add(gamePanel);

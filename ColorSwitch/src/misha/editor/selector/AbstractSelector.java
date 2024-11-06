@@ -11,10 +11,14 @@ import java.awt.Graphics2D;
 
 public abstract class AbstractSelector<T> {
 	
-	protected static final int NOTHING = 0;
+	protected static final int NOTHING = -1;
 	
 	protected int highlightOption;
 	
 	public abstract void draw(Graphics2D g);
+	
+	public void unfocus() {
+		highlightOption = NOTHING;
+	}
 	
 }

@@ -126,7 +126,15 @@ public class PhysicsEngine {
 		}
 		
 		if (player.canJump() && player.getHoldingUp()) { // If the player can jump (is on the floor + within coyote time frame) and wants to jump
-			player.setYVelocity(-Player.JUMP_STRENGTH);
+			float multiplier = 1;
+			if (Player.PLAYER_SIZE != player.getHeight()) {
+				if (player.getHeight() > Player.PLAYER_SIZE) {
+					multiplier = ((float) player.getHeight() / Player.PLAYER_SIZE) * 0.8f;
+				} else {
+					multiplier = 0.7f;
+				}
+			}
+			player.setYVelocity(-Player.JUMP_STRENGTH * multiplier);
 			player.setJumping(true);
 		} else if (!onFloor) { // If the player is not on the floor and should be accelerated by gravity
 			player.accelerate(0, PhysicsEngine.GRAVITY);

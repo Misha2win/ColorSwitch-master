@@ -9,18 +9,17 @@ package misha.game.level.entity.point;
 
 import java.awt.Graphics2D;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.point.SpawnPointEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
 @EditableEntity({ EditableEntityType.POINTS, EditableEntityType.FIELDS })
 public class SpawnPoint extends Point {
+	
+	static { Entity.addSubclass(SpawnPoint.class); }
 	
 	@EditableField
 	private boolean isObtainable;
@@ -78,11 +77,6 @@ public class SpawnPoint extends Point {
 	@Override
 	public Entity clone() {
 		return new SpawnPoint((int) x, (int) y, isActive, isObtainable);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new SpawnPointEditor(levelEditor, this);
 	}
 	
 }

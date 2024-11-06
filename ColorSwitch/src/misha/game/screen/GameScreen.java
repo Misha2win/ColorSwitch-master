@@ -46,6 +46,14 @@ public class GameScreen extends Screen {
 	public void update() {
 		levelManager.update();
 		PhysicsEngine.calcPhysics(levelManager);
+		
+		LevelScreen levelScreen = ((LevelScreen) screenManager.getScreen(ScreenManager.LEVEL_SCREEN));
+		if (levelManager.getLevelNum() > levelManager.getNonNullLevelNames().length) {
+			System.out.println("Doing this!");
+			levelScreen.unlockLevel(levelManager.getNonNullLevelNames().length - 1);
+		} else {
+			levelScreen.unlockLevel(levelManager.getLevelNum());
+		}
 	}
 
 	@Override

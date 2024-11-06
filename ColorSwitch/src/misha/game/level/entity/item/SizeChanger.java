@@ -10,10 +10,8 @@ package misha.game.level.entity.item;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
@@ -22,6 +20,8 @@ import java.awt.Color;
 
 @EditableEntity({ EditableEntityType.POINTS, EditableEntityType.FIELDS })
 public class SizeChanger extends Item {
+	
+	static { Entity.addSubclass(SizeChanger.class); }
 	
 	@EditableField
 	private boolean enlarge;
@@ -93,12 +93,6 @@ public class SizeChanger extends Item {
 	@Override
 	public Entity clone() {
 		return new SizeChanger((int) x, (int) y, enlarge);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return null;
-		//return new SizeChangerEditor(levelEditor, this);
 	}
 	
 }

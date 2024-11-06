@@ -11,12 +11,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Font;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.platform.HealthGateEditor;
+import misha.editor.level.entity.EditableField.EditableFieldType;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
@@ -25,11 +23,13 @@ import misha.game.level.entity.player.Player;
 @EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.FIELDS })
 public class HealthGate extends Platform implements Updatable {
 
+	static { Entity.addSubclass(HealthGate.class); }
+	
 	private boolean isOpen;
 	
 	@EditableField
 	private boolean moreThan;
-	@EditableField
+	@EditableField(value = { EditableFieldType.RANGE }, range = { 0, 100, 5 })
 	private int healthRule;
 	
 	public HealthGate(boolean rule, int healthRule, int x, int y, int w, int h) {
@@ -92,11 +92,6 @@ public class HealthGate extends Platform implements Updatable {
 	@Override
 	public Entity clone() {
 		return new HealthGate(moreThan, healthRule, (int) x, (int) y, width, height);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new HealthGateEditor(levelEditor, this);
 	}
 	
 }

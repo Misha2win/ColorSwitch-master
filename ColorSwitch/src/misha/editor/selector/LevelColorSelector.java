@@ -9,8 +9,8 @@ package misha.editor.selector;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 
 import misha.editor.DrawUtil;
 import misha.editor.level.LevelEditor;
@@ -37,33 +37,45 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 	private static final Rectangle LEVEL_CYAN_BUTTON = new Rectangle(310, 660, 40, 40);
 	private static final Rectangle LEVEL_WHITE_BUTTON = new Rectangle(360, 660, 40, 40);
 	
+	public void setHighlightFromColor(CSColor color) {
+		if (color.equals(CSColor.BLACK)) {
+			highlightOption = 1;
+		} else if (color.equals(CSColor.RED)) {
+			highlightOption = 2;
+		} else if (color.equals(CSColor.GREEN)) {
+			highlightOption = 3;
+		} else if (color.equals(CSColor.BLUE)) {
+			highlightOption = 4;
+		} else if (color.equals(CSColor.YELLOW)) {
+			highlightOption = 5;
+		} else if (color.equals(CSColor.MAGENTA)) {
+			highlightOption = 6;
+		} else if (color.equals(CSColor.CYAN)) {
+			highlightOption = 7;
+		} else if (color.equals(CSColor.WHITE)) {
+			highlightOption = 8;
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
-	public void setColor(LevelEditor levelEditor, Point point) {
+	public void setColor(LevelEditor levelEditor) {
 		Level level = levelEditor.getLevel();
 		
-		if (LEVEL_BLACK_BUTTON.contains(point)) {
-			highlightOption = BLACK;
+		if (highlightOption == BLACK) {
 			level.setLevelColor(CSColor.BLACK);
-		} else if (LEVEL_RED_BUTTON.contains(point)) {
-			highlightOption = RED;
+		} else if (highlightOption == RED) {
 			level.setLevelColor(CSColor.RED);
-		} else if (LEVEL_GREEN_BUTTON.contains(point)) {
-			highlightOption = GREEN;
+		} else if (highlightOption == GREEN) {
 			level.setLevelColor(CSColor.GREEN);
-		} else if (LEVEL_BLUE_BUTTON.contains(point)) {
-			highlightOption = BLUE;
+		} else if (highlightOption == BLUE) {
 			level.setLevelColor(CSColor.BLUE);
-		} else if (LEVEL_YELLOW_BUTTON.contains(point)) {
-			highlightOption = YELLOW;
+		} else if (highlightOption == YELLOW) {
 			level.setLevelColor(CSColor.YELLOW);
-		} else if (LEVEL_MAGENTA_BUTTON.contains(point)) {
-			highlightOption = MAGENTA;
+		} else if (highlightOption == MAGENTA) {
 			level.setLevelColor(CSColor.MAGENTA);
-		} else if (LEVEL_CYAN_BUTTON.contains(point)) {
-			highlightOption = CYAN;
+		} else if (highlightOption == CYAN) {
 			level.setLevelColor(CSColor.CYAN);
-		} else if (LEVEL_WHITE_BUTTON.contains(point)) {
-			highlightOption = WHITE;
+		} else if (highlightOption == WHITE) {
 			level.setLevelColor(CSColor.WHITE);
 		}
 	}
@@ -103,6 +115,36 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 		g.fillRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
 		g.setColor(Color.BLACK);
 		g.drawRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
+	}
+	
+	public boolean mousePressed(MouseEvent e) {
+		if (LEVEL_BLACK_BUTTON.contains(e.getPoint())) {
+			highlightOption = BLACK;
+			return true;
+		} else if (LEVEL_RED_BUTTON.contains(e.getPoint())) {
+			highlightOption = RED;
+			return true;
+		} else if (LEVEL_GREEN_BUTTON.contains(e.getPoint())) {
+			highlightOption = GREEN;
+			return true;
+		} else if (LEVEL_BLUE_BUTTON.contains(e.getPoint())) {
+			highlightOption = BLUE;
+			return true;
+		} else if (LEVEL_YELLOW_BUTTON.contains(e.getPoint())) {
+			highlightOption = YELLOW;
+			return true;
+		} else if (LEVEL_MAGENTA_BUTTON.contains(e.getPoint())) {
+			highlightOption = MAGENTA;
+			return true;
+		} else if (LEVEL_CYAN_BUTTON.contains(e.getPoint())) {
+			highlightOption = CYAN;
+			return true;
+		} else if (LEVEL_WHITE_BUTTON.contains(e.getPoint())) {
+			highlightOption = WHITE;
+			return true;
+		}
+		
+		return false;
 	}
 	
 }

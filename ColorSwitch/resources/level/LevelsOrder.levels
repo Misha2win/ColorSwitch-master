@@ -6,6 +6,7 @@ Element1
 Element2
 Element3
 SuperJump1
+SuperJump2
 Element4
 Prism6
 Prism1
@@ -30,3 +31,7 @@ PortalPoint1
 SizeChangerTest
 MirrorPrismTestLevel
 PrismMirrorTest
+// Appended by editor
+Painter1
+// Appended by editor
+SizeChanger1

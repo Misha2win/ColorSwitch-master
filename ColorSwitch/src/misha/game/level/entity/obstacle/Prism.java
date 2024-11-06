@@ -12,12 +12,10 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Polygon;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
+import misha.editor.level.entity.EditableField.EditableFieldType;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.obstacle.PrismEditor;
 import misha.game.ColorSwitch;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
@@ -25,6 +23,8 @@ import misha.game.level.entity.player.Player;
 
 @EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class Prism extends Obstacle {
+	
+	static { Entity.addSubclass(Prism.class); }
 	
 	private static final int BEAM_WIDTH = 5;
 	
@@ -36,7 +36,7 @@ public class Prism extends Obstacle {
 //	private boolean cooldown;
 	private boolean active;
 	
-	@EditableField
+	@EditableField(value = { EditableFieldType.LIMITED }, range = { UP, RIGHT, DOWN, LEFT })
 	private int direction;
 	
 	private Rectangle beam;
@@ -153,11 +153,6 @@ public class Prism extends Obstacle {
 	@Override
 	public Entity clone() {
 		return new Prism(color, (int) x, (int) y, direction);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new PrismEditor(levelEditor, this);
 	}
 	
 }

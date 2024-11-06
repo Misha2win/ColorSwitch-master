@@ -24,12 +24,27 @@ import misha.game.level.entity.point.Point;
 
 public final class LevelLoader {
 	
+	static {
+		checkUnusedLevels();
+	}
+	
 	public static final String LEVEL_DIRECTORY = "./resources/level/";
 	public static final String LEVELS_DIRECTORY = "./resources/level/levels/";
 	public static final String LEVEL_EXTENSION = ".level";
 	
+	/**
+	 * HashMap of level names and their corresponding level Strings
+	 */
 	private static final HashMap<String, String> LEVEL_STRINGS = new HashMap<>();
 	
+	/**
+	 * Creates a level given its level string
+	 * 
+	 * @param levelManager the levelManager to put this level in
+	 * @param levelName the name to give the level
+	 * @param levelString the String of the level that says where everything in the level is
+	 * @return the level made of levelString
+	 */
 	private static Level createLevel(LevelManager levelManager, String levelName, String levelString) {
 		CSColor levelColor = null;
 		LinkedList<Platform> platforms = new LinkedList<>();
@@ -86,13 +101,13 @@ public final class LevelLoader {
 						
 					}
 				} catch (Exception e) {
+					System.err.println("There was an issue trying to instantiate " + parts[1]);
+					System.err.println("Problematic line was '" + line + "'");
 					e.printStackTrace();
+					System.exit(1);
 				}
 			}
 		}
-		
-//		MasterEntityEditor<ColorChanger> mee = new MasterEntityEditor<>(ColorChanger.class);
-//		items.add(mee.getEntity());
 		
 		return new Level(
 				levelName,
@@ -106,44 +121,37 @@ public final class LevelLoader {
 		);
 	}
 	
+	/**
+	 * Loads the level String of a level provided the level's name
+	 * 
+	 * @param directory the directory to look for the level in
+	 * @param levelName the name of the level to load the level string of
+	 * @return the level String of the level
+	 * @throws IOException if there is no level with the provided name
+	 */
 	private static String loadLevelString(String directory, String levelName) throws IOException {
 		return new String(Files.readAllBytes(Paths.get(directory + levelName)));
 	}
 	
+	/**
+	 * Loads the level String of a level provided the level's name
+	 * 
+	 * @param levelName the name of the level to load
+	 * @return the level String of the level
+	 * @throws IOException if there is no level with the provided name
+	 */
 	private static String loadLevelString(String levelName) throws IOException {
 		return loadLevelString(LEVELS_DIRECTORY , levelName);
 	}
 	
-	public static boolean loadAllLevels() {
-		File directory = new File(LEVELS_DIRECTORY);
-
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-
-            for (File file : files) {
-                if (file.isFile() && !file.isHidden()) {
-                	try {
-                		getLevel(null, file.getName());
-                	} catch (IOException e) {
-                		System.err.println(file.getName() + " is not a level!");
-                		e.printStackTrace();
-                	}
-                }
-            }
-        } else {
-            System.err.println("Directory does not exist or is not a directory.");
-        }
-		
-		return true;
-	}
-	
-	public static boolean isLoaded(String levelName) {
-		if (!levelName.endsWith(LEVEL_EXTENSION))
-			levelName += LEVEL_EXTENSION;
-		
-		return LEVEL_STRINGS.containsKey(levelName);
-	}
-	
+	/**
+	 * Loads a level provided its name
+	 * 
+	 * @param levelManager the LevelManager to assign this level to
+	 * @param levelName the name of the level to load
+	 * @return the level with the provided name
+	 * @throws IOException if no level with the provided name is found
+	 */
 	public static Level loadLevel(LevelManager levelManager, String levelName) throws IOException {
 		if (!levelName.endsWith(LEVEL_EXTENSION))
 			levelName += LEVEL_EXTENSION;
@@ -159,6 +167,14 @@ public final class LevelLoader {
 		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
 	}
 	
+	/**
+	 * Gets or loads a level provided its name
+	 * 
+	 * @param levelManager the LevelManager to assign this level to
+	 * @param levelName the name of the Level to get or load
+	 * @return the level with the provided name
+	 * @throws IOException if no level with the provided name is found
+	 */
 	public static Level getLevel(LevelManager levelManager, String levelName)  throws IOException {
 		if (!levelName.endsWith(LEVEL_EXTENSION))
 			levelName += LEVEL_EXTENSION;
@@ -168,6 +184,39 @@ public final class LevelLoader {
 		}
 		
 		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
+	}
+	
+	/**
+	 * Checks and prints all levels that are not referenced in the LevelCreator.LEVEL_ORDER_STRING.
+	 * Ignoring all lines that start are commented
+	 */
+	private static void checkUnusedLevels() {
+		System.out.println("Checking unused levels...");
+		
+		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
+
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+
+            String[] referencedLevels = LevelCreator.LEVEL_ORDER_STRING.split("\n");
+            for (File file : files) {
+                if (file.isFile() && !file.isHidden() && file.getName().endsWith(".level")) {
+                	boolean referenced = false;
+                	
+                	for (String levelName : referencedLevels) {
+                		if (levelName.equals(file.getName().replace(".level", ""))) {
+                			referenced = true;
+                			break;
+                		}
+                	}
+                	
+                	if (!referenced && !file.getName().equals("TestLevel.level"))
+                		System.err.println("Not using level \"" + file.getName() + "\"");
+                }
+            }
+        } else {
+            System.err.println("Directory does not exist or is not a directory.");
+        }
 	}
 
 }

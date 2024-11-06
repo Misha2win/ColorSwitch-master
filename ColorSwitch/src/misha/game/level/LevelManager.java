@@ -63,6 +63,18 @@ public class LevelManager {
 		return levelNames.toArray(new String[levelNames.size()]);
 	}
 	
+	public String[] getNonNullLevelNames() {
+		LinkedList<String> levelNames = new LinkedList<>();
+		
+		for (Level level : levels) {
+			if (level != null) {
+				levelNames.add(level.getLevelName());
+			}
+		}
+		
+		return levelNames.toArray(new String[levelNames.size()]);
+	}
+	
 	public boolean setLevel(int levelNum) {
 		if (levelNum >= 0 && levelNum < levels.length) {
 			if (levels[levelNum] != null) {
@@ -104,7 +116,7 @@ public class LevelManager {
 				currentLevel = 49;
 			}
 
-			resetPlayer();
+			resetLevel();
 		}
 		
 		if (debugMode)
@@ -113,12 +125,9 @@ public class LevelManager {
 
 	public void previousLevel() {
 		if (currentLevel > 0) {
-			resetLevel();
-			
 			currentLevel--;
 			
 			resetLevel();
-			resetPlayer();
 		}
 		
 		if (debugMode)

@@ -11,15 +11,14 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Polygon;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.item.SuperJumpEditor;
 import misha.game.level.entity.Entity;
 
 @EditableEntity({ EditableEntityType.POINTS })
 public class SuperJump extends Item {
+	
+	static { Entity.addSubclass(SuperJump.class); }
 	
 	public SuperJump(int x, int y) {
 		super(x, y, 30, 30);
@@ -66,11 +65,6 @@ public class SuperJump extends Item {
 	@Override
 	public Entity clone() {
 		return new SuperJump((int) x, (int) y);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new SuperJumpEditor(levelEditor, this);
 	}
 	
 }

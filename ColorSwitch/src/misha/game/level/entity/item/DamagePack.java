@@ -9,17 +9,16 @@ package misha.game.level.entity.item;
 
 import java.awt.Graphics2D;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.item.DamagePackEditor;
 import misha.game.level.entity.Entity;
 
 import java.awt.Color;
 
 @EditableEntity({ EditableEntityType.POINTS })
 public class DamagePack extends Item {
+	
+	static { Entity.addSubclass(DamagePack.class); }
 	
 	public DamagePack(int x, int y) {
 		super(x, y, 30, 30);
@@ -57,11 +56,6 @@ public class DamagePack extends Item {
 	@Override
 	public Entity clone() {
 		return new DamagePack((int) x, (int) y);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new DamagePackEditor(levelEditor, this);
 	}
 	
 }

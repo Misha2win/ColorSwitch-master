@@ -9,16 +9,22 @@ package misha.game.level.entity;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 
 import misha.annotation.EnforceAnnotationInImplementedSubclasses;
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
 import misha.game.level.Level;
+import misha.game.level.entity.player.Player;
 
 @EnforceAnnotationInImplementedSubclasses(EditableEntity.class)
 public abstract class Entity {
+	
+	private static LinkedList<Class<? extends Entity>> SUBCLASSES; // Keep track of Entity subclasses
+	
+	static {
+		SUBCLASSES = new LinkedList<>();
+	}
 	
 	protected Level level;
 
@@ -29,6 +35,11 @@ public abstract class Entity {
 	protected float xVelocity, yVelocity;
 	
 	public Entity(int x, int y, int w, int h) {
+		if (!SUBCLASSES.contains(getClass()) && !getClass().equals(Player.class)) {
+			throw new IllegalStateException(getClass().getCanonicalName() + " is not in the SUBCLASSES array!\n"
+					+ "Did you forget to make a static block that calls Entity.addSubclass(Class<? extends Entity>)?");
+		}
+		
 		this.x = x;
 		this.y = y;
 		this.width = w;
@@ -38,8 +49,6 @@ public abstract class Entity {
 	public abstract void draw(Graphics2D g);
 	
 	public abstract void onCollision(Entity entity);
-	
-	public abstract EntityEditor<?> getEntityEditor(LevelEditor levelEditor);
 	
 	@Override
 	public abstract String toString();
@@ -126,6 +135,20 @@ public abstract class Entity {
 	
 	public Rectangle2D getRect() {
 		return new Rectangle2D.Float(x, y, width, height);
+	}
+	
+	public static Class<? extends Entity>[] getAllSubclasses() {
+		@SuppressWarnings("unchecked")
+		Class<? extends Entity>[] classArray = SUBCLASSES.toArray(new Class[SUBCLASSES.size()]);
+		return classArray;
+	}
+	
+	protected static void addSubclass(Class<? extends Entity> clazz) {
+		if (!SUBCLASSES.contains(clazz)) {
+			SUBCLASSES.add(clazz);
+		} else {
+			throw new IllegalArgumentException("Class " + clazz.getCanonicalName() + " is added to subclasses more than once!");
+		}
 	}
 	
 }

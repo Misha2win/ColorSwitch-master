@@ -17,6 +17,35 @@ import misha.game.level.entity.platform.Platform;
 
 public class Util {
 	
+	public static int sharesAllButOne(String str1, String str2) {
+		if (str1.length() != str2.length())
+			return -1;
+		
+		int mismatchIndex = -1;
+		
+		for (int i = 0; i < str1.length(); i++) {
+			if (str1.charAt(i) != str2.charAt(i)) {
+				if (mismatchIndex != -1) {
+					return -1;
+				}
+				
+				mismatchIndex = i;
+			}
+		}
+		
+		return mismatchIndex;
+	}
+	
+	public static boolean contains(Object[] arr, Object object) {
+		for (Object obj : arr) {
+			if (obj == object) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <T> T[] addToArray(T[] arr, T obj) {
 		Class<?> clazz = (obj.getClass().equals(Platform.class) || obj instanceof String) ? obj.getClass() : (obj instanceof Element ? Obstacle.class : obj.getClass().getSuperclass());

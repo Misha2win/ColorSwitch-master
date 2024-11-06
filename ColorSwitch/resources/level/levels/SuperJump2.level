@@ -1,0 +1,16 @@
+// Level color
+level green
+// Platforms
+platform Platform black 10 10 10 580
+platform Platform black 20 580 720 10
+platform Platform black 20 10 720 10
+platform Platform black 730 20 10 560
+platform Platform black 20 300 170 280
+platform Platform black 560 300 170 280
+// Points
+point SpawnPoint 20 280 true false
+point GoalPoint 710 280
+// Obstacles
+// Items
+item SuperJump 360 270
+// Texts

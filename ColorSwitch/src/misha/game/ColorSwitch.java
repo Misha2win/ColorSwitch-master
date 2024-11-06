@@ -37,7 +37,7 @@ public class ColorSwitch extends JFrame { // TODO Use specific imports!
 		setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + insets.bottom);
 
 		setLocationRelativeTo(null);
-		setResizable(true);
+		setResizable(false);
 		setAlwaysOnTop(true);
 
 		if (levelManager != null)

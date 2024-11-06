@@ -7,17 +7,16 @@
 
 package misha.game.level.entity.obstacle;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.obstacle.LavaEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
 @EditableEntity({ EditableEntityType.PLATFORMS })
 public class Lava extends Element {
+	
+	static { Entity.addSubclass(Lava.class); }
 	
 	public Lava(int x, int y, int w, int h) {
 		super(CSColor.RED, x, y, w, h, -0.5f);
@@ -42,11 +41,6 @@ public class Lava extends Element {
 	@Override
 	public Entity clone() {
 		return new Lava((int) x, (int) y, width, height);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new LavaEditor(levelEditor, this);
 	}
 	
 }

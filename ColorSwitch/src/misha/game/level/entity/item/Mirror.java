@@ -10,19 +10,19 @@ package misha.game.level.entity.item;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.BasicStroke;
+
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.item.MirrorEditor;
 import misha.game.level.Level;
 
 @EditableEntity({ EditableEntityType.POINTS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class Mirror extends Item {
+	
+	static { Entity.addSubclass(Mirror.class); }
 	
 	@EditableField
 	public boolean persistOnce;
@@ -102,11 +102,6 @@ public class Mirror extends Item {
 	@Override
 	public Entity clone() {
 		return new Mirror((int) x, (int) y, color, persistOnce);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new MirrorEditor(levelEditor, this);
 	}
 	
 }

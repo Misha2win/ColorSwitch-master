@@ -7,19 +7,18 @@
 
 package misha.game.level.entity.platform;
 
-import misha.editor.level.LevelEditor;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
 import misha.editor.level.entity.EditableField.EditableFieldType;
-import misha.editor.level.entity.EntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.level.entity.platform.MovingPlatformEditor;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
 
 @EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.COLORS, EditableEntityType.FIELDS })
 public class MovingPlatform extends Platform implements Updatable {
+	
+	static { Entity.addSubclass(MovingPlatform.class); }
 	
 	private boolean movingToPoint2;
 	
@@ -107,11 +106,6 @@ public class MovingPlatform extends Platform implements Updatable {
 	@Override
 	public Entity clone() {
 		return new MovingPlatform(color, (int) x, (int) y, (int) x2, (int) y2, width, height);
-	}
-	
-	@Override
-	public EntityEditor<?> getEntityEditor(LevelEditor levelEditor) {
-		return new MovingPlatformEditor(levelEditor, this);
 	}
 	
 }
