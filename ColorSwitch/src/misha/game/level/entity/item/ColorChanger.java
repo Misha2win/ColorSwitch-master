@@ -37,7 +37,7 @@ public class ColorChanger extends Item {
 		for (Obstacle obstacle : level.getObstacles()) {
 			if (obstacle instanceof Prism) {
 				Prism prism = (Prism) obstacle;
-				if (level.getLevelManager().getPlayer().getRect().intersects(prism.getBeam()))
+				if (prism.isCollidingBeams(level.getLevelManager().getPlayer()) != null)
 					obstacle.setColor(color);
 			}
 		}

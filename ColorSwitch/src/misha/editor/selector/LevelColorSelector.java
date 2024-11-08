@@ -27,6 +27,7 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 	private static final int MAGENTA = 6;
 	private static final int CYAN = 7;
 	private static final int WHITE = 8;
+	private static final int GRAY = 9;
 	
 	private static final Rectangle LEVEL_BLACK_BUTTON = new Rectangle(10, 660, 40, 40);
 	private static final Rectangle LEVEL_RED_BUTTON = new Rectangle(60, 660, 40, 40);
@@ -36,6 +37,7 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 	private static final Rectangle LEVEL_MAGENTA_BUTTON = new Rectangle(260, 660, 40, 40);
 	private static final Rectangle LEVEL_CYAN_BUTTON = new Rectangle(310, 660, 40, 40);
 	private static final Rectangle LEVEL_WHITE_BUTTON = new Rectangle(360, 660, 40, 40);
+	private static final Rectangle LEVEL_GRAY_BUTTON = new Rectangle(410, 660, 40, 40);
 	
 	public void setHighlightFromColor(CSColor color) {
 		if (color.equals(CSColor.BLACK)) {
@@ -54,6 +56,8 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 			highlightOption = 7;
 		} else if (color.equals(CSColor.WHITE)) {
 			highlightOption = 8;
+		} else if (color.equals(CSColor.GRAY)) {
+			highlightOption = 9;
 		}
 	}
 	
@@ -77,6 +81,8 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 			level.setLevelColor(CSColor.CYAN);
 		} else if (highlightOption == WHITE) {
 			level.setLevelColor(CSColor.WHITE);
+		} else if (highlightOption == GRAY) {
+			level.setLevelColor(CSColor.GRAY);
 		}
 	}
 
@@ -115,6 +121,10 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 		g.fillRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
 		g.setColor(Color.BLACK);
 		g.drawRect(LEVEL_WHITE_BUTTON.x + 5, LEVEL_WHITE_BUTTON.y + 5, 30, 30);
+		
+		DrawUtil.drawButton(g, LEVEL_GRAY_BUTTON, highlightOption == GRAY);
+		g.setColor(Color.GRAY);
+		g.fillRect(LEVEL_GRAY_BUTTON.x + 5, LEVEL_GRAY_BUTTON.y + 5, 30, 30);
 	}
 	
 	public boolean mousePressed(MouseEvent e) {
@@ -142,7 +152,10 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 		} else if (LEVEL_WHITE_BUTTON.contains(e.getPoint())) {
 			highlightOption = WHITE;
 			return true;
-		}
+		} else if (LEVEL_GRAY_BUTTON.contains(e.getPoint())) {
+			highlightOption = GRAY;
+			return true;
+		} 
 		
 		return false;
 	}

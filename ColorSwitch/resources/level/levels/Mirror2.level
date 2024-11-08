@@ -14,6 +14,7 @@ platform Platform black 500 190 230 20
 platform Platform black 420 90 230 20
 platform Platform gray 100 490 230 20
 platform Platform gray 20 390 230 20
+platform Platform gray 100 290 230 20
 // Points
 point SpawnPoint 20 560 true false
 point GoalPoint 710 560

@@ -41,6 +41,7 @@ platform MovingPlatform blue 410 220 270 220 60 10
 platform MovingPlatform black 410 340 270 340 60 10
 platform MovingPlatform black 20 400 200 90 60 10
 platform Platform black 690 400 40 10
+platform PhotonicPlatform 0 0 0 0
 // Points
 point SpawnPoint 710 560 true false
 point PortalPoint 710 380 0

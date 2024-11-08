@@ -8,8 +8,8 @@ platform Platform black 730 20 10 560
 platform Platform red 190 20 90 560
 platform Platform blue 470 20 90 560
 // Points
-point SpawnPoint 20 560 true false
-point GoalPoint 20 540
+point SpawnPoint 20 540 true false
+point GoalPoint 20 560
 // Obstacles
 obstacle Prism red 150 20 2
 obstacle Prism red 170 20 2

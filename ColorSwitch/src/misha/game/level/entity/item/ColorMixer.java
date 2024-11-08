@@ -53,7 +53,7 @@ public class ColorMixer extends Item {
 		for (Obstacle obstacle : level.getObstacles()) {
 			if (obstacle instanceof Prism) {
 				Prism prism = (Prism) obstacle;
-				if (level.getLevelManager().getPlayer().getRect().intersects(prism.getBeam()))
+				if (prism.isCollidingBeams(player) != null)
 					if (add)
 						obstacle.setColor(obstacle.getColor().add(color));
 					else

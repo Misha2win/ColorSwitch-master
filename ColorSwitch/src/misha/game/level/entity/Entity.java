@@ -15,7 +15,6 @@ import misha.annotation.EnforceAnnotationInImplementedSubclasses;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableField;
 import misha.game.level.Level;
-import misha.game.level.entity.player.Player;
 
 @EnforceAnnotationInImplementedSubclasses(EditableEntity.class)
 public abstract class Entity {
@@ -34,11 +33,11 @@ public abstract class Entity {
 	protected int width, height;
 	protected float xVelocity, yVelocity;
 	
-	public Entity(int x, int y, int w, int h) {
-		if (!SUBCLASSES.contains(getClass()) && !getClass().equals(Player.class)) {
-			throw new IllegalStateException(getClass().getCanonicalName() + " is not in the SUBCLASSES array!\n"
-					+ "Did you forget to make a static block that calls Entity.addSubclass(Class<? extends Entity>)?");
-		}
+	public Entity(float x, float y, int w, int h) {
+//		if (!SUBCLASSES.contains(getClass()) && !getClass().equals(Player.class)) {
+//			throw new IllegalStateException(getClass().getCanonicalName() + " is not in the SUBCLASSES array!\n"
+//					+ "Did you forget to make a static block that calls Entity.addSubclass(Class<? extends Entity>)?");
+//		}
 		
 		this.x = x;
 		this.y = y;

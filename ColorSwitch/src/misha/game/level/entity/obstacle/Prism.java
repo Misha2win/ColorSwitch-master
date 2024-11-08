@@ -8,8 +8,6 @@
 package misha.game.level.entity.obstacle;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.beans.Beans;
 import java.awt.Color;
 import java.awt.Polygon;
 
@@ -21,6 +19,9 @@ import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
+import misha.game.level.entity.item.ColorChanger;
+import misha.game.level.entity.item.Item;
+import misha.game.level.entity.platform.PhotonicPlatform;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.player.Player;
 
@@ -46,6 +47,7 @@ public class Prism extends Obstacle {
 		
 		this.direction = direction;
 		this.active = true;
+		this.rootBeam = new Beam(this);
 		
 		if (direction != UP && direction != RIGHT && direction != DOWN && direction != LEFT)
 			throw new IllegalArgumentException("Invalid direction provided!");
@@ -57,6 +59,12 @@ public class Prism extends Obstacle {
 	
 	public int getDirection() {
 		return direction;
+	}
+	
+	@Override
+	public void setColor(CSColor color) {
+		super.setColor(color);
+		rootBeam.setColor(color);
 	}
 
 	@Override
@@ -70,10 +78,9 @@ public class Prism extends Obstacle {
 
 	@Override
 	public void draw(Graphics2D g) {
-		Color c = color.getGraphicsColor();
-		
 		rootBeam.draw(g);
 
+		Color c = color.getGraphicsColor();
 		g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), 100));
 		Polygon prism = new Polygon();
 		if (direction == UP) {
@@ -94,6 +101,11 @@ public class Prism extends Obstacle {
 			prism.addPoint((int) (x), (int) (y + height / 2));
 		}
 		g.fill(prism);
+		
+		if (color.equals(CSColor.WHITE)) {
+			g.setColor(Color.BLACK);
+			g.draw(prism);
+		}
 	}
 
 	@Override
@@ -120,66 +132,140 @@ public class Prism extends Obstacle {
 	}
 	
 	public class Beam extends Entity {
-		private static final int BEAM_WIDTH = 6;
+		private static final int BEAM_WIDTH = 5;
+		
+		private final Prism prism;
+		private final int direction;
 		
 		private Beam previousBeam;
 		private Beam nextBeam;
 		
-		private final int direction;
-		
-		private Beam(CSColor color, int x, int y, int width, int height, int direction) {
-			super(x, y, 0, 0);
-			this.color = color;
-			this.direction = direction;
-			
-			if (direction == UP) {
-				this.x = x + width / 2 - BEAM_WIDTH / 2; 		// 1*
-				this.y = y + 10 - ColorSwitch.NATIVE_HEIGHT;	// 6
-			} else if (direction == RIGHT) {
-				this.x = x + 10; 								// 5
-				this.y = y + height / 2 - BEAM_WIDTH / 2; 		// 2*
-			} else if (direction == DOWN) {
-				this.x = x + width / 2 - BEAM_WIDTH / 2; 		// 1*
-				this.y = y + 10; 								// 4
-			} else if (direction == LEFT) {
-				this.x = x + 10 - ColorSwitch.NATIVE_WIDTH; 	// 3
-				this.y = y + height / 2 - BEAM_WIDTH / 2; 		// 2*
-			}
-			this.width = (direction % 2 == 0) ? BEAM_WIDTH : ColorSwitch.NATIVE_WIDTH;
-			this.height = (direction % 2 == 1) ? BEAM_WIDTH : ColorSwitch.NATIVE_HEIGHT;
+		private Beam(Prism prism) {
+			super(prism.x, prism.y, 0, 0);
+			this.prism = prism;
+			this.color = prism.color;
+			this.direction = prism.direction;
 		}
 		
+		private void resetBeam() {
+			if (previousBeam == null) {
+				if (direction == UP) {
+					this.x = prism.x + prism.width / 2 - BEAM_WIDTH / 2; 
+					this.y = prism.y + 10 - ColorSwitch.NATIVE_HEIGHT;	
+				} else if (direction == RIGHT) {
+					this.x = prism.x + 10; 							
+					this.y = prism.y + prism.height / 2 - BEAM_WIDTH / 2; 		
+				} else if (direction == DOWN) {
+					this.x = prism.x + prism.width / 2 - BEAM_WIDTH / 2; 	
+					this.y = prism.y + 10; 							
+				} else if (direction == LEFT) {
+					this.x = prism.x + 10 - ColorSwitch.NATIVE_WIDTH; 	
+					this.y = prism.y + prism.height / 2 - BEAM_WIDTH / 2; 	
+				}
+				this.width = (direction % 2 == 0) ? BEAM_WIDTH : ColorSwitch.NATIVE_WIDTH;
+				this.height = (direction % 2 == 1) ? BEAM_WIDTH : ColorSwitch.NATIVE_HEIGHT;
+			} else {
+				if (direction == UP) {
+					this.x = previousBeam.x;
+					this.y = previousBeam.y - ColorSwitch.NATIVE_HEIGHT;
+					this.width = previousBeam.width;
+					this.height = ColorSwitch.NATIVE_HEIGHT;
+				} else if (direction == RIGHT) {
+					this.x = previousBeam.x + previousBeam.width;
+					this.y = previousBeam.y;
+					this.width = ColorSwitch.NATIVE_WIDTH;
+					this.height = previousBeam.height;
+				} else if (direction == DOWN) {
+					this.x = previousBeam.x;
+					this.y = previousBeam.y + previousBeam.height;
+					this.width = previousBeam.width;
+					this.height = ColorSwitch.NATIVE_HEIGHT;
+				} else if (direction == LEFT) {
+					this.x = previousBeam.x - ColorSwitch.NATIVE_WIDTH;
+					this.y = previousBeam.y;
+					this.width = ColorSwitch.NATIVE_WIDTH;
+					this.height = previousBeam.height;
+				}
+			}
+		}
+
+		/**
+		 * Note: This will throw a stack overflow error if a beam is colliding with another beam
+		 * while one of those beams is half inside of a platform in a way that is parallel to the direction of the beam.
+		 * This happens because beams have a width and are not infinitely thin lines
+		 */
 		public void updateBeam(Level level) {
+			resetBeam();
+			
 			for (Platform platform : level.getPlatforms()) {
-				if (platform.getColor().collidesWith(color)) {
-					if (direction == UP) {
-					} else if (direction == RIGHT) {
-					} else if (direction == DOWN) {
-					} else if (direction == LEFT) {
+				if (platform instanceof PhotonicPlatform)
+					continue;
+				
+				if (platform.getColor().collidesWith(color) && getRect().intersects(platform.getRect())) {
+					CSColor subtraction = color.subtract(platform.getColor());
+					
+					shortenBeam(platform);
+					nextBeam = null;
+					
+					if (!subtraction.equals(CSColor.BLACK) && !platform.getColor().equals(CSColor.BLACK)) { // XXX GC issues???
+						createPartition(level, subtraction);
 					}
 				}
 			}
-//			if (direction == UP) {
-//				if (platform != null && platform.getColor().collidesWith(color)) {
-//					beam.height = (int) (beam.height - ((platform.getY() + platform.getHeight()) - beam.y));
-//					beam.y = (int) (platform.getY() + platform.getHeight());
-//				}
-//			} else if (direction == RIGHT) {
-//				if (platform != null && platform.getColor().collidesWith(color)) {
-//					beam.width = (int) (platform.getX() - beam.x);
-//				}
-//			} else if (direction == DOWN) {
-//				if (platform != null && platform.getColor().collidesWith(color)) {
-//					beam.height = (int) (platform.getY() - beam.y);
-//				}
-//			} else if (direction == LEFT) {
-//				if (platform != null && platform.getColor().collidesWith(color)) {
-//					beam.width = (int) (beam.width - ((platform.getX() + platform.getWidth()) - beam.x));
-//					beam.x = (int) (platform.getX() + platform.getWidth());
-//				}
-//			} else {
-//				throw new IllegalStateException("Unrecognized direction: " + direction);
-//			}
+			
+			// Second check specifically for PhotonicPlatforms
+			for (Platform platform : level.getPlatforms()) {
+				if (platform instanceof PhotonicPlatform && getRect().intersects(platform.getRect())) {
+					if (platform.getColor().equals(CSColor.GRAY)) {
+						platform.setColor(color);
+					} else {
+						platform.setColor(platform.getColor().add(color));
+					}
+				}
+			}
+			
+			for (Obstacle obstacle : level.getObstacles()) {
+				if (obstacle instanceof Prism prism) {
+					if (prism == this.prism)
+						continue;
+					
+					Beam collidingBeam = prism.isCollidingBeams(this);
+					if (collidingBeam != null) {
+						CSColor addition = collidingBeam.color.add(color);
+						if (!addition.equals(color)) {
+							shortenBeam(collidingBeam);
+							
+							createPartition(level, addition);
+						}
+					}
+				}
+			}
+			
+			for (Item item : level.getItems()) {
+				if (item instanceof ColorChanger colorChanger) {
+					if (!colorChanger.getColor().equals(color) && getRect().intersects(colorChanger.getRect())) {
+						shortenBeam(colorChanger);
+						
+						createPartition(level, colorChanger.getColor());
+					}
+				}
+			}
+		}
+		
+		private void shortenBeam(Entity entity) {
+			boolean isRoot = previousBeam == null;
+			
+			if (direction == UP) {
+				height = (int) ((isRoot ? prism.height / 2 : height) - (entity.getY() + entity.getHeight()) + (isRoot ? prism.y : y));
+				y = (int) (entity.getY() + entity.getHeight());
+			} else if (direction == RIGHT) {
+				width = (int) (entity.getX() - (isRoot ? prism.x : x)) - (isRoot ? prism.width / 2 : 0);
+			} else if (direction == DOWN) {
+				height = (int) (entity.getY() - (isRoot ? prism.y : y)) - (isRoot ? prism.height / 2 : 0);
+			} else if (direction == LEFT) {
+				width = (int) ((isRoot ? prism.width / 2 : width) - (entity.getX() + entity.getWidth()) + (isRoot ? prism.x : x));
+				x = (int) (entity.getX() + entity.getWidth());
+			}
 		}
 		
 		public Beam getCollidingBeam(Entity entity) {
@@ -192,6 +278,15 @@ public class Prism extends Obstacle {
 			else
 				return null;
 		}
+		
+		private void createPartition(Level level, CSColor color) {
+			Beam newBeam = new Beam(prism);
+			newBeam.previousBeam = this;
+			this.nextBeam = newBeam;
+			
+			newBeam.setColor(color);
+			newBeam.updateBeam(level);
+		}
 
 		@Override
 		public void draw(Graphics2D g) { // Draw all beams in reverse order
@@ -201,6 +296,11 @@ public class Prism extends Obstacle {
 			
 			g.setColor(color.getGraphicsColor());
 			g.fillRect((int) x, (int) y, width, height);
+			
+			if (color.equals(CSColor.WHITE)) {
+				g.setColor(Color.BLACK);
+				g.drawRect((int) x, (int) y, width, height);
+			}
 		}
 
 		@Override
@@ -210,7 +310,7 @@ public class Prism extends Obstacle {
 
 		@Override
 		public String toString() {
-			throw new IllegalStateException("toString() in Prism.Beam class should never be called!");
+			return "[" + x + " " + y + " " + width + " " + height + "]";
 		}
 
 		@Override
