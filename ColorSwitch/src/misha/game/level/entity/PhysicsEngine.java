@@ -93,15 +93,15 @@ public class PhysicsEngine {
 			}
 		}
 
-		for (Obstacle obstacle : level.getObstacles()) {
+		for (Obstacle obstacle : level.getObstacles()) { // XXX Refactor Prism logic!!!
 			// Player only collides with Obstacles if they are NOT the same color
-			boolean playerBeamCollide = (obstacle instanceof Prism && player.getRect().intersects(((Prism) obstacle).getBeam()));
-			if ((!player.color.collidesWith(obstacle.color) && isColliding(player, obstacle)) || playerBeamCollide) {
+			boolean playerBeamCollide = (obstacle instanceof Prism prism && prism.isCollidingBeams(player) != null);
+			if (playerBeamCollide || (!player.color.collidesWith(obstacle.color) && isColliding(player, obstacle))) {
 				obstacle.onCollision(player);
 			} else if (player.getMirrored()) {
 				// Check mirror player collision since player is mirrored
 				Player mirrorPlayer = player.getMirrorPlayer();
-				boolean mirrorBeamCollide = (obstacle instanceof Prism && mirrorPlayer.getRect().intersects(((Prism) obstacle).getBeam()));
+				boolean mirrorBeamCollide = (obstacle instanceof Prism prism && prism.isCollidingBeams(mirrorPlayer) != null);
 				if (!mirrorPlayer.color.collidesWith(obstacle.color) && isColliding(mirrorPlayer, obstacle)) {
 					obstacle.onCollision(player);
 				} else if (mirrorBeamCollide) {

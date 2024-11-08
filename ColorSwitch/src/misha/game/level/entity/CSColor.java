@@ -36,6 +36,9 @@ public class CSColor {
 	}
 	
 	public boolean collidesWith(CSColor other) {
+		if (this.color == BLACK.color || other.color == BLACK.color || this.color == WHITE.color || other.color == WHITE.color)
+			return true;
+		
 		return ((this.color & 0b111) & (other.color & 0b111)) != 0;
 	}
 	
@@ -67,8 +70,8 @@ public class CSColor {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof CSColor) {
-			if (this.color == ((CSColor) o).color) {
+		if (o instanceof CSColor other) {
+			if (this.color == other.color) {
 				return true;
 			}
 		}
@@ -119,7 +122,7 @@ public class CSColor {
 		else if (color.equals(GRAY))
 			return "CSColor.GRAY";
 	
-		return "unknown";
+		throw new IllegalStateException("Unknown color: " + color);
 	}
 	
 	public static CSColor getColorFromString(String name) {

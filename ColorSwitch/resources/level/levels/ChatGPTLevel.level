@@ -1,5 +1,6 @@
 // Level color
 level magenta
+
 // Platforms
 platform Platform black 10 10 730 10
 platform Platform black 10 10 10 580
@@ -10,16 +11,21 @@ platform Platform black 150 300 180 20
 platform Platform black 450 400 180 20
 platform Platform black 200 500 100 20
 platform Platform black 550 200 100 20
+
 // Points
 point SpawnPoint 50 540 true false
 point GoalPoint 680 80
+
 // Obstacles
 obstacle Prism green 350 120 0
 obstacle Prism red 400 460 2
+
 // Items
 item Mirror 180 480 red false
 item ColorChanger green 150 250
 item ColorChanger blue 600 150
 item SizeChanger 520 350 true
 item SuperJump 220 450
+
 // Texts
+// Reach the goal with the correct color! Use the Mirror to your advantage.
