@@ -10,6 +10,7 @@ package misha.editor.screen;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.BasicStroke;
 import java.awt.Polygon;
@@ -41,6 +42,8 @@ public class LevelEditorScreen extends Screen {
 	private static final Rectangle PREVIOUS_LEVEL_BUTTON = new Rectangle(600, 760, 40, 40);
 	private static final Rectangle SEEK_LEVEL_BUTTON = new Rectangle(550, 760, 40, 40);
 	
+	private String buttonHint;
+	
 	private EntityTypeSelector typeSelector;
 	private AbstractSelector<?> entitySelector;
 	private MasterEntityEditor<?> entityEditor;
@@ -65,6 +68,8 @@ public class LevelEditorScreen extends Screen {
 		this.levels = LevelCreator.createLevels(null);
 		this.levelCounter = num;
 		this.typeSelector = new EntityTypeSelector(this);
+		
+		this.buttonHint = "";
 		
 		System.out.println("Currently editing level: " + levelCounter + " (" + level.getLevelName() + ")");
 	}
@@ -200,6 +205,19 @@ public class LevelEditorScreen extends Screen {
 		g.draw(playArrow);
 	}
 	
+	public void drawLevelName(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("monospaced", Font.PLAIN, 14));
+		String levelName = "Level: " + this.getLevel().getLevelName();
+		g.drawString(levelName, 10, Editor.HEIGHT - 5);
+	}
+	
+	public void drawButtonHint(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("monospaced", Font.PLAIN, 14));
+		g.drawString(buttonHint, Editor.WIDTH - 10 - g.getFontMetrics().stringWidth(buttonHint), Editor.HEIGHT - 5);
+	}
+	
 	@Override
 	public void draw(Graphics gr) {
 		Graphics2D g = (Graphics2D) gr;
@@ -212,6 +230,10 @@ public class LevelEditorScreen extends Screen {
 			entityEditor.draw(g);
 		
 		drawButtons(g);
+		
+		drawLevelName(g);
+		
+		drawButtonHint(g);
 		
 		if (entitySelector != null)
 			entitySelector.draw(g);
@@ -275,6 +297,26 @@ public class LevelEditorScreen extends Screen {
 	public void mouseMoved(MouseEvent e) {
 		if (entityEditor != null)
 			entityEditor.mouseMoved(e);
+		
+		if (SAVE_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Save level";
+		} else if (SAVE_NEW_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Save as new";
+		} else if (DELETE_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Delete level";
+		} else if (CLEAR_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Clear level";
+		} else if (NEXT_LEVEL_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Next level";
+		} else if (PREVIOUS_LEVEL_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Previous level";
+		} else if (SEEK_LEVEL_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Search for level";
+		} else if (PLAY_LEVEL_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Play level";
+		} else {
+			buttonHint = "";
+		}
 	}
 
 	@Override

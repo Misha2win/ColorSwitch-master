@@ -50,6 +50,8 @@ public abstract class LevelGridScreen extends Screen {
 	private final int LEVEL_IMAGE_HEIGHT = (int) (ColorSwitch.NATIVE_HEIGHT * LEVEL_IMAGE_SCALE + 0.5);
 	private final int padding = 1;
 	
+	private String buttonHint;
+	
 	private String[] levelNames;
 	
 	public LevelGridScreen(ScreenManager screenManager) {
@@ -57,6 +59,7 @@ public abstract class LevelGridScreen extends Screen {
 		
 		LevelImageSaver.saveAllLevels();
 		
+		buttonHint = "";
 		levelNames = LevelCreator.LEVEL_ORDER_STRING.split("\n");
 		
 		resetLevelButtons();
@@ -141,6 +144,10 @@ public abstract class LevelGridScreen extends Screen {
 		g.fillRect(SAVE_BUTTON.x + 10, SAVE_BUTTON.y + 10, 20, 20);
 		g.setColor(Color.GREEN.darker());
 		g.fillOval(SAVE_BUTTON.x + 15, SAVE_BUTTON.y + 15, 10, 10);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("monospaced", Font.PLAIN, 14));
+		g.drawString(buttonHint, Editor.WIDTH - 10 - g.getFontMetrics().stringWidth(buttonHint), Editor.HEIGHT - 5);
 	}
 
 	@Override
@@ -241,6 +248,13 @@ public abstract class LevelGridScreen extends Screen {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		if (RELOAD_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Reload level images";
+		} else if (SAVE_BUTTON.contains(e.getPoint())) {
+			buttonHint = "Save level order";
+		} else {
+			buttonHint = "";
+		}
 	}
 
 	@Override

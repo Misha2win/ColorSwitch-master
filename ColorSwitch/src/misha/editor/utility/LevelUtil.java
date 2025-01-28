@@ -7,6 +7,8 @@
 
 package misha.editor.utility;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -56,7 +58,7 @@ public class LevelUtil {
 		}
 			
 		System.out.println("Saving level as: " + name + ".level");
-		LevelSaver.saveLevel(level, name);
+		boolean saveResult = LevelSaver.saveLevel(level, name);
 		
 		try {
 			Field nameField = Level.class.getDeclaredField("levelName");
@@ -66,16 +68,44 @@ public class LevelUtil {
 			e.printStackTrace();
 		}
 		
-		
 		LevelImageSaver.createAndSaveImage(level, name);
 		
 		if (promptForLevelOrder) {
 			askToAppendToLevelOrder(name);
 		}
+		
+		if (saveResult) {
+			JOptionPane.showMessageDialog(null, "Level Successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "There was an issue saving the level!", "Fail", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	
 	public static void saveLevelAsNew(Level level) {
 		String name = JOptionPane.showInputDialog("What should the name of this level be?");
+		
+		String fileName = name;
+		if (!fileName.endsWith(LevelLoader.LEVEL_EXTENSION))
+			fileName += LevelLoader.LEVEL_EXTENSION;
+
+		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
+		File file = new File(directory, fileName);
+
+		try {
+			if (!directory.exists()) {
+				throw new IllegalStateException("Directory " + LevelLoader.LEVELS_DIRECTORY + " does not exists!");
+			}
+
+			if (file.exists()) {
+				int option = JOptionPane.showConfirmDialog(null, "A level by the name of '" + name + "' already exists!\nWould you like to override it?", "Level already Exists!", JOptionPane.YES_NO_OPTION);
+				if (option != JOptionPane.YES_OPTION) {
+					return;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		LevelSaver.saveLevel(level, name);
 		askToAppendToLevelOrder(name);
 	}

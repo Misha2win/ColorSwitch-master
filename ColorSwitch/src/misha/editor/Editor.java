@@ -16,7 +16,7 @@ import javax.swing.*;
 public class Editor extends JFrame {
 	
 	public static final int WIDTH = 750;
-	public static final int HEIGHT = 600 + 210;
+	public static final int HEIGHT = 600 + 210 + 10;
 	
 	private EditorPanel gamePanel;
 	
