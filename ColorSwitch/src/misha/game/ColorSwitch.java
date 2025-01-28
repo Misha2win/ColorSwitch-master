@@ -93,31 +93,6 @@ public class ColorSwitch extends JFrame { // TODO Use specific imports!
 		});
 	}
 
-//	private ColorSwitch(String frameTitle, LevelManager levelManager) {
-//		super(frameTitle);
-//
-//		if (levelManager != null) {
-//			gamePanel = new GamePanel(levelManager);
-//		} else {
-//			gamePanel = new GamePanel();
-//		}
-//
-//		getContentPane().add(gamePanel);
-//
-//		// Remove window decorations
-//		setUndecorated(false);
-//
-//		// Set the window size to cover the entire screen
-//		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-//		device.setFullScreenWindow(this);
-//
-//
-//		setDefaultCloseOperation(EXIT_ON_CLOSE);
-//		setResizable(false); // Prevent resizing
-//		
-//		setVisible(true);
-//	}
-
 	public static void main(String[] args) {
 		new ColorSwitch();
 	}

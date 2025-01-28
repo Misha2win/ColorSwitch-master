@@ -18,6 +18,10 @@ import misha.game.level.Level;
 import misha.game.level.LevelLoader;
 
 public class LevelImageSaver {
+	
+	static {
+		LevelImageSaver.saveAllLevels();
+	}
 
 	public static BufferedImage createLevelImage(Level level) {
 		BufferedImage img = new BufferedImage(ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -40,6 +44,14 @@ public class LevelImageSaver {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static boolean createAndSaveImage(Level level) {
+		return saveImage(createLevelImage(level), level.getLevelName());
+	}
+	
+	public static boolean createAndSaveImage(Level level, String name) {
+		return saveImage(createLevelImage(level), name);
 	}
 
 	public static void saveAllLevels() {

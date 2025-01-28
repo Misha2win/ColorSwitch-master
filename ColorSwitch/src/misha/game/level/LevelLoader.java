@@ -9,24 +9,15 @@ package misha.game.level;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import misha.game.level.entity.CSColor;
-import misha.game.level.entity.item.Item;
-import misha.game.level.entity.obstacle.Obstacle;
-import misha.game.level.entity.platform.Platform;
-import misha.game.level.entity.point.Point;
+import misha.editor.utility.Util;
 
 public final class LevelLoader {
-	
-	static {
-		checkUnusedLevels();
-	}
 	
 	public static final String LEVEL_DIRECTORY = "./resources/level/";
 	public static final String LEVELS_DIRECTORY = "./resources/level/levels/";
@@ -37,88 +28,9 @@ public final class LevelLoader {
 	 */
 	private static final HashMap<String, String> LEVEL_STRINGS = new HashMap<>();
 	
-	/**
-	 * Creates a level given its level string
-	 * 
-	 * @param levelManager the levelManager to put this level in
-	 * @param levelName the name to give the level
-	 * @param levelString the String of the level that says where everything in the level is
-	 * @return the level made of levelString
-	 */
-	private static Level createLevel(LevelManager levelManager, String levelName, String levelString) {
-		CSColor levelColor = null;
-		LinkedList<Platform> platforms = new LinkedList<>();
-		LinkedList<Obstacle> obstacles = new LinkedList<>();
-		LinkedList<Point> points = new LinkedList<>();
-		LinkedList<Item> items = new LinkedList<>();
-		LinkedList<String> texts = new LinkedList<>();
-		
-		String[] lines = levelString.split("\n");
-		for (String line : lines) {
-			String[] parts = line.split(" ");
-			
-			if (line.startsWith("//") || line.length() == 0) {
-				continue;
-			} else if (parts[0].equals("text")) {
-				texts.add(line.substring(5));
-			} else if (parts[0].equals("level")) {
-				levelColor = CSColor.getColorFromString(parts[1]);
-			} else {
-				try {
-					Class<?> clazz = Class.forName("misha.game.level.entity." + parts[0] + "." + parts[1]);
-					
-					Constructor<?> constructor = clazz.getConstructors()[0];
-					Class<?>[] parameters = constructor.getParameterTypes();
-					
-					Object[] objs = new Object[parameters.length];
-					
-					for (int i = 0; i < parameters.length; i++) {
-						int partsIndex = 2 + i;
-						
-						if (parameters[i].equals(CSColor.class)) {
-							objs[i] = CSColor.getColorFromString(parts[partsIndex]);
-							
-						} else if (parameters[i].equals(int.class)) {
-							objs[i] = Integer.valueOf(parts[partsIndex]);
-							
-						} else if (parameters[i].equals(boolean.class)) {
-							objs[i] = Boolean.valueOf(parts[partsIndex]);
-							
-						}
-					}
-					
-					if (Platform.class.isAssignableFrom(clazz)) {
-						platforms.add((Platform) constructor.newInstance(objs));
-						
-					} else if (Point.class.isAssignableFrom(clazz)) {
-						points.add((Point) constructor.newInstance(objs));
-						
-					} else if (Obstacle.class.isAssignableFrom(clazz)) {
-						obstacles.add((Obstacle) constructor.newInstance(objs));
-						
-					} else if (Item.class.isAssignableFrom(clazz)) {
-						items.add((Item) constructor.newInstance(objs));
-						
-					}
-				} catch (Exception e) {
-					System.err.println("There was an issue trying to instantiate " + parts[1]);
-					System.err.println("Problematic line was '" + line + "'");
-					e.printStackTrace();
-					System.exit(1);
-				}
-			}
-		}
-		
-		return new Level(
-				levelName,
-				levelManager,
-				levelColor, 
-				platforms.toArray(new Platform[platforms.size()]),
-				points.toArray(new Point[points.size()]),
-				obstacles.toArray(new Obstacle[obstacles.size()]),
-				items.toArray(new Item[items.size()]),
-				texts.toArray(new String[texts.size()])
-		);
+	static {
+		loadAllLevelStrings();
+		checkUnusedLevels();
 	}
 	
 	/**
@@ -164,7 +76,7 @@ public final class LevelLoader {
 			throw new NoSuchFileException("There was an issue reading level " + levelName);
 		}
 		
-		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
+		return LevelCreator.createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
 	}
 	
 	/**
@@ -183,40 +95,59 @@ public final class LevelLoader {
 			return loadLevel(levelManager, levelName);
 		}
 		
-		return createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
+		return LevelCreator.createLevel(levelManager, levelName.replace(".level", ""), LEVEL_STRINGS.get(levelName));
+	}
+	
+	public static String[] getUnreferencedLevelNames() {
+		LinkedList<String> names = new LinkedList<>();
+		
+		String[] referencedLevels = LevelCreator.LEVEL_ORDER_STRING.split("\n");
+		for (String loadedLevel : LEVEL_STRINGS.keySet()) {
+			loadedLevel = loadedLevel.replace(LEVEL_EXTENSION, "");
+			
+			if (loadedLevel.equals("TestLevel"))
+				continue;
+			
+			if (!Util.contains(referencedLevels, loadedLevel)) {
+				names.add(loadedLevel);
+			}
+		}
+		
+		return names.toArray(new String[names.size()]);
 	}
 	
 	/**
-	 * Checks and prints all levels that are not referenced in the LevelCreator.LEVEL_ORDER_STRING.
-	 * Ignoring all lines that start are commented
+	 * Checks and prints all levels that are not referenced in the LevelCreator.LEVEL_ORDER_STRING
 	 */
 	private static void checkUnusedLevels() {
 		System.out.println("Checking unused levels...");
 		
+		for (String unreferencedLevel : getUnreferencedLevelNames()) {
+			System.err.println("Not using \"" + unreferencedLevel + "\"");
+		}
+	}
+	
+	private static void loadAllLevelStrings() {
+		System.out.println("Loading all levels in directory '" + LevelLoader.LEVEL_DIRECTORY + "'");
 		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
 
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
 
-            String[] referencedLevels = LevelCreator.LEVEL_ORDER_STRING.split("\n");
             for (File file : files) {
-                if (file.isFile() && !file.isHidden() && file.getName().endsWith(".level")) {
-                	boolean referenced = false;
-                	
-                	for (String levelName : referencedLevels) {
-                		if (levelName.equals(file.getName().replace(".level", ""))) {
-                			referenced = true;
-                			break;
-                		}
-                	}
-                	
-                	if (!referenced && !file.getName().equals("TestLevel.level"))
-                		System.err.println("Not using level \"" + file.getName() + "\"");
+                if (file.isFile() && !file.isHidden() && file.getName().endsWith(LEVEL_EXTENSION)) {
+                	try {
+                		LEVEL_STRINGS.put(file.getName(), LevelLoader.loadLevelString(file.getName()));
+					} catch (IOException e) {
+						System.err.println("There was an issue loading the level String of " + file.getName());
+						e.printStackTrace();
+					}
                 }
             }
         } else {
             System.err.println("Directory does not exist or is not a directory.");
         }
+        System.out.println("Done! Loaded " + LEVEL_STRINGS.size() + " levels!");
 	}
 
 }

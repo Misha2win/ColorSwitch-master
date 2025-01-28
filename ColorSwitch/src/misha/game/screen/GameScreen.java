@@ -101,5 +101,13 @@ public class GameScreen extends Screen {
 	public void keyReleased(KeyEvent e) {
 		levelManager.getPlayer().keyReleased(e);
 	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	}
 	
 }

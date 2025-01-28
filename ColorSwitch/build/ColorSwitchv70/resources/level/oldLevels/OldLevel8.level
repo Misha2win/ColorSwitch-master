@@ -1,0 +1,26 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform Platform black 230 20 20 460
+platform MovingPlatform red 250 140 250 580 240 10
+platform Platform black 490 140 20 440
+platform Platform black 490 140 140 20
+platform Platform black 590 240 140 20
+platform Platform black 490 340 140 20
+platform Platform black 590 440 140 20
+platform HealthGate true 99 510 460 220 30
+// Points
+point GoalPoint 710 560
+point SpawnPoint 20 560 true false
+// Obstacles
+obstacle Lava 250 20 240 560
+obstacle Water 500 160 240 300
+// Items
+item ColorChanger red 85 500
+item ColorChanger green 535 540
+item ColorChanger blue 545 100
+// Texts

@@ -31,7 +31,7 @@ public class Level implements Updatable {
 	
 	private LevelManager levelManager;
 	
-	private final String levelName;
+	private String levelName;
 	
 	private CSColor levelColor;
 	private Platform[] platforms;

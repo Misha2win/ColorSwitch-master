@@ -8,9 +8,12 @@
 package misha.game.level;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.obstacle.Obstacle;
@@ -21,9 +24,13 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class LevelCreator {
 	
-	public final static String LEVEL_ORDER_STRING;
+	public static String LEVEL_ORDER_STRING;
 	
 	static {
+		loadLevelOrderString();
+	}
+	
+	public static void loadLevelOrderString() {
 		String levelOrderString = null;
 		
 		try {
@@ -33,7 +40,7 @@ public class LevelCreator {
 			e.printStackTrace();
 		}
 		
-		LEVEL_ORDER_STRING = levelOrderString;
+		LEVEL_ORDER_STRING = levelOrderString.replaceAll("(\n|^)//.*?(?=\n|$)", "");
 	}
 
 	/**
@@ -69,6 +76,90 @@ public class LevelCreator {
 		}
 
 		return levels.toArray(new Level[levels.size()]);
+	}
+	
+	/**
+	 * Creates a level given its level string
+	 * 
+	 * @param levelManager the levelManager to put this level in
+	 * @param levelName the name to give the level
+	 * @param levelString the String of the level that says where everything in the level is
+	 * @return the level made of levelString
+	 */
+	public static Level createLevel(LevelManager levelManager, String levelName, String levelString) {
+		CSColor levelColor = null;
+		LinkedList<Platform> platforms = new LinkedList<>();
+		LinkedList<Obstacle> obstacles = new LinkedList<>();
+		LinkedList<Point> points = new LinkedList<>();
+		LinkedList<Item> items = new LinkedList<>();
+		LinkedList<String> texts = new LinkedList<>();
+		
+		String[] lines = levelString.split("\n");
+		for (String line : lines) {
+			String[] parts = line.split(" ");
+			
+			if (line.startsWith("//") || line.length() == 0) {
+				continue;
+			} else if (parts[0].equals("text")) {
+				texts.add(line.substring(5));
+			} else if (parts[0].equals("level")) {
+				levelColor = CSColor.getColorFromString(parts[1]);
+			} else {
+				try {
+					Class<?> clazz = Class.forName("misha.game.level.entity." + parts[0] + "." + parts[1]);
+					
+					Constructor<?> constructor = clazz.getConstructors()[0];
+					Class<?>[] parameters = constructor.getParameterTypes();
+					
+					Object[] objs = new Object[parameters.length];
+					
+					for (int i = 0; i < parameters.length; i++) {
+						int partsIndex = 2 + i;
+						
+						if (parameters[i].equals(CSColor.class)) {
+							objs[i] = CSColor.getColorFromString(parts[partsIndex]);
+							
+						} else if (parameters[i].equals(int.class)) {
+							objs[i] = Integer.valueOf(parts[partsIndex]);
+							
+						} else if (parameters[i].equals(boolean.class)) {
+							objs[i] = Boolean.valueOf(parts[partsIndex]);
+							
+						}
+					}
+					
+					if (Platform.class.isAssignableFrom(clazz)) {
+						platforms.add((Platform) constructor.newInstance(objs));
+						
+					} else if (Point.class.isAssignableFrom(clazz)) {
+						points.add((Point) constructor.newInstance(objs));
+						
+					} else if (Obstacle.class.isAssignableFrom(clazz)) {
+						obstacles.add((Obstacle) constructor.newInstance(objs));
+						
+					} else if (Item.class.isAssignableFrom(clazz)) {
+						items.add((Item) constructor.newInstance(objs));
+						
+					}
+				} catch (Exception e) {
+					System.err.println("There was an issue trying to instantiate " + parts[1]);
+					System.err.println("Problematic line was '" + line + "'");
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+		}
+		
+		return new Level(
+				levelName,
+				levelManager,
+				levelColor, 
+				platforms.toArray(new Platform[platforms.size()]),
+				points.toArray(new Point[points.size()]),
+				obstacles.toArray(new Obstacle[obstacles.size()]),
+				items.toArray(new Item[items.size()]),
+				texts.toArray(new String[texts.size()])
+		);
 	}
 	
 	/**

@@ -12,8 +12,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-import misha.editor.DrawUtil;
-import misha.editor.level.LevelEditor;
+import misha.editor.screen.LevelEditorScreen;
+import misha.editor.utility.DrawUtil;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.obstacle.Obstacle;
@@ -34,9 +34,9 @@ public class EntityTypeSelector extends AbstractSelector<CSColor> {
 	private static final int ITEMS = 4;
 	private static final int COLORS = 5;
 	
-	private LevelEditor levelEditor;
+	private LevelEditorScreen levelEditor;
 	
-	public EntityTypeSelector(LevelEditor levelEditor) {
+	public EntityTypeSelector(LevelEditorScreen levelEditor) {
 		this.levelEditor = levelEditor;
 	}
 

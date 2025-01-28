@@ -36,8 +36,11 @@ public class CSColor {
 	}
 	
 	public boolean collidesWith(CSColor other) {
+		if (this.color == GRAY.color || other.color == GRAY.color)
+			return false; // Nothing collides with gray
+		
 		if (this.color == BLACK.color || other.color == BLACK.color || this.color == WHITE.color || other.color == WHITE.color)
-			return true;
+			return true; // Everything that is not gray collides with white and black
 		
 		return ((this.color & 0b111) & (other.color & 0b111)) != 0;
 	}

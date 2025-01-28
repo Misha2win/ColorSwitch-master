@@ -111,4 +111,12 @@ public class MenuScreen extends Screen {
 	public void keyReleased(KeyEvent e) {
 	}
 	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	}
+	
 }

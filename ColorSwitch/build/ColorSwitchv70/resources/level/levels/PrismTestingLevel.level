@@ -1,0 +1,29 @@
+// Level color
+level gray
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform MovingPlatform red 240 70 520 70 110 120
+platform MovingPlatform blue 250 220 680 220 70 120
+platform MovingPlatform green 430 250 190 250 120 100
+platform MovingPlatform blue 80 360 80 220 50 120
+platform MovingPlatform red 160 240 160 540 50 110
+platform MovingPlatform green 560 320 560 450 60 70
+platform MovingPlatform red 640 290 640 390 20 100
+platform MovingPlatform blue 410 420 410 130 30 110
+platform Platform black 390 430 10 20
+// Points
+point SpawnPoint 20 560 true false
+point GoalPoint 710 560
+// Obstacles
+obstacle Prism blue 360 20 2
+obstacle Prism green 370 560 0
+obstacle Prism magenta 20 400 1
+obstacle Prism white 710 430 3
+obstacle Prism red 20 190 1
+// Items
+item ColorChanger green 550 520
+item ColorChanger gray 120 190
+// Texts

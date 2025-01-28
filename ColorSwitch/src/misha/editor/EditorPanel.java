@@ -10,22 +10,23 @@ package misha.editor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
-import misha.editor.level.LevelEditor;
 import misha.game.level.entity.CSColor;
+import misha.editor.screen.ScreenManager;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
 
 public class EditorPanel extends JPanel {
 	
-	private LevelEditor editor;
+	private ScreenManager screenManager;
 	
 	private EditorPanel(Level editingLevel, int levelNum) {
-		editor = new LevelEditor(editingLevel, levelNum);
+		this.screenManager = new ScreenManager(editingLevel, levelNum);
 		
 		super.setFocusable(true);
-		super.addKeyListener(editor);
-		super.addMouseListener(editor);
-		super.addMouseMotionListener(editor);
+		
+		super.addKeyListener(screenManager);
+		super.addMouseListener(screenManager);
+		super.addMouseMotionListener(screenManager);
 	}
 	
 	public EditorPanel(Level editingLevel) {
@@ -46,7 +47,7 @@ public class EditorPanel extends JPanel {
 		Graphics2D g = (Graphics2D) gr;
 		super.paintComponent(g);
 		
-		editor.draw(g);
+		screenManager.draw(g);
 	}
 	
 }

@@ -65,7 +65,7 @@ public class LevelScreen extends Screen {
 		LEVEL_BUTTONS = new Rectangle2D.Float[levelCount];
 		
 		int xOffset = (ColorSwitch.NATIVE_WIDTH - (GRID_X_DIMENSION * (LEVEL_IMAGE_WIDTH + padding))) / 2;
-		int gridHeight = unlockedLevels.length / GRID_X_DIMENSION;
+		int gridHeight = (unlockedLevels.length > 30 ? 30 : unlockedLevels.length) / GRID_X_DIMENSION;
 		int yOffset = (ColorSwitch.NATIVE_HEIGHT - (padding * (gridHeight - 1))) / 2 - (5 * gridHeight * LEVEL_IMAGE_HEIGHT / 9);
 		
 		for (int i = 0; i < LEVEL_BUTTONS.length; i++) {
@@ -88,12 +88,6 @@ public class LevelScreen extends Screen {
 
 	@Override
 	public void setup() {
-	}
-	
-	@Override
-	public void focused() {
-		
-		
 	}
 
 	@Override
@@ -195,6 +189,14 @@ public class LevelScreen extends Screen {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 	}
 	
 }

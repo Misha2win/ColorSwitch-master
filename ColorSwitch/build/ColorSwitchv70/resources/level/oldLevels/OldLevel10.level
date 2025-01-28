@@ -1,0 +1,15 @@
+// Level color
+level green
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+// Points
+point GoalPoint 710 560
+point SpawnPoint 20 560 true false
+// Obstacles
+// Items
+// Texts
+text Almost there!
+text Get ready for more new mechanics ;)

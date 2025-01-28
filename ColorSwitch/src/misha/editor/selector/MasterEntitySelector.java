@@ -13,11 +13,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.lang.reflect.ParameterizedType;
 
-import misha.editor.DrawUtil;
-import misha.editor.Util;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.MasterEntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
+import misha.editor.utility.DrawUtil;
+import misha.editor.utility.Util;
 import misha.game.level.entity.Entity;
 
 public class MasterEntitySelector<T extends Entity> extends AbstractSelector<T> {

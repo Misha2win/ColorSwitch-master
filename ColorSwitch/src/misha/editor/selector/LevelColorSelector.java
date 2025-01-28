@@ -12,8 +12,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-import misha.editor.DrawUtil;
-import misha.editor.level.LevelEditor;
+import misha.editor.screen.LevelEditorScreen;
+import misha.editor.utility.DrawUtil;
 import misha.game.level.Level;
 import misha.game.level.entity.CSColor;
 
@@ -62,7 +62,7 @@ public class LevelColorSelector extends AbstractSelector<CSColor> {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void setColor(LevelEditor levelEditor) {
+	public void setColor(LevelEditorScreen levelEditor) {
 		Level level = levelEditor.getLevel();
 		
 		if (highlightOption == BLACK) {

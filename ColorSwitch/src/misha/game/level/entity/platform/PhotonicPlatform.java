@@ -16,7 +16,7 @@ import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.Updatable;
 
-@EditableEntity({ EditableEntityType.PLATFORMS, EditableEntityType.COLORS })
+@EditableEntity({ EditableEntityType.PLATFORMS })
 public class PhotonicPlatform extends Platform implements Updatable {
 	
 	static { Entity.addSubclass(PhotonicPlatform.class); }

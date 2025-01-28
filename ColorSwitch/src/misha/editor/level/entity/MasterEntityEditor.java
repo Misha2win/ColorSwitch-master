@@ -20,11 +20,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import misha.editor.DrawUtil;
 import misha.editor.Editor;
-import misha.editor.Util;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.EditableField.EditableFieldType;
+import misha.editor.utility.DrawUtil;
+import misha.editor.utility.Util;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 
@@ -281,15 +281,12 @@ public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseL
 		// Draw editable property buttons
 		for (int i = 0; i < fieldEditors.size(); i++) { // FIXME There can be more buttons than editors!
 			boolean shouldHighlight = false;
-			if (!fieldEditors.get(i).getFieldType().equals(int.class)) {
-				try {
-					shouldHighlight = fieldEditors.get(i).getFieldValue(entity).equals(fieldEditors.get(i).getSetterObject());
-				} catch (Exception e) {
-					System.err.println("Could not determine shouldHighlight for " + fieldEditors.get(i).getFieldType().getName());
-					e.printStackTrace();
-				}
+			try {
+				shouldHighlight = fieldEditors.get(i).getFieldValue(entity).equals(fieldEditors.get(i).getSetterObject());
+			} catch (Exception e) {
+				System.err.println("Could not determine shouldHighlight for " + fieldEditors.get(i).getFieldType().getName());
+				e.printStackTrace();
 			}
-			
 			
 			DrawUtil.drawButton(g, buttons.get(i), shouldHighlight);
 			drawingEntities.get(i).draw(g);

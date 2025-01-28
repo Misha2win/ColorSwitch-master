@@ -21,6 +21,7 @@ import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
 import misha.game.level.entity.item.ColorChanger;
 import misha.game.level.entity.item.Item;
+import misha.game.level.entity.platform.FragilePlatform;
 import misha.game.level.entity.platform.PhotonicPlatform;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.player.Player;
@@ -166,25 +167,25 @@ public class Prism extends Obstacle {
 				this.height = (direction % 2 == 1) ? BEAM_WIDTH : ColorSwitch.NATIVE_HEIGHT;
 			} else {
 				if (direction == UP) {
-					this.x = previousBeam.x;
+					this.x = previousBeam.x;// + 1;
 					this.y = previousBeam.y - ColorSwitch.NATIVE_HEIGHT;
-					this.width = previousBeam.width;
+					this.width = previousBeam.width;// - 1;
 					this.height = ColorSwitch.NATIVE_HEIGHT;
 				} else if (direction == RIGHT) {
 					this.x = previousBeam.x + previousBeam.width;
-					this.y = previousBeam.y;
+					this.y = previousBeam.y;// + 1;
 					this.width = ColorSwitch.NATIVE_WIDTH;
-					this.height = previousBeam.height;
+					this.height = previousBeam.height;// - 1;
 				} else if (direction == DOWN) {
-					this.x = previousBeam.x;
+					this.x = previousBeam.x;// - 1;
 					this.y = previousBeam.y + previousBeam.height;
-					this.width = previousBeam.width;
+					this.width = previousBeam.width;// - 1;
 					this.height = ColorSwitch.NATIVE_HEIGHT;
 				} else if (direction == LEFT) {
 					this.x = previousBeam.x - ColorSwitch.NATIVE_WIDTH;
-					this.y = previousBeam.y;
+					this.y = previousBeam.y;// - 1;
 					this.width = ColorSwitch.NATIVE_WIDTH;
-					this.height = previousBeam.height;
+					this.height = previousBeam.height;// - 1;
 				}
 			}
 		}
@@ -198,7 +199,7 @@ public class Prism extends Obstacle {
 			resetBeam();
 			
 			for (Platform platform : level.getPlatforms()) {
-				if (platform instanceof PhotonicPlatform)
+				if (platform instanceof PhotonicPlatform || (platform instanceof FragilePlatform fragPlat && fragPlat.isBroken()))
 					continue;
 				
 				if (platform.getColor().collidesWith(color) && getRect().intersects(platform.getRect())) {
@@ -221,6 +222,19 @@ public class Prism extends Obstacle {
 					} else {
 						platform.setColor(platform.getColor().add(color));
 					}
+					
+					shortenBeam(platform);
+					if (direction == UP) {
+						y -= 1;
+						height += 1;
+					} else if (direction == RIGHT) {
+						width += 1;
+					} else if (direction == DOWN) {
+						height += 1;
+					} else if (direction == LEFT) {
+						x -= 1;
+						width += 1;
+					}
 				}
 			}
 			
@@ -238,6 +252,14 @@ public class Prism extends Obstacle {
 							createPartition(level, addition);
 						}
 					}
+				} else if (obstacle instanceof Element) {
+					if (obstacle.getRect().intersects(getRect())) {
+						CSColor addition = obstacle.getColor().add(color);
+						if (!addition.equals(color)) {
+							shortenBeam(obstacle);
+							createPartition(level, obstacle.getColor().add(color));
+						}
+					}
 				}
 			}
 			
@@ -247,6 +269,10 @@ public class Prism extends Obstacle {
 						shortenBeam(colorChanger);
 						
 						createPartition(level, colorChanger.getColor());
+					}
+				} else {
+					if (getRect().intersects(item.getRect())) {
+						shortenBeam(item);
 					}
 				}
 			}
@@ -266,6 +292,8 @@ public class Prism extends Obstacle {
 				width = (int) ((isRoot ? prism.width / 2 : width) - (entity.getX() + entity.getWidth()) + (isRoot ? prism.x : x));
 				x = (int) (entity.getX() + entity.getWidth());
 			}
+			
+			nextBeam = null;
 		}
 		
 		public Beam getCollidingBeam(Entity entity) {

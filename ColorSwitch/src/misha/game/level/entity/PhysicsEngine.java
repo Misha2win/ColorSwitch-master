@@ -16,6 +16,7 @@ import misha.game.level.entity.point.PortalPoint;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.obstacle.Prism;
+
 import misha.game.level.Level;
 import misha.game.level.LevelManager;
 
@@ -168,5 +169,109 @@ public class PhysicsEngine {
 	public static boolean isColliding(Entity e1, Entity e2) {
 		return e1.getRect().intersects(e2.getRect());
 	}
+	
+//	public static Vector3 GRAVITATIONAL_ACCELERATION = new Vector3(0, -9.81, 0);
+//
+//	public void calculatePhysics(Scene scene) {
+//		// Get all children from root that have physics components
+//		GameObject[] objects = scene.getChildrenRecursively();
+//		LinkedList<GameObject> list = new LinkedList<>(Arrays.asList(scene.getChildrenRecursively()));
+//		list.removeIf(object -> object.getComponent(PhysicsComponent.class) == null);
+//		objects = list.toArray(new GameObject[list.size()]);
+//		
+//		// Get all PhysicsComponents of all the objects
+//		PhysicsComponent[] physicsComponents = new PhysicsComponent[objects.length];
+//		for (int i = 0; i < objects.length; i++) {
+//			physicsComponents[i] = objects[i].getComponent(PhysicsComponent.class);
+//		}
+//		
+//		// Get all PhysicsColliders of all the objects
+//		PhysicsCollider[] physicsColliders = new PhysicsCollider[objects.length];
+//		for (int i = 0; i < objects.length; i++) {
+//			physicsColliders[i] = objects[i].getComponent(PhysicsCollider.class);
+//		}
+//		
+//		applyGravitationalForce(physicsComponents);
+//		applyVelocities(objects, physicsComponents);
+//		resolveCollisions(objects, physicsComponents, physicsColliders); 
+//	}
+//	
+//	private void applyGravitationalForce(PhysicsComponent[] physicsComponents) {
+//		for (int i = 0; i < physicsComponents.length; i++) {
+//			if (physicsComponents[i].applyGravity) {
+//				Vector3 gravitationalForce = GRAVITATIONAL_ACCELERATION.multiply(physicsComponents[i].getMass());
+//				physicsComponents[i].applyForce(gravitationalForce.multiply(Time.getFixedDelta()));
+//			}
+//		}
+//	}
+//	
+//	private void applyVelocities(GameObject[] objects, PhysicsComponent[] physicsComponents) {
+//		for (int i = 0; i < objects.length; i++) {
+//			objects[i].transform.translate(physicsComponents[i].getVelocity().multiply(Time.getFixedDelta()));
+//		}
+//	}
+//	
+//	private void resolveCollisions(GameObject[] objects, PhysicsComponent[] physicsComponents, PhysicsCollider[] colliders) {
+//		for (int i = 0; i < objects.length; i++) {
+//			if (colliders[i] == null) {
+//				continue;
+//			}
+//			
+//			for (int j = i + 1; j < objects.length; j++) {
+//				if (colliders[j] == null || (physicsComponents[i].isStatic && physicsComponents[j].isStatic)) {
+//					continue;
+//				}
+//				
+//				Vector3 collision = colliders[i].isIntersecting(colliders[j]);
+//				if (collision == null) {
+//					continue;
+//				}
+//				
+//				// They are colliding!
+//				if (physicsComponents[i].isTrigger || physicsComponents[j].isTrigger) {
+//					ScriptComponent script1 = objects[i].getComponent(ScriptComponent.class);
+//					if (script1 != null) {
+//						script1.onCollision(objects[j]);
+//					}
+//					
+//					ScriptComponent script2 = objects[j].getComponent(ScriptComponent.class);
+//					if (script2 != null) {
+//						script2.onCollision(objects[i]);
+//					}
+//					
+//					continue;
+//				} else if (physicsComponents[i].isStatic) {
+//					objects[j].transform.translate(collision);
+//				} else if (physicsComponents[j].isStatic) {
+//					objects[i].transform.translate(collision.multiply(-1));
+//				} else {
+//					Vector3 halfCollision = collision.divide(2);
+//					objects[i].transform.translate(halfCollision.multiply(-1));
+//					objects[j].transform.translate(halfCollision);
+//				}
+//				
+//				// Apply force to both collision objects
+//				applyImpulses(physicsComponents[i], physicsComponents[j], collision);
+//			}
+//		}
+//	}
+//	
+//	private void applyImpulses(PhysicsComponent object1, PhysicsComponent object2, Vector3 collision) {
+//		double object1InverseMass = (object1.isStatic) ? 0 : 1 / object1.getMass();
+//		double object2InverseMass = (object2.isStatic) ? 0 : 1 / object2.getMass();
+//		
+//		Vector3 collisionNormal = collision.normalize();
+//		
+//		Vector3 relativeVelocity = object2.getVelocity().subtract(object1.getVelocity());
+//		
+//		double restitution = (object1.getRestitution() + object2.getRestitution()) / 2;
+//		restitution = 0;
+//		
+//		double impulse = -(1 + restitution) * relativeVelocity.dot(collisionNormal);
+//		impulse /= object1InverseMass + object2InverseMass;
+//		
+//		object1.applyForce(collisionNormal.multiply(impulse * object1InverseMass).multiply(-1));
+//		object2.applyForce(collisionNormal.multiply(impulse * object2InverseMass));
+//	}
 
 }

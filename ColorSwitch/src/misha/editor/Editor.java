@@ -8,6 +8,8 @@
 package misha.editor;
 
 import java.awt.Insets;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 
 import javax.swing.*;
 
@@ -28,7 +30,13 @@ public class Editor extends JFrame {
         
 		setLocationRelativeTo(null);
 		setResizable(false);
-//		setAlwaysOnTop(true);
+		
+		RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        boolean isDebug = runtimeMxBean.getInputArguments().toString().contains("jdwp");
+		if (isDebug) {
+			System.out.println("Code was run with debug as true!");
+			setAlwaysOnTop(true);
+		}
 		
 		gamePanel = new EditorPanel(levelNum);
 		getContentPane().add(gamePanel);
