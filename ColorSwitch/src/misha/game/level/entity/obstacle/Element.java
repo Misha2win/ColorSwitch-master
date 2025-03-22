@@ -14,6 +14,8 @@ import misha.game.level.entity.Entity;
 import misha.game.level.entity.player.Player;
 
 public abstract class Element extends Obstacle {
+	
+	private static final double PULSE_FREQUENCY = 250;
 
 	protected float damageOnHit;
 	
@@ -26,20 +28,30 @@ public abstract class Element extends Obstacle {
 		return damageOnHit;
 	}
 	
-	@Override
-	public void draw(Graphics2D g) {
-		g.setColor(color.getGraphicsColor().darker());
-		
+	private Color getPulsingColor(int alpha) {
+		double sin = (0.5) + (Math.sin(System.currentTimeMillis() / PULSE_FREQUENCY) + 1) / 6;
+		Color c = color.getGraphicsColor().darker();
+		return new Color((int) (sin * c.getRed()), (int) (sin * c.getGreen()), (int) (sin * c.getBlue()), alpha);
+	}
+	
+	private boolean isCollidable() {
 		if (level != null && level.getLevelManager() != null) {
 			Player player = level.getLevelManager().getPlayer();
 			Player mirrorPlayer = player.getMirrorPlayer();
 			if (!level.getLevelManager().getDebugMode()) {
 				if (player.getColor().collidesWith(color) || (player.getMirrored() && mirrorPlayer.getColor().collidesWith(color))) {
-					Color c = color.getGraphicsColor().darker();
-					g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), 50));
+					return false;
 				}
 			}
 		}
+		
+		return true;
+	}
+	
+	@Override
+	public void draw(Graphics2D g) {
+		int alpha = isCollidable() ? 255 : 50;
+		g.setColor(getPulsingColor(alpha));
 
 		g.fillRect((int)x, (int)y, width, height);
 	}

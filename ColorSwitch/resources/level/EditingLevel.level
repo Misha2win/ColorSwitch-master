@@ -1,96 +1,19 @@
 // Level color
-level green
+level blue
 // Platforms
 platform Platform black 10 10 730 10
 platform Platform black 10 10 10 580
 platform Platform black 730 10 10 580
 platform Platform black 10 580 730 10
-platform Platform black 20 490 640 10
-platform Platform black 20 400 600 10
-platform MovingPlatform red 20 90 20 400 60 10
-platform MovingPlatform blue 140 90 140 400 60 10
-platform MovingPlatform green 80 400 80 90 60 10
-platform MovingPlatform black 200 400 200 90 60 10
-platform Platform blue 610 260 60 10
-platform Platform blue 670 340 60 10
-platform Platform black 260 100 10 260
-platform Platform blue 670 180 60 10
-platform Platform red 540 260 60 10
-platform Platform red 480 340 60 10
-platform Platform black 470 100 10 250
-platform Platform red 480 180 60 10
-platform Platform green 540 340 130 10
-platform Platform black 600 180 10 90
-platform Platform black 260 90 280 10
-platform HealthGate true 50 420 20 60 70
-platform HealthGate false 50 260 20 60 70
-platform Platform black 670 90 60 10
-platform Platform black 380 340 10 60
-platform Platform black 610 410 10 50
-platform Platform black 650 500 10 50
-platform Platform cyan 480 260 60 10
-platform Platform cyan 540 180 60 10
-platform Platform yellow 670 260 60 10
-platform Platform yellow 610 180 60 10
-platform Platform red 370 280 10 60
-platform Platform blue 360 220 10 60
-platform Platform green 350 160 10 60
-platform MovingPlatform red 270 280 410 280 60 10
-platform MovingPlatform green 270 160 410 160 60 10
-platform MovingPlatform blue 410 220 270 220 60 10
-platform MovingPlatform black 410 340 270 340 60 10
-platform MovingPlatform black 20 400 200 90 60 10
-platform Platform black 690 400 40 10
-platform PhotonicPlatform 0 0 0 0
-platform FragilePlatform black 0 0 0 0
 // Points
-point SpawnPoint 710 560 true false
-point PortalPoint 710 380 0
-point PortalPoint 400 20 0
-point PortalPoint 320 20 1
-point PortalPoint 20 20 1
-point SpawnPoint 340 70 false true
-point SpawnPoint 380 70 false true
+point SpawnPoint 20 560 true false
+point GoalPoint 710 560
 // Obstacles
-obstacle Acid 670 20 60 70
-obstacle Lava 480 100 60 240
-obstacle Water 670 100 60 240
-obstacle Prism blue 280 100 2
-obstacle Prism green 320 100 2
-obstacle Prism red 400 100 2
-obstacle Prism black 440 100 2
 // Items
-item ColorChanger red 40 520
-item ColorChanger green 80 520
-item ColorChanger blue 120 520
-item ColorChanger yellow 160 520
-item ColorChanger magenta 200 520
-item ColorChanger cyan 240 520
-item ColorChanger white 280 520
-item ColorChanger black 320 520
-item ColorMixer red 40 430 true
-item ColorMixer green 80 430 true
-item ColorMixer blue 120 430 true
-item ColorMixer yellow 160 430 true
-item ColorMixer magenta 200 430 true
-item ColorMixer cyan 240 430 true
-item ColorMixer white 280 430 true
-item ColorMixer red 320 430 false
-item ColorMixer green 360 430 false
-item ColorMixer blue 400 430 false
-item ColorMixer yellow 440 430 false
-item ColorMixer magenta 480 430 false
-item ColorMixer cyan 520 430 false
-item ColorMixer white 560 430 false
-item DamagePack 360 520
-item HealthPack 400 520
-item Mirror 480 520 gray false
-item Mirror 520 520 gray true
-item Teleporter 560 520 false -1 -1
-item SuperJump 440 520
-item Painter gray 600 520 true
+item ColorChanger green 360 520
 // Texts
-text 
-text 
-text This level is the testing level.
-text There are no levels after this.
+text Use WASD to MOVE,
+text Use E to USE the item in your inventory,
+text Use R to RESTART the current level you are in,
+text Use DELETE to go to the PREVIOUS level.
+text Good luck ;)

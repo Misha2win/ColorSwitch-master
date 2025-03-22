@@ -17,3 +17,5 @@ point GoalPoint 710 230
 // Items
 item Mirror 210 290 gray false
 // Texts
+text Mirrors reflect you across the gray line! You also
+text collide with what the mirrored you collides with!

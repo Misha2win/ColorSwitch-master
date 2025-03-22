@@ -183,51 +183,61 @@ public class Level implements Updatable {
 		spawnPoint.setIsActive(true);
 	}
 	
-	public void createGhostPlatforms(CSColor color) {
-		ghostPlatforms = new Platform[platforms.length];
+	private CSColor getGhostColor(CSColor platform, CSColor mirrored, CSColor player) {
+		if (platform.equals(CSColor.BLACK) || platform.equals(CSColor.GRAY)) {
+			return platform;
+		}
 		
-		for (int i = 0; i < platforms.length; i++) {
-			Platform platform = platforms[i];
+		if (platform.collidesWith(mirrored)) {
+			return platform.subtract(mirrored).add(player);
+		}
+		
+		return CSColor.GRAY;
+	}
+	
+	private Platform createGhostPlatform(Platform platform, CSColor mirroredColor) {
+		int ghostX = (int) (ColorSwitch.NATIVE_WIDTH - platform.getX() - platform.getWidth());
+		
+		if (platform instanceof HealthGate) {
+			HealthGate gate = (HealthGate) platform;
+			return new HealthGate(gate.getRule(), gate.getHealthRule(), ghostX, (int)gate.getY(), gate.getWidth(), gate.getHeight());
+		} else {	
+			CSColor ghostColor = getGhostColor(platform.getColor(), mirroredColor, levelManager.getPlayer().getColor());
 			
-			Platform ghostPlatform = null;
-			
-			CSColor c = null;
-			
-			CSColor levelColor = (levelManager != null && levelManager.getPlayer() != null ? levelManager.getPlayer().getColor() : this.levelColor);
-			
-			if (color.equals(CSColor.GRAY))
-				color = CSColor.GREEN;
-			
-			if (levelColor.equals(platform.getColor())) { // TODO refactor this be just subtract and add color instead
-				c = color;
-			} else if (color.equals(platform.getColor())) {
-				c = levelColor;
-			} else if (platform.getColor().equals(CSColor.BLACK)) {
-				c = CSColor.BLACK;
-			} else if (platform.getColor().collidesWith(color)) {
-				c = platform.getColor().subtract(color).add(levelColor);
-			} else {
-				c = CSColor.GRAY;
-			}
-			
-			int ghostX = (int) (ColorSwitch.NATIVE_WIDTH - platform.getX() - platform.getWidth());
-			if (platform instanceof HealthGate) {
-				HealthGate gate = (HealthGate) platform;
-				ghostPlatform = new HealthGate(gate.getRule(), gate.getHealthRule(), ghostX, (int)gate.getY(), gate.getWidth(), gate.getHeight());
-			} else if (platform instanceof MovingPlatform) {
+			if (platform instanceof MovingPlatform) {
+				
 				MovingPlatform mp = (MovingPlatform) platform;
 				int ghostX1 = (int) (ColorSwitch.NATIVE_WIDTH - mp.getX1() - platform.getWidth());
 				int ghostX2 = (int) (ColorSwitch.NATIVE_WIDTH - mp.getX2() - platform.getWidth());
-				ghostPlatform = new MovingPlatform(c, ghostX1, (int)mp.getY1(), ghostX2, (int)mp.getY(), mp.getWidth(), mp.getHeight());
+				Platform ghostPlatform = new MovingPlatform(ghostColor, ghostX1, (int)mp.getY1(), ghostX2, (int)mp.getY(), mp.getWidth(), mp.getHeight());
 				ghostPlatform.setPos(ghostX, platform.getY());
+				return ghostPlatform;
 			} else {
-				ghostPlatform = new Platform(c, ghostX, (int) platform.getY(), platform.getWidth(), platform.getHeight());
+				return new Platform(ghostColor, ghostX, (int) platform.getY(), platform.getWidth(), platform.getHeight());
+			}
+		}
+	}
+	
+	public void createGhostPlatforms(CSColor mirroredColor) {
+		if (mirroredColor.equals(CSColor.GRAY)) // If the mirrored color is gray, pretend it is green
+			mirroredColor = CSColor.GREEN;
+		
+		ArrayList<Platform> ghostPlatforms = new ArrayList<>(platforms.length);
+		
+		for (int i = 0; i < platforms.length; i++) {
+			if (!platforms[i].getColor().collidesWith(CSColor.WHITE)) {
+				continue;
 			}
 			
-			ghostPlatform.setLevel(this);
+			ghostPlatforms.add(createGhostPlatform(platforms[i], mirroredColor));
+			ghostPlatforms.get(ghostPlatforms.size() - 1).setLevel(this);
 			
-			ghostPlatforms[i] = ghostPlatform;
+			if (ghostPlatforms.get(ghostPlatforms.size() - 1).getColor().equals(CSColor.GRAY)) {
+				ghostPlatforms.remove(ghostPlatforms.size() - 1); // Remove gray platforms since they're never collided with anyways
+			}
 		}
+		
+		this.ghostPlatforms = ghostPlatforms.toArray(new Platform[ghostPlatforms.size()]);
 	}
 	
 	public Platform[] getGhostPlatforms() {
@@ -247,7 +257,7 @@ public class Level implements Updatable {
 //		}
 		
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, ColorSwitch.WIDTH, ColorSwitch.HEIGHT);
+		g.fillRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
 		
 		
 		

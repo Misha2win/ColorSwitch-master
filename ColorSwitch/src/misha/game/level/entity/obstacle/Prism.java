@@ -31,7 +31,7 @@ public class Prism extends Obstacle {
 	
 	static { Entity.addSubclass(Prism.class); }
 	
-	public static final int UP = 0;
+	public static final int UP = 0; // TODO Should be an enum
 	public static final int RIGHT = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
@@ -108,7 +108,7 @@ public class Prism extends Obstacle {
 			g.draw(prism);
 		}
 	}
-
+	
 	@Override
 	public void onCollision(Entity entity) {
 		if (entity instanceof Player) {
@@ -267,7 +267,6 @@ public class Prism extends Obstacle {
 				if (item instanceof ColorChanger colorChanger) {
 					if (!colorChanger.getColor().equals(color) && getRect().intersects(colorChanger.getRect())) {
 						shortenBeam(colorChanger);
-						
 						createPartition(level, colorChanger.getColor());
 					}
 				} else {

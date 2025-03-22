@@ -20,9 +20,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import misha.editor.Editor;
 import misha.editor.level.LevelImageLoader;
@@ -30,7 +27,6 @@ import misha.editor.level.LevelImageSaver;
 import misha.editor.utility.DrawUtil;
 import misha.editor.utility.Util;
 import misha.game.ColorSwitch;
-import misha.game.level.LevelCreator;
 import misha.game.level.LevelLoader;
 import misha.screen.Screen;
 

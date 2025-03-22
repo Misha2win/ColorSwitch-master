@@ -40,6 +40,8 @@ public class Mirror extends Item {
 		
 		Player player = level.getLevelManager().getPlayer();
 		
+		level.createGhostPlatforms(color);
+		
 		if (!persist && !persistOnce) {
 			removeItem();
 			used = true;
@@ -90,8 +92,6 @@ public class Mirror extends Item {
 	@Override
 	public void setLevel(Level level) {
 		super.setLevel(level);
-		
-		level.createGhostPlatforms(color);
 	}
 	
 	@Override

@@ -14,6 +14,10 @@ import misha.game.level.entity.player.Player;
 
 public abstract class Item extends Entity implements Updatable {
 	
+	private int originalX, originalY;
+	private int shiftFrequency = 100; // TODO Do this time-based instead of speed of execution based
+	private int shiftCounter = 0;
+	
 	protected boolean isCollected;
 	protected boolean used;
 	protected boolean dropped;
@@ -24,6 +28,8 @@ public abstract class Item extends Entity implements Updatable {
 		isCollected = false;
 		dropped = false;
 		persist = false;
+		originalX = x;
+		originalY = y;
 	}
 	
 	public void onCollect() {
@@ -40,6 +46,16 @@ public abstract class Item extends Entity implements Updatable {
 	
 	@Override
 	public void update() {
+		shiftFrequency = 40;
+		
+		if (!isCollected) {
+			shiftCounter++;
+			if (shiftCounter >= shiftFrequency) {
+				shiftCounter = 0;
+				x = originalX + (int) (Math.random() * 4 - 2);
+				y = originalY + (int) (Math.random() * 4 - 2);
+			}
+		}
 	}
 	
 	public boolean getUsed() {

@@ -7,11 +7,8 @@
 
 package misha.game;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -22,7 +19,7 @@ import java.awt.FontMetrics;
 import misha.game.level.LevelManager;
 import misha.game.screen.ScreenManager;
 
-public class GamePanel extends JPanel implements KeyListener, MouseListener {
+public class GamePanel extends JPanel {
 	
 	private ScreenManager screenManager;
 	
@@ -36,14 +33,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 	public GamePanel(LevelManager levelManager) {
 		setBackground(Color.BLACK);
 		
-		addKeyListener(this);
-		addMouseListener(this);
 		setFocusable(true);
 		requestFocus();
 		
 		isRepainting = true;
 		
 		screenManager = new ScreenManager();
+		addKeyListener(screenManager);
+		addMouseListener(screenManager);
 		
 		if (levelManager != null) {
 			screenManager.getGameScreen().setLevelManager(levelManager);
@@ -76,7 +73,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		}
 		
 		BufferedImage image = new BufferedImage(ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-		Graphics imageGraphics = image.getGraphics();
+		Graphics2D imageGraphics = (Graphics2D) image.getGraphics();
+		
+		imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		imageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR); // or VALUE_BILINEAR for smoother scaling
 		
 		screenManager.draw(imageGraphics);
 		
@@ -88,7 +88,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 		
 		imageGraphics.dispose();
 		
-		g.drawImage(image, getWidth() / 2 - ColorSwitch.WIDTH / 2, getHeight() / 2 - ColorSwitch.HEIGHT / 2, ColorSwitch.WIDTH, ColorSwitch.HEIGHT, null);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR); // Ensures sharp edges
+		g.drawImage(image, getWidth() / 2 - ColorSwitch.GAME_WIDTH / 2, getHeight() / 2 - ColorSwitch.GAME_HEIGHT / 2, ColorSwitch.GAME_WIDTH, ColorSwitch.GAME_HEIGHT, null);
 	}
 	
 	private void start() {
@@ -103,46 +104,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 				}
 			}
 		}).start();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		screenManager.keyPressed(e);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		screenManager.keyReleased(e);
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		screenManager.keyTyped(e);
-	}
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-		screenManager.mousePressed(e);
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		screenManager.mouseReleased(e);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		screenManager.mouseClicked(e);
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		screenManager.mouseEntered(e);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		screenManager.mouseExited(e);
 	}
 	
 }

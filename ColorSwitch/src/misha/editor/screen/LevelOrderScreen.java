@@ -38,6 +38,7 @@ public class LevelOrderScreen extends Screen {
 	
 	private static final Rectangle RELOAD_BUTTON = new Rectangle(700, 610, 40, 40);
 	private static final Rectangle SAVE_BUTTON = new Rectangle(700, 660, 40, 40);
+	@SuppressWarnings("unused")
 	private static final Rectangle REMOVE_BUTTON = new Rectangle(700, 710, 40, 40);
 	
 	private Point previousMousePos = new Point();

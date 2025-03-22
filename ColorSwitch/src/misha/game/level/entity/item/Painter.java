@@ -53,6 +53,8 @@ public class Painter extends Item {
 	
 	@Override
 	public void update() {
+		super.update();
+		
 		if (level != null && level.getLevelManager() != null) {
 			Player player = level.getLevelManager().getPlayer();
 			
