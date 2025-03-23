@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.security.CodeSource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -127,7 +128,8 @@ public final class LevelLoader {
 	public static String[] getUnreferencedLevelNames() {
 		LinkedList<String> names = new LinkedList<>();
 		
-		String[] referencedLevels = LevelCreator.LEVEL_ORDER_STRING.split("\n");
+		String[] referencedLevels = LevelCreator.LEVEL_ORDER_STRING.split("\\r?\\n");
+		System.out.println(Arrays.toString(referencedLevels));
 		for (String loadedLevel : LEVEL_STRINGS.keySet()) {
 			loadedLevel = loadedLevel.replace(LEVEL_EXTENSION, "");
 			

@@ -60,7 +60,7 @@ public class LevelCreator {
 	public static Level[] createLevels(LevelManager levelManager) {
 		ArrayList<Level> levels = new ArrayList<>();
 		
-		String[] lines = LEVEL_ORDER_STRING.split("\n");
+		String[] lines = LEVEL_ORDER_STRING.split("\\r?\\n");
 		for (String line : lines) {
 			if (line.startsWith("//")) {
 				continue;
@@ -102,7 +102,7 @@ public class LevelCreator {
 		LinkedList<Item> items = new LinkedList<>();
 		LinkedList<String> texts = new LinkedList<>();
 		
-		String[] lines = levelString.split("\n");
+		String[] lines = levelString.split("\\r?\\n");
 		for (String line : lines) {
 			String[] parts = line.split(" ");
 			
