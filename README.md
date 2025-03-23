@@ -1,13 +1,13 @@
 Color Switch is a game all about colors and platforming to solve puzzles and complete levels. 
 The goal is to become green and get to the goal point (the green cirlce) to advance to the next level.
 
-Controls:
-WASD to move
-E to use the item in your inventory
-R to restart the current level
-ESC to pause the game
-Backspace to go to the previous level
-B to enable debug mode (Changes how things render and allows you to go to all levels in the level select menu)
+Controls:<br>
+WASD to move<br>
+E to use the item in your inventory<br>
+R to restart the current level<br>
+ESC to pause the game<br>
+Backspace to go to the previous level<br>
+B to enable debug mode (Changes how things render and allows you to go to all levels in the level select menu)<br>
 
 In the builds folder you will find version folders that contain a folder and two executable jar files.
 The other jar file will launch the game so that you can play it.
