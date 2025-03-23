@@ -12,17 +12,12 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 
-import misha.game.level.LevelLoader;
 import misha.game.level.LevelManager;
 
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 
 public class ColorSwitch extends JFrame {
 

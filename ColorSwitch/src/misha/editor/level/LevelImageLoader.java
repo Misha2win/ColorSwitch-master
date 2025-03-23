@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 
-import misha.game.level.LevelCreator;
 import misha.game.level.LevelLoader;
 
 public class LevelImageLoader {
