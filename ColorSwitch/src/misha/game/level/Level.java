@@ -26,9 +26,6 @@ import misha.game.level.entity.point.SpawnPoint;
 
 public class Level implements Updatable {
 	
-//	private static final int LIGHT_RADIUS = 200;
-//	private boolean isDark = false;
-	
 	private LevelManager levelManager;
 	
 	private String levelName;
@@ -245,21 +242,8 @@ public class Level implements Updatable {
 	}
 	
 	public void draw(Graphics2D g) {
-//		int ol = lightRadius;
-//		
-//		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
-//			long time = System.currentTimeMillis() / 100;
-//			lightRadius +=  (Math.sin(time / 2) + Math.cos(time / 3) + Math.sin(time / 5));
-//			
-//			
-//			Player p = levelManager.getPlayer();
-//			g.setClip(new Ellipse2D.Float(p.getX() + p.getWidth() / 2 - lightRadius, p.getY() + p.getHeight() / 2 - lightRadius, 2 * lightRadius, 2 * lightRadius));
-//		}
-		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
-		
-		
 		
 		for (Obstacle obstacle : obstacles) {
 			obstacle.draw(g);
@@ -275,9 +259,6 @@ public class Level implements Updatable {
 		
 		for (Platform platform : platforms) {
 			platform.draw(g);
-			if (platform == null) {
-				System.out.println("It is null!");
-			}
 		}
 		
 		if (levelManager != null && levelManager.getPlayer() != null && levelManager.getPlayer().getMirrored()) {
@@ -311,20 +292,8 @@ public class Level implements Updatable {
 				}
 			}
 		}
-
-//		if (isDark && levelManager != null && levelManager.getPlayer() != null && !levelManager.getDebugMode()) {
-//			Player p = levelManager.getPlayer();
-//			
-//			float[] dist = new float[] { 0f, 0.7f, 1f };
-//			Color[] colors = new Color[] { new Color(0, 0, 0, 0), new Color(0, 0, 0, 150), new Color(0, 0, 0, 255)};
-//			RadialGradientPaint paint = new RadialGradientPaint(p.getX() + p.getWidth() / 2, p.getY() + p.getHeight() / 2, lightRadius, dist, colors);
-//			g.setPaint(paint);
-//			g.fill(g.getClip());
-//		}
 		
 		g.setClip(null);
-		
-//		lightRadius = ol;
 	}
 
 	@Override

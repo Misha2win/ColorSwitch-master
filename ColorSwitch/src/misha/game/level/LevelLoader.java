@@ -8,14 +8,20 @@
 package misha.game.level;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.security.CodeSource;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import misha.editor.utility.Util;
+import misha.game.ColorSwitch;
 
 public final class LevelLoader {
 	
@@ -29,6 +35,20 @@ public final class LevelLoader {
 	private static final HashMap<String, String> LEVEL_STRINGS = new HashMap<>();
 	
 	static {
+		File parentFile = LevelLoader.getJarParentDirectory();
+		if (parentFile != null) {
+			try {
+				File outputFile = new File(parentFile, "output.log");
+				PrintStream newPrintStream = new PrintStream(new FileOutputStream(outputFile, true));
+				System.out.println("This is being executed as a jar file! Setting the printstream to a custom stream!");
+				System.setOut(newPrintStream);
+				System.setErr(newPrintStream);
+				System.out.println("This program is executing as a .jar, so this is no where the outputs will be written to!");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		loadAllLevelStrings();
 		checkUnusedLevels();
 	}
@@ -42,6 +62,12 @@ public final class LevelLoader {
 	 * @throws IOException if there is no level with the provided name
 	 */
 	private static String loadLevelString(String directory, String levelName) throws IOException {
+		File parentFile = getJarParentDirectory();
+        
+        if (parentFile != null) {
+        	return new String(Files.readAllBytes(new File(parentFile, directory + levelName).toPath()));
+        }
+        
 		return new String(Files.readAllBytes(Paths.get(directory + levelName)));
 	}
 	
@@ -130,12 +156,18 @@ public final class LevelLoader {
 	private static void loadAllLevelStrings() {
 		System.out.println("Loading all levels in directory '" + LevelLoader.LEVEL_DIRECTORY + "'");
 		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
+		
+		File parentDirectory = getJarParentDirectory();
+		if (parentDirectory != null) {
+			directory = new File(parentDirectory, LevelLoader.LEVELS_DIRECTORY);
+		}
 
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
 
             for (File file : files) {
                 if (file.isFile() && !file.isHidden() && file.getName().endsWith(LEVEL_EXTENSION)) {
+                	System.out.println("Loading file \'" + file.getName() + "\'");
                 	try {
                 		LEVEL_STRINGS.put(file.getName(), LevelLoader.loadLevelString(file.getName()));
 					} catch (IOException e) {
@@ -145,9 +177,24 @@ public final class LevelLoader {
                 }
             }
         } else {
-            System.err.println("Directory does not exist or is not a directory.");
+            System.err.println("Directory '" + directory.getAbsolutePath() + "' does not exist or is not a directory.");
         }
         System.out.println("Done! Loaded " + LEVEL_STRINGS.size() + " levels!");
+	}
+	
+	public static File getJarParentDirectory() {
+		try {
+        	CodeSource codeSource = ColorSwitch.class.getProtectionDomain().getCodeSource();
+			File location = new File(codeSource.getLocation().toURI());
+			if (location.isFile() && location.getName().endsWith(".jar")) {
+				return location.getParentFile();
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		return null;
 	}
 
 }

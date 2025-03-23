@@ -12,12 +12,17 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 
+import misha.game.level.LevelLoader;
 import misha.game.level.LevelManager;
 
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 public class ColorSwitch extends JFrame {
 
@@ -40,10 +45,9 @@ public class ColorSwitch extends JFrame {
 		pack();
 
 		Insets insets = getInsets();
-		setSize(SCREEN_WIDTH + insets.left + insets.right, GAME_HEIGHT + insets.top + insets.bottom);
+		setSize(SCREEN_WIDTH + insets.left + insets.right, SCREEN_HEIGHT + insets.top + insets.bottom);
 
 		setLocationRelativeTo(null);
-//		setResizable(false);
 		setAlwaysOnTop(true);
 
 		if (levelManager != null)
@@ -58,10 +62,15 @@ public class ColorSwitch extends JFrame {
 		
 		addComponentListener(new ComponentListener() {
 			@Override
-			public void componentResized(ComponentEvent e) {
+			public void componentResized(ComponentEvent e) {				
 				Dimension dim = e.getComponent().getSize();
+				
+				Insets insets = getInsets();
 				dim.height -= insets.top + insets.bottom;
 			    dim.width -= insets.left + insets.right;
+			    
+			    SCREEN_WIDTH = dim.width;
+			    SCREEN_HEIGHT = dim.height;
 
 			    int newWidth = dim.width;
 			    int newHeight = dim.height;

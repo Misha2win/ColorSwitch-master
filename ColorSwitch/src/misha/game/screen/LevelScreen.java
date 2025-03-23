@@ -138,19 +138,19 @@ public class LevelScreen extends Screen {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (BACK_BUTTON.contains(e.getPoint())) {
+		if (ScreenUtil.scaledContains(BACK_BUTTON, e.getPoint())) {
 			if (page > 0)
 				page--;
-		} else if (MENU_BUTTON.contains(e.getPoint())) {
+		} else if (ScreenUtil.scaledContains(MENU_BUTTON, e.getPoint())) {
 			screenManager.setScreen(ScreenManager.MENU_SCREEN);
-		} else if (NEXT_BUTTON.contains(e.getPoint())) {
+		} else if (ScreenUtil.scaledContains(NEXT_BUTTON, e.getPoint())) {
 			if (page < unlockedLevels.length / 30) {
 				page++;
 			}
 		}
 		else {
 			for (int i = page * 30; i < LEVEL_BUTTONS.length && i - (30 * page) < 30; i++) {
-				if (LEVEL_BUTTONS[i].contains(e.getPoint())) {
+				if (ScreenUtil.scaledContains(LEVEL_BUTTONS[i], e.getPoint())) {
 					if (unlockedLevels[i]) {
 						((ScreenManager) screenManager).getGameScreen().getLevelManager().setLevel(i);
 						((ScreenManager) screenManager).getGameScreen().getLevelManager().resetLevel();

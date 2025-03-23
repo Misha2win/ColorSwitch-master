@@ -20,6 +20,7 @@ import misha.game.level.LevelLoader;
 public class LevelImageSaver {
 	
 	static {
+		System.out.println("Saving level images...");
 		LevelImageSaver.saveAllLevels();
 	}
 
@@ -36,6 +37,12 @@ public class LevelImageSaver {
 
 	public static boolean saveImage(BufferedImage img, String name) {
 		File outputfile = new File(LevelImageLoader.IMAGE_DIRECTORY + name + ".png");
+		
+		File parentDirectory = LevelLoader.getJarParentDirectory();
+		if (parentDirectory != null) {
+			outputfile = new File(parentDirectory, LevelImageLoader.IMAGE_DIRECTORY + name + ".png");
+		}
+		
 		try {
 			ImageIO.write(img, "png", outputfile);
 			return true;
@@ -56,6 +63,11 @@ public class LevelImageSaver {
 
 	public static void saveAllLevels() {
 		File directory = new File(LevelLoader.LEVELS_DIRECTORY);
+		
+		File parentDirectory = LevelLoader.getJarParentDirectory();
+		if (parentDirectory != null) {
+			directory = new File(parentDirectory, LevelLoader.LEVELS_DIRECTORY);
+		}
 
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
@@ -64,6 +76,8 @@ public class LevelImageSaver {
                 if (file.isFile() && !file.isHidden() && file.getName().endsWith(".level")) {
                 	try {
 						saveImage(createLevelImage(LevelLoader.getLevel(null, file.getName())), file.getName().replace(".level", ""));
+						System.out.println("Saved level image for '" + file.getName() + "'");
+						LevelImageLoader.loadLevelImage(file.getName().replace(".level", ""));
 					} catch (IOException e) {
 						System.err.println("Could not create image for " + file.getName());
 						e.printStackTrace();
@@ -71,7 +85,7 @@ public class LevelImageSaver {
                 }
             }
         } else {
-            System.err.println("Directory does not exist or is not a directory.");
+            System.err.println("Directory '" + directory.getAbsolutePath() + "' does not exist or is not a directory.");
         }
 	}
 

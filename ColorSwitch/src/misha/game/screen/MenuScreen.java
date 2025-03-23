@@ -80,9 +80,9 @@ public class MenuScreen extends Screen {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (PLAY_BUTTON.contains(e.getPoint())) {
+		if (ScreenUtil.scaledContains(PLAY_BUTTON, e.getPoint())) {
 			screenManager.setScreen(ScreenManager.LEVEL_SCREEN);
-		} else if (QUIT_BUTTON.contains(e.getPoint())) {
+		} else if (ScreenUtil.scaledContains(QUIT_BUTTON, e.getPoint())) {
 			System.exit(0);
 		}
 	}

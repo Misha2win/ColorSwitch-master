@@ -14,6 +14,7 @@ import java.awt.Polygon;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.game.level.entity.Entity;
+import misha.game.level.entity.player.Player;
 
 @EditableEntity({ EditableEntityType.POINTS })
 public class SuperJump extends Item {
@@ -29,7 +30,7 @@ public class SuperJump extends Item {
 		if (level == null)
 			return;
 		
-		level.getLevelManager().getPlayer().setYVelocity(-24f);
+		level.getLevelManager().getPlayer().setYVelocity(-Player.JUMP_STRENGTH);
 		if (!persist) {
 			removeItem();
 			used = true;

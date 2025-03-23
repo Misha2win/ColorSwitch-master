@@ -96,9 +96,9 @@ public class PauseScreen extends Screen {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (BACK_BUTTON.contains(e.getPoint())) {
+		if (ScreenUtil.scaledContains(BACK_BUTTON, e.getPoint())) {
 			screenManager.setScreen(ScreenManager.GAME_SCREEN);
-		} else if (NEXT_BUTTON.contains(e.getPoint())) {
+		} else if (ScreenUtil.scaledContains(NEXT_BUTTON, e.getPoint())) {
 			screenManager.setScreen(ScreenManager.MENU_SCREEN);
 		}
 	}

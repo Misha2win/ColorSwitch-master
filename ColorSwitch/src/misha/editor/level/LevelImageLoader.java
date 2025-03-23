@@ -9,6 +9,7 @@ package misha.editor.level;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 
+import misha.game.level.LevelCreator;
 import misha.game.level.LevelLoader;
 
 public class LevelImageLoader {
@@ -25,11 +27,19 @@ public class LevelImageLoader {
 	private static final HashMap<String, BufferedImage> IMAGES = new HashMap<>();
 	
 	private static BufferedImage loadImage(String imageName) throws IOException {
+		File parentFile = LevelLoader.getJarParentDirectory();
+        
+        if (parentFile != null) {
+        	return ImageIO.read(new ByteArrayInputStream(Files.readAllBytes(new File(parentFile, IMAGE_DIRECTORY + imageName + ".png").toPath())));
+        }
+        
         return ImageIO.read(new ByteArrayInputStream(Files.readAllBytes(Paths.get(IMAGE_DIRECTORY + imageName + ".png"))));
 	}
 	
 	public static BufferedImage loadLevelImage(String levelName) throws IOException {
 		IMAGES.put(levelName, loadImage(levelName));
+		
+		System.out.println("Loaded level image for '" + levelName + "'");
 		
 		return IMAGES.get(levelName);
 	}
