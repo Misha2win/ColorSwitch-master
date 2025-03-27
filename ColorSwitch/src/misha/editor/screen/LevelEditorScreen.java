@@ -23,10 +23,10 @@ import misha.editor.selector.AbstractSelector;
 import misha.editor.selector.EntityTypeSelector;
 import misha.editor.selector.LevelColorSelector;
 import misha.editor.selector.MasterEntitySelector;
-import misha.editor.utility.DrawUtil;
-import misha.editor.utility.LevelUtil;
 import misha.game.level.entity.Entity;
 import misha.screen.Screen;
+import misha.util.DrawUtil;
+import misha.util.LevelUtil;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
 

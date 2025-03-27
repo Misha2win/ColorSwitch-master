@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import misha.editor.Editor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
 import misha.editor.level.entity.EditableField.EditableFieldType;
-import misha.editor.utility.DrawUtil;
-import misha.editor.utility.Util;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.Entity;
+import misha.util.DrawUtil;
+import misha.util.Util;
 
 public class MasterEntityEditor<T extends Entity> implements KeyListener, MouseListener, MouseMotionListener {
 	

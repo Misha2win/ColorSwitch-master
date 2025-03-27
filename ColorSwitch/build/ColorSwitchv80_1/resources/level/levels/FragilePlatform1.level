@@ -1,0 +1,26 @@
+// Level color
+level green
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform Platform black 20 320 130 260
+platform Platform black 600 320 130 260
+platform FragilePlatform black 160 320 30 30
+platform FragilePlatform black 200 320 30 30
+platform FragilePlatform black 240 320 30 30
+platform FragilePlatform black 280 320 30 30
+platform FragilePlatform black 320 320 30 30
+platform FragilePlatform black 360 320 30 30
+platform FragilePlatform black 400 320 30 30
+platform FragilePlatform black 440 320 30 30
+platform FragilePlatform black 480 320 30 30
+platform FragilePlatform black 520 320 30 30
+platform FragilePlatform black 560 320 30 30
+// Points
+point SpawnPoint 20 300 true false
+point GoalPoint 710 300
+// Obstacles
+// Items
+// Texts

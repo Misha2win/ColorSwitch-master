@@ -7,11 +7,8 @@
 
 package misha.game.level;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -22,6 +19,7 @@ import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.point.GoalPoint;
 import misha.game.level.entity.point.Point;
 import misha.game.level.entity.point.SpawnPoint;
+import misha.util.FileUtil;
 
 public class LevelCreator {
 	
@@ -32,22 +30,7 @@ public class LevelCreator {
 	}
 	
 	public static void loadLevelOrderString() {
-		String levelOrderString = null;
-		
-		try {
-			System.out.println("Loading 'LevelsOrder.levels'");
-			File parentFile = LevelLoader.getJarParentDirectory();
-	        
-	        if (parentFile != null) {
-	        	levelOrderString = new String(Files.readAllBytes(new File(parentFile, LevelLoader.LEVEL_DIRECTORY + "LevelsOrder.levels").toPath()));
-	        } else {
-	        	levelOrderString = new String(Files.readAllBytes(Paths.get(LevelLoader.LEVEL_DIRECTORY + "LevelsOrder.levels")));
-	        }	
-		} catch (IOException e) {
-			System.err.println("Could not load LevelOrder.levels!");
-			e.printStackTrace();
-		}
-		
+		String levelOrderString = new String(FileUtil.readFileBytes(LevelLoader.LEVEL_DIRECTORY, "LevelsOrder.levels"));
 		LEVEL_ORDER_STRING = levelOrderString.replaceAll("(\n|^)//.*?(?=\n|$)", "");
 	}
 

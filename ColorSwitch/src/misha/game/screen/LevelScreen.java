@@ -16,14 +16,16 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
-import misha.editor.level.LevelImageLoader;
-import misha.editor.level.LevelImageSaver;
 import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelLoader;
 import misha.screen.Screen;
+import misha.util.FileUtil;
+import misha.util.LevelImageLoader;
+import misha.util.LevelImageSaver;
 
 public class LevelScreen extends Screen {
 	
@@ -31,13 +33,13 @@ public class LevelScreen extends Screen {
 	private final static RoundRectangle2D BACK_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 - 210 - 20, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
 	private final static RoundRectangle2D NEXT_BUTTON = new RoundRectangle2D.Float(ColorSwitch.NATIVE_WIDTH / 2 - 125 + 210 + 60, ColorSwitch.NATIVE_HEIGHT - 90, 210, 75, 20, 20);
 	
-	private final Rectangle2D.Float[] LEVEL_BUTTONS;
+	private static final int LEVEL_IMAGE_SCALE = 7;
+	private static final int LEVEL_IMAGE_WIDTH = ColorSwitch.NATIVE_WIDTH / LEVEL_IMAGE_SCALE;
+	private static final int LEVEL_IMAGE_HEIGHT = ColorSwitch.NATIVE_HEIGHT / LEVEL_IMAGE_SCALE;
+	private static final int GRID_X_DIMENSION = 6;
+	private static final int PADDING = 1;
 	
-	private final int LEVEL_IMAGE_SCALE = 7;
-	private final int LEVEL_IMAGE_WIDTH = ColorSwitch.NATIVE_WIDTH / LEVEL_IMAGE_SCALE;
-	private final int LEVEL_IMAGE_HEIGHT = ColorSwitch.NATIVE_HEIGHT / LEVEL_IMAGE_SCALE;
-	private final int GRID_X_DIMENSION = 6;
-	private final int padding = 1;
+	private final Rectangle2D.Float[] LEVEL_BUTTONS;
 	
 	private boolean[] unlockedLevels;
 	private int page;
@@ -47,7 +49,14 @@ public class LevelScreen extends Screen {
 	public LevelScreen(ScreenManager manager) {
 		super(manager);
 		
-		LevelImageSaver.saveAllLevels();
+		for (File image : FileUtil.getLevelFiles()) { // XXX FIXME
+			try {
+				LevelImageLoader.loadLevelImage(image.getName().replace(".level", ""));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		try {
 			backgroundLevel = LevelLoader.getLevel(null, "ColorChanger3");
@@ -64,14 +73,14 @@ public class LevelScreen extends Screen {
 		
 		LEVEL_BUTTONS = new Rectangle2D.Float[levelCount];
 		
-		int xOffset = (ColorSwitch.NATIVE_WIDTH - (GRID_X_DIMENSION * (LEVEL_IMAGE_WIDTH + padding))) / 2;
+		int xOffset = (ColorSwitch.NATIVE_WIDTH - (GRID_X_DIMENSION * (LEVEL_IMAGE_WIDTH + PADDING))) / 2;
 		int gridHeight = (unlockedLevels.length > 30 ? 30 : unlockedLevels.length) / GRID_X_DIMENSION;
-		int yOffset = (ColorSwitch.NATIVE_HEIGHT - (padding * (gridHeight - 1))) / 2 - (5 * gridHeight * LEVEL_IMAGE_HEIGHT / 9);
+		int yOffset = (ColorSwitch.NATIVE_HEIGHT - (PADDING * (gridHeight - 1))) / 2 - (5 * gridHeight * LEVEL_IMAGE_HEIGHT / 9);
 		
 		for (int i = 0; i < LEVEL_BUTTONS.length; i++) {
 			LEVEL_BUTTONS[i] = new Rectangle2D.Float(
-					xOffset + ((i % 30) % GRID_X_DIMENSION) * (LEVEL_IMAGE_WIDTH + padding), 
-					yOffset + ((i % 30) / GRID_X_DIMENSION) * (LEVEL_IMAGE_HEIGHT + padding), 
+					xOffset + ((i % 30) % GRID_X_DIMENSION) * (LEVEL_IMAGE_WIDTH + PADDING), 
+					yOffset + ((i % 30) / GRID_X_DIMENSION) * (LEVEL_IMAGE_HEIGHT + PADDING), 
 					LEVEL_IMAGE_WIDTH, 
 					LEVEL_IMAGE_HEIGHT
 			);

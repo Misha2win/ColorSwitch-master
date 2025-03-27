@@ -16,9 +16,9 @@ import java.lang.reflect.ParameterizedType;
 import misha.editor.level.entity.EditableEntity;
 import misha.editor.level.entity.MasterEntityEditor;
 import misha.editor.level.entity.EditableEntity.EditableEntityType;
-import misha.editor.utility.DrawUtil;
-import misha.editor.utility.Util;
 import misha.game.level.entity.Entity;
+import misha.util.DrawUtil;
+import misha.util.Util;
 
 public class MasterEntitySelector<T extends Entity> extends AbstractSelector<T> {
 	

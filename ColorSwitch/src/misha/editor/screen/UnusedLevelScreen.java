@@ -22,13 +22,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import misha.editor.Editor;
-import misha.editor.level.LevelImageLoader;
-import misha.editor.level.LevelImageSaver;
-import misha.editor.utility.DrawUtil;
-import misha.editor.utility.Util;
 import misha.game.ColorSwitch;
 import misha.game.level.LevelLoader;
 import misha.screen.Screen;
+import misha.util.DrawUtil;
+import misha.util.LevelImageLoader;
+import misha.util.Util;
 
 public class UnusedLevelScreen extends Screen {
 	
@@ -51,7 +50,7 @@ public class UnusedLevelScreen extends Screen {
 	public UnusedLevelScreen(ScreenManager screenManager) {
 		super(screenManager);
 		
-		LevelImageSaver.saveAllLevels();
+		LevelImageLoader.reloadAllLevelImages();
 		
 		levelNames = LevelLoader.getUnreferencedLevelNames();
 		

@@ -1,0 +1,43 @@
+// Level color
+level blue
+// Platforms
+platform Platform black 10 10 730 10
+platform Platform black 10 10 10 580
+platform Platform black 730 10 10 580
+platform Platform black 10 580 730 10
+platform Platform black 530 150 200 30
+platform Platform red 410 150 120 30
+platform Platform black 20 150 200 30
+platform HealthGate true 10 220 150 120 30
+platform Platform black 140 320 200 30
+platform Platform black 410 320 200 30
+platform Platform blue 20 320 120 30
+platform Platform black 410 480 150 30
+platform Platform black 440 430 20 20
+platform Platform black 470 390 20 20
+platform Platform black 340 20 70 490
+platform Platform black 190 480 150 30
+platform Platform black 160 350 20 20
+platform Platform black 200 390 20 20
+platform Platform black 240 430 20 20
+platform Platform yellow 190 510 370 70
+platform Platform green 20 480 170 100
+platform Platform red 560 480 170 80
+platform Platform red 560 560 150 20
+// Points
+point SpawnPoint 20 130 true false
+point GoalPoint 710 560
+// Obstacles
+obstacle Prism blue 530 20 2
+obstacle Water 410 20 120 130
+obstacle Acid 550 20 180 130
+obstacle Prism red 410 350 2
+obstacle Prism green 440 350 2
+obstacle Prism blue 470 350 2
+obstacle Prism green 320 430 3
+obstacle Prism red 320 390 3
+obstacle Prism blue 320 350 3
+// Items
+item Mirror 100 90 red false
+item ColorChanger red 60 260
+// Texts

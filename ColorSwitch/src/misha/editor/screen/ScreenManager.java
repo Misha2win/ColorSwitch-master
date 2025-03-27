@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 import misha.screen.Screen;
-import misha.editor.utility.DrawUtil;
+import misha.util.DrawUtil;
 import misha.game.level.Level;
 import misha.screen.AbstractScreenManager;
 

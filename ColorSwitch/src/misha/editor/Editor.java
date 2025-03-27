@@ -18,8 +18,6 @@ public class Editor extends JFrame {
 	public static final int WIDTH = 750;
 	public static final int HEIGHT = 600 + 210 + 10;
 	
-	private EditorPanel gamePanel;
-	
 	public Editor(int levelNum) {
 		super("Color Switch: Level Editor");
 		
@@ -38,7 +36,7 @@ public class Editor extends JFrame {
 			setAlwaysOnTop(true);
 		}
 		
-		gamePanel = new EditorPanel(levelNum);
+		EditorPanel gamePanel = new EditorPanel(levelNum);
 		getContentPane().add(gamePanel);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -53,7 +51,7 @@ public class Editor extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		Editor game = new Editor(0);
+		new Editor(0);
 	}
 	
 }

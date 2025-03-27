@@ -13,12 +13,12 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import misha.editor.screen.LevelEditorScreen;
-import misha.editor.utility.DrawUtil;
 import misha.game.level.entity.CSColor;
 import misha.game.level.entity.item.Item;
 import misha.game.level.entity.obstacle.Obstacle;
 import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.point.Point;
+import misha.util.DrawUtil;
 
 public class EntityTypeSelector extends AbstractSelector<CSColor> {
 	

@@ -13,9 +13,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import misha.editor.screen.LevelEditorScreen;
-import misha.editor.utility.DrawUtil;
 import misha.game.level.Level;
 import misha.game.level.entity.CSColor;
+import misha.util.DrawUtil;
 
 public class LevelColorSelector extends AbstractSelector<CSColor> {
 	

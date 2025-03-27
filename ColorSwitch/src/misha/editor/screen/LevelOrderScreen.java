@@ -19,20 +19,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import misha.editor.Editor;
-import misha.editor.level.LevelImageLoader;
-import misha.editor.level.LevelImageSaver;
-import misha.editor.utility.DrawUtil;
-import misha.editor.utility.Util;
 import misha.game.ColorSwitch;
 import misha.game.level.LevelCreator;
 import misha.game.level.LevelLoader;
 import misha.screen.Screen;
+import misha.util.DrawUtil;
+import misha.util.FileUtil;
+import misha.util.LevelImageLoader;
+import misha.util.LevelImageSaver;
+import misha.util.Util;
 
 public class LevelOrderScreen extends Screen {
 	
@@ -88,12 +90,12 @@ public class LevelOrderScreen extends Screen {
 		
 		focused();
 		
-		LevelImageSaver.saveAllLevels();
+		LevelImageLoader.reloadAllLevelImages();
 	}
 	
 	@Override
 	public void focused() {
-		levelNames = LevelCreator.LEVEL_ORDER_STRING.split("\n");
+		levelNames = LevelCreator.LEVEL_ORDER_STRING.split("\\r?\\n");
 		resetLevelButtons();
 	}
 	

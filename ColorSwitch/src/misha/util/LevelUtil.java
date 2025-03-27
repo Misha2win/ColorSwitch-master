@@ -5,8 +5,11 @@
  * Notes:  
  */
 
-package misha.editor.utility;
+package misha.util;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,7 +18,6 @@ import java.lang.reflect.Field;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-import misha.editor.level.LevelImageSaver;
 import misha.game.ColorSwitch;
 import misha.game.level.Level;
 import misha.game.level.LevelCreator;
@@ -29,6 +31,17 @@ import misha.game.level.entity.platform.Platform;
 import misha.game.level.entity.point.Point;
 
 public class LevelUtil {
+	
+	public static BufferedImage createLevelImage(Level level) {
+		BufferedImage img = new BufferedImage(ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT, BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D g = (Graphics2D) img.getGraphics();
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, ColorSwitch.NATIVE_WIDTH, ColorSwitch.NATIVE_HEIGHT);
+		level.draw(g);
+
+		return img;
+	}
 	
 	@SuppressWarnings("deprecation")
 	public static void playLevel(Level level) {
@@ -67,7 +80,11 @@ public class LevelUtil {
 			e.printStackTrace();
 		}
 		
-		LevelImageSaver.createAndSaveImage(level, name);
+		try {
+			LevelImageLoader.loadLevelImage(name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		if (promptForLevelOrder) {
 			askToAppendToLevelOrder(name);

@@ -22,7 +22,7 @@ import misha.game.level.LevelManager;
 
 public class PhysicsEngine {
 
-	public static final float GRAVITY = 0.5f;
+	public static float GRAVITY = 0.5f;
 
 	public static void calcPhysics(LevelManager levelManager) {
 		Player player = levelManager.getPlayer();
@@ -135,7 +135,7 @@ public class PhysicsEngine {
 					multiplier = 0.7f;
 				}
 			}
-			player.setYVelocity(-Player.JUMP_STRENGTH * multiplier);
+			player.setYVelocity(Player.JUMP_STRENGTH * multiplier * -Math.signum(GRAVITY));
 			player.setJumping(true);
 		} else if (!onFloor) { // If the player is not on the floor and should be accelerated by gravity
 			player.accelerate(0, PhysicsEngine.GRAVITY);

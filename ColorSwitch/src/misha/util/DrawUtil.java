@@ -5,7 +5,7 @@
  * Notes:  
  */
 
-package misha.editor.utility;
+package misha.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
